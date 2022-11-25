@@ -12,12 +12,13 @@ function App() {
   return (
     <>
       <AppHeader />
-      <section className={styles.main}>
+      <main className={styles.main}>
           <BurgerIngredients data={data} />
           <BurgerConstructor data={data} />
-      </section>
+      </main>
     </>
   );
 }
+
 
 export default App;

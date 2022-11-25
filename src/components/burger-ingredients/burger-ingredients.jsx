@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from 'prop-types';
+import dataPropTypes from '../../utils/types.js'
 import { Tab, CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css'
 
@@ -37,6 +38,14 @@ const MenuElement = ({ingredients}) => {
   )
 }
 
+MenuElement.propTypes = {
+  ingredients: PropTypes.shape({
+    image: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired
+  }).isRequired
+}
+
 const Menu = ({data}) => {
 
   return (
@@ -63,6 +72,10 @@ const Menu = ({data}) => {
   )
 }
 
+Menu.propTypes = { 
+  data: dataPropTypes.isRequired
+};
+
 const BurgerIngredients = ({data}) => {
   return (
     <section className={styles.build_burger}>
@@ -78,20 +91,8 @@ const BurgerIngredients = ({data}) => {
 }
 
 BurgerIngredients.propTypes = { 
-  data: PropTypes.arrayOf(PropTypes.shape({  
-    _id: PropTypes.string,
-    name: PropTypes.string,
-    type: PropTypes.string,
-    proteins: PropTypes.number,
-    fat: PropTypes.number,
-    carbohydrates: PropTypes.number,
-    calories: PropTypes.number,
-    price: PropTypes.number,
-    image: PropTypes.string,
-    image_mobile: PropTypes.string,
-    image_large: PropTypes.string,
-    __v: PropTypes.number
-  })).isRequired,
+  data: dataPropTypes.isRequired
 };
+
 
 export default BurgerIngredients;

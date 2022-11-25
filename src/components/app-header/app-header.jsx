@@ -1,20 +1,26 @@
 import React from "react";
+import PropTypes from 'prop-types';
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './app-header.module.css'
 
 
-const NavItem = (props) => {
+const NavItem = ({icon, text}) => {
     
     return (
       // eslint-disable-next-line jsx-a11y/anchor-is-valid
       <a href="#" className={'p-5 mr-2 ' + styles.nav_item}>
-        <div className="pr-2">{props.icon}</div>
+        <div className="pr-2">{icon}</div>
         <p className="text text_type_main-default">
-              {props.text}
+              {text}
             </p>
       </a>
     )
 
+}
+
+NavItem.propTypes = {
+  text: PropTypes.string.isRequired,
+  icon: PropTypes.object.isRequired,
 }
 
 const AppHeader = () => {

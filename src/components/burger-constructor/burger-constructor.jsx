@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import dataPropTypes from '../../utils/types';
 import styles from './burger-constructor.module.css';
 import { Button, CurrencyIcon, DragIcon, ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components/';
 
@@ -21,21 +21,21 @@ import { Button, CurrencyIcon, DragIcon, ConstructorElement } from '@ya.praktiku
       </div>
       <ul className={styles.content}>
         { data.map((item, index) => {
-          if(item.type !== 'bun') {
             return (
-            <li key={index} className={'mr-1 ' + styles.item}>
-              <span className={'mr-10' + styles.grug_icon}><DragIcon type="primary" /></span>
-              <ConstructorElement
-              key={index}
-              text={item.name}
-              price={item.price}
-              thumbnail={item.image}
-            />
-            </li>
+            <React.Fragment key={index}>
+              { item.type !== 'bun' && 
+              <li key={index} className={'mr-1 ' + styles.item}>
+                <span className={'mr-10' + styles.grug_icon}><DragIcon type="primary" /></span>
+                <ConstructorElement
+                key={index}
+                text={item.name}
+                price={item.price}
+                thumbnail={item.image}
+                />
+              </li> 
+              }
+            </React.Fragment>
             )
-          }
-
-          return null;
         }) }
       </ul>
       <div className={'mt-4 mr-4 ' + styles.bottom}>
@@ -58,22 +58,8 @@ import { Button, CurrencyIcon, DragIcon, ConstructorElement } from '@ya.praktiku
 }
 
 BurgerConstructor.propTypes = { 
-  data: PropTypes.arrayOf(PropTypes.shape({  
-    _id: PropTypes.string,
-    name: PropTypes.string,
-    type: PropTypes.string,
-    proteins: PropTypes.number,
-    fat: PropTypes.number,
-    carbohydrates: PropTypes.number,
-    calories: PropTypes.number,
-    price: PropTypes.number,
-    image: PropTypes.string,
-    image_mobile: PropTypes.string,
-    image_large: PropTypes.string,
-    __v: PropTypes.number
-  })).isRequired,
+  data: dataPropTypes.isRequired
 };
 
 
-
-export default BurgerConstructor
+export default BurgerConstructor;
