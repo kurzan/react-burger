@@ -1,0 +1,49 @@
+.header {
+  max-width: 1920px;
+  background-color: #1C1C21;
+}
+
+.header nav {
+  width: calc(50% - 145px);
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 1280px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.nav_item {
+  display: flex;
+  color: #8585AD;
+  text-decoration: none;
+}
+
+
+.nav_item__active {
+  color: white;
+  display: flex;
+  text-decoration: none;
+}
+
+.nav_item:hover {
+  display: flex;
+  color: white;
+}
+
+.menu {
+  display: flex;
+}
+
+.logo {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.user_menu {
+  display: flex;
+  justify-content: flex-end;
+}
