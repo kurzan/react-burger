@@ -1,5 +1,6 @@
 import React from 'react';
 import dataPropTypes from '../../utils/types';
+import PropTypes from 'prop-types';
 import styles from './burger-constructor.module.css';
 import { Button, CurrencyIcon, DragIcon, ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components/';
 
@@ -15,7 +16,7 @@ import { Button, CurrencyIcon, DragIcon, ConstructorElement } from '@ya.praktiku
           type="top"
           isLocked={true}
           text={bun.name + ' (верх)'}
-          price={bun.proce}
+          price={bun.price}
           thumbnail={bun.image}
         />
       </div>
@@ -43,7 +44,7 @@ import { Button, CurrencyIcon, DragIcon, ConstructorElement } from '@ya.praktiku
             type="bottom"
             isLocked={true}
             text={bun.name + ' (низ)'}
-            price={bun.proce}
+            price={bun.price}
             thumbnail={bun.image}
           />
       </div>
@@ -58,7 +59,9 @@ import { Button, CurrencyIcon, DragIcon, ConstructorElement } from '@ya.praktiku
 }
 
 BurgerConstructor.propTypes = { 
-  data: dataPropTypes.isRequired
+  data: PropTypes.arrayOf(
+    PropTypes.shape(
+      dataPropTypes.isRequired).isRequired)
 };
 
 

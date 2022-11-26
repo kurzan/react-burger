@@ -22,29 +22,26 @@ const Tabs = () => {
   )
 }
 
-const MenuElement = ({ingredients}) => {
+const MenuElement = ({ingredient}) => {
 
   return (
     <div className={styles.menu_element}>
       <span className={styles.counter} ><Counter /></span>  
-      <img className="ml-4 mr-4 mb-1" src={ingredients.image} alt={ingredients.name} />
+      <img className="ml-4 mr-4 mb-1" src={ingredient.image} alt={ingredient.name} />
       <div className={styles.price_wrapper}>
-        <p className="text text_type_digits-default">{ingredients.price}</p>
+        <p className="text text_type_digits-default">{ingredient.price}</p>
         <CurrencyIcon />
       </div>
-      <p className="text text_type_main-default">{ingredients.name}</p>
+      <p className="text text_type_main-default">{ingredient.name}</p>
     </div>
 
   )
 }
 
-MenuElement.propTypes = {
-  ingredients: PropTypes.shape({
-    image: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired
-  }).isRequired
-}
+MenuElement.propTypes = { 
+  ingredient: PropTypes.shape(
+      dataPropTypes.isRequired).isRequired
+};
 
 const Menu = ({data}) => {
 
@@ -59,7 +56,7 @@ const Menu = ({data}) => {
               <ul className={styles.menu_wrapper}>
                 {data.map((item, i) => {
                   if(item.type === id) {
-                  return <MenuElement key={i} ingredients={item}/>
+                  return <MenuElement key={i} ingredient={item}/>
                   }
 
                   return null;
@@ -73,7 +70,9 @@ const Menu = ({data}) => {
 }
 
 Menu.propTypes = { 
-  data: dataPropTypes.isRequired
+  data: PropTypes.arrayOf(
+    PropTypes.shape(
+      dataPropTypes.isRequired).isRequired)
 };
 
 const BurgerIngredients = ({data}) => {
@@ -91,7 +90,9 @@ const BurgerIngredients = ({data}) => {
 }
 
 BurgerIngredients.propTypes = { 
-  data: dataPropTypes.isRequired
+  data: PropTypes.arrayOf(
+    PropTypes.shape(
+      dataPropTypes.isRequired).isRequired)
 };
 
 
