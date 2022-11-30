@@ -6,7 +6,7 @@ import { Button, CurrencyIcon, DragIcon, ConstructorElement } from '@ya.praktiku
 
 
 
- const BurgerConstructor = ({data}) => {
+ const BurgerConstructor = ({data, onOrderClick}) => {
   const bun = data.find(item => item.type === 'bun');
 
   return (
@@ -50,9 +50,11 @@ import { Button, CurrencyIcon, DragIcon, ConstructorElement } from '@ya.praktiku
       </div>
       <div className={'mt-10 mr-4 ' + styles.order}>
         <p className="text text_type_digits-medium mr-10">1 450<CurrencyIcon /></p>
-        <Button htmlType="button" type="primary" size="large">
-          Оформить заказ
-        </Button>
+        <div onClick={onOrderClick}>
+          <Button htmlType="button" type="primary" size="large">
+            Оформить заказ
+          </Button>
+        </div>
       </div>
     </section>
   )
@@ -61,7 +63,8 @@ import { Button, CurrencyIcon, DragIcon, ConstructorElement } from '@ya.praktiku
 BurgerConstructor.propTypes = { 
   data: PropTypes.arrayOf(
     PropTypes.shape(
-      dataPropTypes.isRequired).isRequired)
+      dataPropTypes.isRequired).isRequired),
+  onOrderClick: PropTypes.func.isRequired
 };
 
 

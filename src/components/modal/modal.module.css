@@ -1,0 +1,27 @@
+.modal {
+  position: fixed;
+  background-color: #1C1C21;
+  border-radius: 40px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  max-height: 720px;
+  width: 720px;
+  z-index: 2;
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.button:hover {
+  cursor: pointer;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+}
