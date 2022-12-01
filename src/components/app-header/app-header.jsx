@@ -4,12 +4,17 @@ import { Logo, BurgerIcon, ListIcon, ProfileIcon } from "@ya.praktikum/react-dev
 import styles from './app-header.module.css'
 
 
-const NavItem = ({icon, text}) => {
+const NavItem = ({Icon, text}) => {
+  const [isActive, setIsActive] = React.useState(false);
+
+  const iconHandle = () => {
+    setIsActive(!isActive);
+  }
     
     return (
       // eslint-disable-next-line jsx-a11y/anchor-is-valid
-      <a href="#" className={'p-5 mr-2 ' + styles.nav_item}>
-        <div className="pr-2">{icon}</div>
+      <a href="#" className={'p-5 mr-2 ' + styles.nav_item} onMouseEnter={iconHandle} onMouseLeave={iconHandle}>
+        <div className="pr-2"><Icon type={ isActive ? 'primary' : 'secondary'} /></div>
         <p className="text text_type_main-default">
               {text}
             </p>
@@ -20,7 +25,7 @@ const NavItem = ({icon, text}) => {
 
 NavItem.propTypes = {
   text: PropTypes.string.isRequired,
-  icon: PropTypes.object.isRequired,
+  Icon: PropTypes.element.isRequired,
 }
 
 const AppHeader = () => {
@@ -29,14 +34,14 @@ const AppHeader = () => {
       <header className={'pt-4 pb-4 ' + styles.header}>
         <div className={styles.container}>
           <nav className={styles.menu}>
-              <NavItem icon={<BurgerIcon type="active" />} text={'Конструктор'}/>
-              <NavItem icon={<ListIcon type="secondary" />} text={'Лента заказов'}/>
+              <NavItem Icon={BurgerIcon} text={'Конструктор'}/>
+              <NavItem Icon={ListIcon} text={'Лента заказов'}/>
           </nav>
           <div className={styles.logo}>
             <Logo />
           </div>
           <nav className={styles.user_menu}>
-              <NavItem icon={<ProfileIcon type="secondary" />} text={'Личный кабинет'} />
+              <NavItem Icon={ProfileIcon} text={'Личный кабинет'} />
           </nav>
         </div>
       </header>
