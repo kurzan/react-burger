@@ -39,7 +39,7 @@ const Modal = ({children, title, onClose}) => {
       <>
         <ModalOverlay onClick={close} />
         <div className={styles.modal}>
-          <div className={'ml-10 mr-10 mt-10 ' + styles.head}>
+          <div className={'ml-10 mr-10 mt-10 mb-8 ' + styles.head}>
             <p className="text text_type_main-large">{title}</p>
             <div className={styles.button} onClick={close} onMouseEnter={handleIcon} onMouseLeave={handleIcon}>
               {isHovered ? <CloseIcon type="secondary" /> : <CloseIcon type="primary" />}
@@ -54,9 +54,9 @@ const Modal = ({children, title, onClose}) => {
 };
 
 Modal.propTypes = {
-  children: PropTypes.element.isRequired,
+  children: PropTypes.element,
   title: PropTypes.string,
-  onClose: PropTypes.func.isRequired
+  onClose: PropTypes.func
 };
 
 

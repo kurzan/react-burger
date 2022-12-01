@@ -5,7 +5,7 @@ import donePng from '../../images/done.svg';
 const OrderDetails = () => {
 
   return (
-    <div className={"mt-8 " + styles.order}>
+    <div className={styles.order}>
       <p className={"mb-8 text text_type_digits-large " + styles.id}>034536</p>
       <p className={"mb-15 text text_type_main-medium " + styles.text}>идентификатор заказа</p>
       <img className="mb-15" src={donePng} alt="done" />

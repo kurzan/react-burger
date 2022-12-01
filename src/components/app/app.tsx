@@ -4,12 +4,10 @@ import AppHeader from '../app-header/app-header';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import Modal from '../modal/modal';
+import getIngridients from '../../utils/burger-api.js'
 
 import OrderDetails from "../order-details/order-details";
 import IngredientDetails from "../ingredient-details/ingredient-details";
-
-
-const INGREDIENTS_URL = 'https://norma.nomoreparties.space/api/ingredients';
 
 
 function App() {
@@ -18,19 +16,10 @@ function App() {
   const [modalIngredientsOpen, setModalIngredientsOpen] = React.useState(false);
   const [modalOrderOpen, setModalOrderOpen] = React.useState(false);
   const [currentIngredient, setCurrentIngredient] = React.useState({});
+  const [isError, setIsError] = React.useState({status: false, text: ''}); 
 
   useEffect(() => {
-    fetch(INGREDIENTS_URL)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        return Promise.reject(response.status);
-      })
-      .then(data => setIngredients(data.data))
-      .catch(err => {
-        console.log(err)
-      })
+    getIngridients(setIngredients, setIsError)
   }, []);
 
   const onOrderClick = () => {
@@ -63,10 +52,14 @@ function App() {
       </Modal>}
 
       <AppHeader />
+      {!isError.status ? 
       <main className={styles.main}>
           <BurgerIngredients data={ingredients} onIngredientClick={onIngredientClick}/>
-          {ingredients.length > 0 && <BurgerConstructor data={ingredients} onOrderClick={onOrderClick} />}
+          {ingredients.length && <BurgerConstructor data={ingredients} onOrderClick={onOrderClick} />}
       </main>
+      :
+      <Modal title={`Ошибка: ${isError.text} Что-то пошло не так :( Обновите страницу`} />
+    }
     </>
   );
 }
