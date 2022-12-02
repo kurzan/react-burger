@@ -42,7 +42,7 @@ const Modal = ({children, title, onClose}) => {
           <div className={'ml-10 mr-10 mt-10 mb-8 ' + styles.head}>
             <p className="text text_type_main-large">{title}</p>
             <div className={styles.button} onClick={close} onMouseEnter={handleIcon} onMouseLeave={handleIcon}>
-              {isHovered ? <CloseIcon type="secondary" /> : <CloseIcon type="primary" />}
+              <CloseIcon type={isHovered ? "secondary" : "primary"} />
             </div>
           </div>
           {children}
