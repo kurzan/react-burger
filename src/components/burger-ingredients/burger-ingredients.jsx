@@ -1,14 +1,19 @@
-import React from "react";
+import React, {useEffect} from "react";
 import PropTypes from 'prop-types';
 import dataPropTypes from '../../utils/types.js'
 import { Tab, CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
-import styles from './burger-ingredients.module.css'
+import styles from './burger-ingredients.module.css';
 
-const tabs = [{id: 'bun', title: 'Булки'}, {id: 'sauce', title: 'Соусы'},{id: 'main', title: 'Начинки'}];
+const tabs = [{id: 'bun', title: 'Булки'}, {id: 'sauce', title: 'Соусы'}, {id: 'main', title: 'Начинки'}];
 
 const Tabs = () => {
   
   const [current, setCurrent] = React.useState('bun');
+
+  useEffect(() => {
+    const target = document.querySelector(`#${current}`);
+    target.scrollIntoView();
+  }, [current]);
   
   return (
     
@@ -22,10 +27,15 @@ const Tabs = () => {
   )
 }
 
-const MenuElement = ({ingredient}) => {
+const MenuElement = ({ingredient, onIngredientClick}) => {
+
+  const onClick = () => {
+    onIngredientClick(ingredient)
+  }
+
 
   return (
-    <div className={styles.menu_element}>
+    <div className={styles.menu_element} onClick={onClick} >
       <span className={styles.counter} ><Counter /></span>  
       <img className="ml-4 mr-4 mb-1" src={ingredient.image} alt={ingredient.name} />
       <div className={styles.price_wrapper}>
@@ -40,10 +50,12 @@ const MenuElement = ({ingredient}) => {
 
 MenuElement.propTypes = { 
   ingredient: PropTypes.shape(
-      dataPropTypes.isRequired).isRequired
+      dataPropTypes.isRequired).isRequired,
+  onIngredientClick: PropTypes.func.isRequired
 };
 
-const Menu = ({data}) => {
+const Menu = ({data, onIngredientClick}) => {
+
 
   return (
     <>
@@ -56,7 +68,7 @@ const Menu = ({data}) => {
               <ul className={styles.menu_wrapper}>
                 {data.map((item, i) => {
                   if(item.type === id) {
-                  return <MenuElement key={i} ingredient={item}/>
+                  return <MenuElement key={i} ingredient={item} onIngredientClick={onIngredientClick}/>
                   }
 
                   return null;
@@ -72,27 +84,27 @@ const Menu = ({data}) => {
 Menu.propTypes = { 
   data: PropTypes.arrayOf(
     PropTypes.shape(
-      dataPropTypes.isRequired).isRequired)
+      dataPropTypes.isRequired).isRequired),
+  onIngredientClick: PropTypes.func.isRequired
 };
 
-const BurgerIngredients = ({data}) => {
+const BurgerIngredients = ({data, onIngredientClick}) => {
   return (
     <section className={styles.build_burger}>
       <h1 className="mt-10 text text_type_main-large">Соберите бургер</h1>
       <Tabs />
       <div className={styles.menu_container}>
-        <Menu data={data} />
+        <Menu data={data} onIngredientClick={onIngredientClick}/>
       </div>
     </section>
-
   )
-
 }
 
 BurgerIngredients.propTypes = { 
   data: PropTypes.arrayOf(
     PropTypes.shape(
-      dataPropTypes.isRequired).isRequired)
+      dataPropTypes.isRequired).isRequired),
+  onIngredientClick: PropTypes.func.isRequired
 };
 
 

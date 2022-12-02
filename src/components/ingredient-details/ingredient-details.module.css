@@ -1,0 +1,16 @@
+.details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.substance {
+  display: flex;
+  justify-content: space-between;
+}
+
+.substance__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
