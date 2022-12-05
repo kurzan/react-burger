@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './app.module.css'
 import AppHeader from '../app-header/app-header';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
@@ -15,13 +15,13 @@ import { OrderContext } from '../../services/orderContext';
 
 function App() {
 
-  const [ingredients, setIngredients] = React.useState([]);
-  const [selectedIngredients, setSelectedIngredients] = React.useState([]);
-  const [modalIngredientsOpen, setModalIngredientsOpen] = React.useState(false);
-  const [modalOrderOpen, setModalOrderOpen] = React.useState(false);
-  const [currentIngredient, setCurrentIngredient] = React.useState({});
-  const [isError, setIsError] = React.useState({status: false, text: ''});
-  const [order, setOrder] = React.useState({});
+  const [ingredients, setIngredients] = useState([]);
+  const [selectedIngredients, setSelectedIngredients] = useState([]);
+  const [modalIngredientsOpen, setModalIngredientsOpen] = useState(false);
+  const [modalOrderOpen, setModalOrderOpen] = useState(false);
+  const [currentIngredient, setCurrentIngredient] = useState({});
+  const [isError, setIsError] = useState({status: false, text: ''});
+  const [order, setOrder] = useState({});
 
   useEffect(() => {
     getIngridients(setIngredients, setIsError);

@@ -1,4 +1,4 @@
-import React, {useEffect, useCallback} from "react";
+import React, {useEffect, useCallback, useState} from "react";
 import PropTypes from 'prop-types';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from "./modal.module.css";
@@ -7,8 +7,8 @@ import ModalOverlay from '../modal-overlay/modal-overlay';
 
 const Modal = ({children, title, onClose}) => {
 
-  const [isOpen, setIsOpen] = React.useState(true);
-  const [isHovered, setIsHovered] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
 
   const close = useCallback(() => {
     setIsOpen(false)

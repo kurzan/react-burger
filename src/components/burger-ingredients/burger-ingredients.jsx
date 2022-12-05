@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import dataPropTypes from '../../utils/types.js'
 import { Tab, CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -8,7 +8,7 @@ const tabs = [{id: 'bun', title: 'Булки'}, {id: 'sauce', title: 'Соусы
 
 const Tabs = () => {
   
-  const [current, setCurrent] = React.useState('bun');
+  const [current, setCurrent] = useState('bun');
 
   useEffect(() => {
     const target = document.querySelector(`#${current}`);

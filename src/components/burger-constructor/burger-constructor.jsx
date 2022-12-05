@@ -13,7 +13,7 @@ import { postOrder } from '../../utils/burger-api.js'
   const {setOrder} = useContext(OrderContext);
   
   const bun = selectedIngredients.find(item => item.type === 'bun');
-  const mainIngredients = selectedIngredients.slice(0, 6).filter(item => item.type !== 'bun');
+  const mainIngredients = selectedIngredients.slice(0, 8).filter(item => item.type !== 'bun');
   const allIngredients = [...mainIngredients, bun];
   const totalValue = mainIngredients.reduce((sum, el) => sum + el.price, 0) + (bun? bun.price * 2 : 0);
 
