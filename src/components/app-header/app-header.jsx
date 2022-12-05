@@ -25,7 +25,7 @@ const NavItem = ({Icon, text}) => {
 
 NavItem.propTypes = {
   text: PropTypes.string.isRequired,
-  Icon: PropTypes.element.isRequired,
+  Icon: PropTypes.func.isRequired,
 }
 
 const AppHeader = () => {
