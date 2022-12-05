@@ -1,13 +1,25 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import dataPropTypes from '../../utils/types';
 import PropTypes from 'prop-types';
 import styles from './burger-constructor.module.css';
 import { Button, CurrencyIcon, DragIcon, ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components/';
+import { IngredientsContext } from '../../services/ingredientsContext';
+import { OrderContext } from '../../services/orderContext';
+import { postOrder } from '../../utils/burger-api.js'
 
 
+ const BurgerConstructor = ({onOrderClick, setIsError}) => {
+  const {selectedIngredients} = useContext(IngredientsContext);
+  const {setOrder} = useContext(OrderContext);
+  
+  const bun = selectedIngredients.find(item => item.type === 'bun');
+  const mainIngredients = selectedIngredients.slice(0, 6).filter(item => item.type !== 'bun');
+  const totalValue = mainIngredients.reduce((sum, el) => sum + el.price, 0) + (bun? bun.price * 2 : 0);
 
- const BurgerConstructor = ({data, onOrderClick}) => {
-  const bun = data.find(item => item.type === 'bun');
+  const createOrder = () => {
+    postOrder(setOrder, mainIngredients, setIsError);
+    onOrderClick();
+  };
 
   return (
     <section className={'mt-25 ml-10 ' + styles.constructor}>
@@ -21,10 +33,8 @@ import { Button, CurrencyIcon, DragIcon, ConstructorElement } from '@ya.praktiku
         />
       </div>
       <ul className={styles.content}>
-        { data.map((item, index) => {
+        { mainIngredients.map((item, index) => {
             return (
-            <React.Fragment key={index}>
-              { item.type !== 'bun' && 
               <li key={index} className={'mr-1 ' + styles.item}>
                 <span className={'mr-10' + styles.grug_icon}><DragIcon type="primary" /></span>
                 <ConstructorElement
@@ -34,8 +44,6 @@ import { Button, CurrencyIcon, DragIcon, ConstructorElement } from '@ya.praktiku
                 thumbnail={item.image}
                 />
               </li> 
-              }
-            </React.Fragment>
             )
         }) }
       </ul>
@@ -49,8 +57,8 @@ import { Button, CurrencyIcon, DragIcon, ConstructorElement } from '@ya.praktiku
           />
       </div>
       <div className={'mt-10 mr-4 ' + styles.order}>
-        <p className="text text_type_digits-medium mr-10">1 450<CurrencyIcon /></p>
-        <div onClick={onOrderClick}>
+        <p className="text text_type_digits-medium mr-10">{totalValue}<CurrencyIcon /></p>
+        <div onClick={createOrder}>
           <Button htmlType="button" type="primary" size="large">
             Оформить заказ
           </Button>
