@@ -14,10 +14,11 @@ import { postOrder } from '../../utils/burger-api.js'
   
   const bun = selectedIngredients.find(item => item.type === 'bun');
   const mainIngredients = selectedIngredients.slice(0, 6).filter(item => item.type !== 'bun');
+  const allIngredients = [...mainIngredients, bun];
   const totalValue = mainIngredients.reduce((sum, el) => sum + el.price, 0) + (bun? bun.price * 2 : 0);
 
   const createOrder = () => {
-    postOrder(setOrder, mainIngredients, setIsError);
+    postOrder(setOrder, allIngredients, setIsError);
     onOrderClick();
   };
 
@@ -72,7 +73,8 @@ BurgerConstructor.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape(
       dataPropTypes.isRequired).isRequired),
-  onOrderClick: PropTypes.func.isRequired
+  onOrderClick: PropTypes.func.isRequired,
+  setIsError: PropTypes.func.isRequired,
 };
 
 
