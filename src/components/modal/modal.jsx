@@ -1,8 +1,11 @@
 import React, {useEffect, useCallback, useState} from "react";
+import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from "./modal.module.css";
 import ModalOverlay from '../modal-overlay/modal-overlay';
+
+const modalRoot = document.querySelector('#modals');
 
 
 const Modal = ({children, title, onClose}) => {
@@ -33,7 +36,7 @@ const Modal = ({children, title, onClose}) => {
     setIsHovered(!isHovered);
   }
 
-  return (
+  return ReactDOM.createPortal(
     <>
     {isOpen &&
       <>
@@ -49,7 +52,8 @@ const Modal = ({children, title, onClose}) => {
         </div>
       </>
     }
-    </>
+    </>,
+    modalRoot
   )
 };
 
