@@ -14,7 +14,7 @@ import { OrderContext } from '../../services/orderContext';
 
 
 function App() {
-
+  const [isLoading, setIsLoading] = useState(true);
   const [ingredients, setIngredients] = useState([]);
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [modalIngredientsOpen, setModalIngredientsOpen] = useState(false);
@@ -24,7 +24,8 @@ function App() {
   const [order, setOrder] = useState({});
 
   useEffect(() => {
-    getIngridients(setIngredients, setIsError);
+    getIngridients(setIngredients, setIsError)
+      .finally(setIsLoading(false));
     getIngridients(setSelectedIngredients, setIsError)
   }, []);
 
@@ -60,7 +61,9 @@ function App() {
       </Modal>}
 
       <AppHeader />
-      {!isError.status ? 
+      {isLoading && <Modal title={'Загрузка данных...'} />}
+      {isError.status ? <Modal title={`Ошибка: ${isError.text} Что-то пошло не так :( Обновите страницу`} /> 
+      :
       <main className={styles.main}>
           <BurgerIngredients data={ingredients} onIngredientClick={onIngredientClick}/>
           {selectedIngredients.length && 
@@ -70,9 +73,7 @@ function App() {
             </OrderContext.Provider>   
           </IngredientsContext.Provider>}
       </main>
-      :
-      <Modal title={`Ошибка: ${isError.text} Что-то пошло не так :( Обновите страницу`} />
-    }
+      }
     </>
   );
 }

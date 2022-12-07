@@ -15,7 +15,7 @@ const Modal = ({children, title, onClose}) => {
 
   const close = useCallback(() => {
     setIsOpen(false)
-    onClose();
+    onClose && onClose();
   }, [onClose]);
 
   const onEscClose = useCallback((evt) => {
