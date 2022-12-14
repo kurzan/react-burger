@@ -1,8 +1,10 @@
-import dataPropTypes from '../../utils/types';
-import PropTypes from 'prop-types';
 import styles from './ingredient-details.module.css';
+import { useSelector } from 'react-redux';
 
-const IngredientDetails = ({currentIngredient}) => {
+
+const IngredientDetails = () => {
+
+  const currentIngredient = useSelector(store => store.currentIngredientReducer.currentIngredient)
 
   return (
     <div className={"mt-8 " + styles.details}>
@@ -32,11 +34,6 @@ const IngredientDetails = ({currentIngredient}) => {
       </div>
     </div>
   )
-};
-
-IngredientDetails.propTypes = { 
-  currentIngredient: PropTypes.shape(
-      dataPropTypes.isRequired).isRequired
 };
 
 export default IngredientDetails;

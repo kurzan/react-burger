@@ -4,6 +4,7 @@ import dataPropTypes from '../../utils/types.js'
 import { Tab, CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 
+
 const tabs = [{id: 'bun', title: 'Булки'}, {id: 'sauce', title: 'Соусы'}, {id: 'main', title: 'Начинки'}];
 
 const Tabs = () => {

@@ -1,10 +1,11 @@
-import React, {useContext} from "react";
+import React from "react";
 import styles from './order-details.module.css';
 import donePng from '../../images/done.svg';
-import { OrderContext } from '../../services/orderContext';
+import { useSelector } from 'react-redux';
+
 
 const OrderDetails = () => {
-  const {order} = useContext(OrderContext);
+  const { order } = useSelector(store => store.orderReducer);
 
   return (
     <div className={styles.order}>

@@ -1,6 +1,6 @@
-const NORMA_URL = 'https://norma.nomoreparties.space/api';
+export const NORMA_URL = 'https://norma.nomoreparties.space/api';
 
-const isresponseOk = (response) => {
+export const isresponseOk = (response) => {
   if (response.ok) {
     return response.json();
   }
