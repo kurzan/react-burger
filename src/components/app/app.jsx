@@ -11,9 +11,9 @@ import IngredientDetails from "../ingredient-details/ingredient-details";
 import { useSelector, useDispatch } from 'react-redux';
 import { getIngredients } from '../../services/actions/ingrediens';
 import { setCurrentIngredient, resetCurrentIngredient } from '../../services/actions/current-ingredient';
-import { selectIngredient, selectBun } from '../../services/actions/selected-ingredients';
-import { v4 as uuid } from 'uuid';
 
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 function App() {
   const [modalIngredientsOpen, setModalIngredientsOpen] = useState(false);
@@ -34,17 +34,11 @@ function App() {
 
   const onOrderModalClose = () => {
     setModalOrderOpen(false);
-    
+
   }
 
   const onIngredientClick = (ingredient) => {
     dispatch(setCurrentIngredient(ingredient));
-    if (ingredient.type === 'bun') {
-      dispatch(selectBun(ingredient));
-    } else {
-      dispatch(selectIngredient(ingredient, uuid()));
-    }
-    
     setModalIngredientsOpen(true);
   }
 
@@ -73,11 +67,12 @@ function App() {
       {isLoading && <Modal title={'Загрузка данных...'} />}
       {isError ? <Modal title={`Ошибка: Что-то пошло не так :( Обновите страницу`} /> 
       :
-      <main className={styles.main}>
-          <BurgerIngredients data={ingredients} onIngredientClick={onIngredientClick}/>
-          <BurgerConstructor onOrderClick={onOrderClick} />
-
-      </main>
+      <DndProvider backend={HTML5Backend}>
+        <main className={styles.main}>
+            <BurgerIngredients data={ingredients} onIngredientClick={onIngredientClick}/>
+            <BurgerConstructor onOrderClick={onOrderClick} />
+        </main>
+      </DndProvider>
       }
     </>
   );

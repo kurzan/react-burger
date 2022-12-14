@@ -3,19 +3,32 @@ import dataPropTypes from '../../utils/types';
 import PropTypes from 'prop-types';
 import styles from './burger-constructor.module.css';
 import { Button, CurrencyIcon, DragIcon, ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components/';
-
+import { useDrop } from "react-dnd";
 
 import { postOrder } from '../../services/actions/order';
 import { removeIngredient } from '../../services/actions/selected-ingredients';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { selectIngredient, selectBun } from '../../services/actions/selected-ingredients';
+import { v4 as uuid } from 'uuid';
 
  const BurgerConstructor = ({onOrderClick}) => {
   const dispatch = useDispatch();
+
+  const [, dropTarget] = useDrop({
+    accept: "ingredient",
+    drop(item) {
+      if (item.ingredient.type === 'bun') {
+        dispatch(selectBun(item.ingredient));
+      } else {
+        dispatch(selectIngredient(item.ingredient, uuid()));
+      }
+    },
+  });
   
   const { bun, selectedIngredients } = useSelector(store => store.selectedIngredientsReducer );
 
-  const allIngredients = [...selectedIngredients, bun];
+  const allIngredients = [...selectedIngredients, bun ? bun : ''];
   const totalValue = selectedIngredients.reduce((sum, el) => sum + el.price, 0) + (bun? bun.price * 2 : 0);
 
   const createOrder = () => {
@@ -28,8 +41,8 @@ import { useDispatch, useSelector } from 'react-redux';
   }
 
   return (
-    <section className={'mt-25 ml-10 ' + styles.constructor}>
-      <div className={'mb-4 mr-4 ' + styles.top}>
+    <section className={'mt-25 ml-10 ' + styles.constructor} ref={dropTarget}>
+      <div className={'mb-4 mr-4 ' + styles.top} >
         {bun && 
                 <ConstructorElement
                 type="top"

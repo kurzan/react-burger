@@ -4,17 +4,28 @@ import dataPropTypes from '../../utils/types.js'
 import { Tab, CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import { useInView } from 'react-intersection-observer';
-
+import { useDrag } from "react-dnd";
+import { useSelector } from "react-redux";
 
 const MenuElement = ({ ingredient, onIngredientClick }) => {
+
+  const { selectedIngredients, bun } = useSelector(store => store.selectedIngredientsReducer)
+
+  const [, dragRef] = useDrag({
+    type: "ingredient",
+    item: {ingredient},
+
+  });
+
+  const allIngredients = [...selectedIngredients, bun ? bun : ''];
 
   const onClick = () => {
     onIngredientClick(ingredient)
   }
 
   return (
-    <div className={styles.menu_element} onClick={onClick} >
-      <span className={styles.counter} ><Counter /></span>
+    <div className={styles.menu_element} onClick={onClick} ref={dragRef}>
+      <span className={styles.counter} ><Counter count={allIngredients.filter(item => item._id === ingredient._id).length}/></span>
       <img className="ml-4 mr-4 mb-1" src={ingredient.image} alt={ingredient.name} />
       <div className={styles.price_wrapper}>
         <p className="text text_type_digits-default">{ingredient.price}</p>
