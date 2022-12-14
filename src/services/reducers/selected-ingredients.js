@@ -7,7 +7,6 @@ import {
 const initialState = {
   bun: null,
   selectedIngredients: [],
-  allIngredients: []
 }
 
 export const selectedIngredientsReducer = (state = initialState, action) => {

@@ -82,11 +82,9 @@ import { v4 as uuid } from 'uuid';
       </div>
       <div className={'mt-10 mr-4 ' + styles.order}>
         <p className="text text_type_digits-medium mr-10">{totalValue}<CurrencyIcon /></p>
-        <div onClick={createOrder}>
-          <Button htmlType="button" type="primary" size="large">
-            Оформить заказ
-          </Button>
-        </div>
+        <Button htmlType="button" type="primary" size="large" disabled={selectedIngredients.length || bun ? false : true} onClick={createOrder}>
+          Оформить заказ
+        </Button>
       </div>
     </section>
   )
