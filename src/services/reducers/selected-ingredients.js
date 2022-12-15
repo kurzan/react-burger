@@ -2,7 +2,8 @@ import {
   ADD_INGREDIENT, 
   REMOVE_INGREDIENT, 
   RESET_INGREDIENTS,
-  ADD_BUN } from '../actions/selected-ingredients';
+  ADD_BUN,
+  MOVE_INGREDIENT } from '../actions/selected-ingredients';
 
 const initialState = {
   bun: null,
@@ -36,7 +37,15 @@ export const selectedIngredientsReducer = (state = initialState, action) => {
         selectedIngredients: []
       }
     }
+    case MOVE_INGREDIENT: {
+      const data = [...state.selectedIngredients];
+      data.splice(action.hoverIndex, 0, data.splice(action.dragIndex, 1)[0]);
 
+      return {
+        ...state,
+        selectedIngredients: data,
+      };
+    }
     default:
       return state;
   }

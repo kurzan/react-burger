@@ -1,16 +1,93 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import dataPropTypes from '../../utils/types';
 import PropTypes from 'prop-types';
 import styles from './burger-constructor.module.css';
 import { Button, CurrencyIcon, DragIcon, ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components/';
-import { useDrop } from "react-dnd";
+import { useDrop, useDrag } from "react-dnd";
 
 import { postOrder } from '../../services/actions/order';
-import { removeIngredient } from '../../services/actions/selected-ingredients';
+import { removeIngredient, moveIngredient } from '../../services/actions/selected-ingredients';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { selectIngredient, selectBun } from '../../services/actions/selected-ingredients';
 import { v4 as uuid } from 'uuid';
+
+
+const ConstructorItem = ({ingredient, index, onDelete}) => {
+  const dispatch = useDispatch();
+
+  const ref = useRef(null);
+
+  const [{ handlerId }, drop] = useDrop({
+    accept: "constructor",
+    collect(monitor) {
+      return {
+        handlerId: monitor.getHandlerId(),
+      };
+    },
+    hover(item, monitor) {
+      if (!ref.current) {
+        return;
+      }
+
+      const dragIndex = item.index;
+      const hoverIndex = index;
+
+      if (dragIndex === hoverIndex) {
+        return;
+      }
+
+      const hoverBoundingRect = ref.current?.getBoundingClientRect();
+
+      const hoverMiddleY =
+        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+
+      const clientOffset = monitor.getClientOffset();
+
+      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+
+      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+        return;
+      }
+
+      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+        return;
+      }
+
+      dispatch(moveIngredient(dragIndex, hoverIndex));
+
+      item.index = hoverIndex;
+      
+    },
+  });
+
+  const [{ isDragging }, drag] = useDrag({
+    type: "constructor",
+    item: () => {
+      return { id: ingredient._id, index };
+    },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+
+  drag(drop(ref));
+
+  const opacity = isDragging ? 0 : 1;
+
+  return (
+    <li className={'mr-1 ' + styles.item} style={{ opacity }} ref={ref} data-handler-id={handlerId}>
+      <span className={'mr-10 ' + styles.grug_icon}><DragIcon type="primary" /></span>
+      <ConstructorElement
+      key={index}
+      text={ingredient.name}
+      price={ingredient.price}
+      thumbnail={ingredient.image}
+      handleClose={() => onDelete(ingredient.key)}
+      />
+    </li> 
+  )
+}
 
  const BurgerConstructor = ({onOrderClick}) => {
   const dispatch = useDispatch();
@@ -54,20 +131,7 @@ import { v4 as uuid } from 'uuid';
         }
       </div>
       <ul className={styles.content}>
-        { selectedIngredients.map((item, index) => {
-            return (
-              <li key={index} className={'mr-1 ' + styles.item}>
-                <span className={'mr-10' + styles.grug_icon}><DragIcon type="primary" /></span>
-                <ConstructorElement
-                key={index}
-                text={item.name}
-                price={item.price}
-                thumbnail={item.image}
-                handleClose={() => handleRemoveItem(item.key)}
-                />
-              </li> 
-            )
-        }) }
+        { selectedIngredients.map((item, index) => <ConstructorItem key={item.key} ingredient={item} index={index} onDelete={handleRemoveItem} />) }
       </ul>
       <div className={'mt-4 mr-4 ' + styles.bottom}>
         {bun && 
