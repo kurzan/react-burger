@@ -13,7 +13,7 @@ import { selectIngredient, selectBun } from '../../services/actions/selected-ing
 import { v4 as uuid } from 'uuid';
 
 
-const ConstructorItem = ({ingredient, index, onDelete}) => {
+const ConstructorItem = ({ ingredient, index, onDelete }) => {
   const dispatch = useDispatch();
 
   const ref = useRef(null);
@@ -57,7 +57,7 @@ const ConstructorItem = ({ingredient, index, onDelete}) => {
       dispatch(moveIngredient(dragIndex, hoverIndex));
 
       item.index = hoverIndex;
-      
+
     },
   });
 
@@ -79,17 +79,25 @@ const ConstructorItem = ({ingredient, index, onDelete}) => {
     <li className={'mr-1 ' + styles.item} style={{ opacity }} ref={ref} data-handler-id={handlerId}>
       <span className={'mr-10 ' + styles.grug_icon}><DragIcon type="primary" /></span>
       <ConstructorElement
-      key={index}
-      text={ingredient.name}
-      price={ingredient.price}
-      thumbnail={ingredient.image}
-      handleClose={() => onDelete(ingredient.key)}
+        key={index}
+        text={ingredient.name}
+        price={ingredient.price}
+        thumbnail={ingredient.image}
+        handleClose={() => onDelete(ingredient.key)}
       />
-    </li> 
+    </li>
   )
 }
 
- const BurgerConstructor = ({onOrderClick}) => {
+ConstructorItem.propTypes = {
+  ingredient: PropTypes.shape(
+      dataPropTypes.isRequired).isRequired,
+  index: PropTypes.number.isRequired,
+  onDelete: PropTypes.func.isRequired,
+};
+
+
+const BurgerConstructor = ({ onOrderClick }) => {
   const dispatch = useDispatch();
 
   const [, dropTarget] = useDrop({
@@ -102,11 +110,11 @@ const ConstructorItem = ({ingredient, index, onDelete}) => {
       }
     },
   });
-  
-  const { bun, selectedIngredients } = useSelector(store => store.selectedIngredientsReducer );
+
+  const { bun, selectedIngredients } = useSelector(store => store.selectedIngredientsReducer);
 
   const allIngredients = [...selectedIngredients, bun ? bun : ''];
-  const totalValue = selectedIngredients.reduce((sum, el) => sum + el.price, 0) + (bun? bun.price * 2 : 0);
+  const totalValue = selectedIngredients.reduce((sum, el) => sum + el.price, 0) + (bun ? bun.price * 2 : 0);
 
   const createOrder = () => {
     dispatch(postOrder(allIngredients));
@@ -120,28 +128,28 @@ const ConstructorItem = ({ingredient, index, onDelete}) => {
   return (
     <section className={'mt-25 ml-10 ' + styles.constructor} ref={dropTarget}>
       <div className={'mb-4 mr-4 ' + styles.top} >
-        {bun && 
-                <ConstructorElement
-                type="top"
-                isLocked={true}
-                text={bun.name + ' (верх)'}
-                price={bun.price}
-                thumbnail={bun.image}
-              />
+        {bun &&
+          <ConstructorElement
+            type="top"
+            isLocked={true}
+            text={bun.name + ' (верх)'}
+            price={bun.price}
+            thumbnail={bun.image}
+          />
         }
       </div>
       <ul className={styles.content}>
-        { selectedIngredients.map((item, index) => <ConstructorItem key={item.key} ingredient={item} index={index} onDelete={handleRemoveItem} />) }
+        {selectedIngredients.map((item, index) => <ConstructorItem key={item.key} ingredient={item} index={index} onDelete={handleRemoveItem} />)}
       </ul>
       <div className={'mt-4 mr-4 ' + styles.bottom}>
-        {bun && 
-                <ConstructorElement
-                type="bottom"
-                isLocked={true}
-                text={bun.name + ' (низ)'}
-                price={bun.price}
-                thumbnail={bun.image}
-              />
+        {bun &&
+          <ConstructorElement
+            type="bottom"
+            isLocked={true}
+            text={bun.name + ' (низ)'}
+            price={bun.price}
+            thumbnail={bun.image}
+          />
         }
       </div>
       <div className={'mt-10 mr-4 ' + styles.order}>
@@ -154,10 +162,7 @@ const ConstructorItem = ({ingredient, index, onDelete}) => {
   )
 }
 
-BurgerConstructor.propTypes = { 
-  data: PropTypes.arrayOf(
-    PropTypes.shape(
-      dataPropTypes.isRequired).isRequired),
+BurgerConstructor.propTypes = {
   onOrderClick: PropTypes.func.isRequired,
 };
 
