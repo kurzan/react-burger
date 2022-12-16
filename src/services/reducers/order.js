@@ -14,7 +14,8 @@ export const orderReducer = (state = initialState, action) => {
     case POST_ORDER_REQUEST: {
       return {
         ...state,
-        orderRequest: true
+        orderRequest: true,
+        orderFailed: false
       }
     }
 
@@ -30,7 +31,6 @@ export const orderReducer = (state = initialState, action) => {
     case POST_ORDER_FAILED: {
       return {
         ...state,
-        order: {},
         orderRequest: false,
         orderFailed: true
       }

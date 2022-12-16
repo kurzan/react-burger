@@ -23,9 +23,11 @@ const MenuElement = ({ ingredient, onIngredientClick }) => {
     onIngredientClick(ingredient)
   }
 
+  const count = allIngredients.filter(item => item._id === ingredient._id).length
+
   return (
     <div className={styles.menu_element} onClick={onClick} ref={dragRef}>
-      <span className={styles.counter} ><Counter count={allIngredients.filter(item => item._id === ingredient._id).length}/></span>
+      {count ? <span className={styles.counter} ><Counter count={count}/></span> : null}
       <img className="ml-4 mr-4 mb-1" src={ingredient.image} alt={ingredient.name} />
       <div className={styles.price_wrapper}>
         <p className="text text_type_digits-default">{ingredient.price}</p>
@@ -44,7 +46,11 @@ MenuElement.propTypes = {
 };
 
 
-const BurgerIngredients = ({ data, onIngredientClick }) => {
+const BurgerIngredients = ({ onIngredientClick }) => {
+
+  const { ingredients } = useSelector(store => store.ingredientsReducer);
+
+
   const tabs = [{ id: 'bun', title: 'Булки' }, { id: 'sauce', title: 'Соусы' }, { id: 'main', title: 'Начинки' }];
 
   const [current, setCurrent] = useState('bun');
@@ -85,9 +91,9 @@ const BurgerIngredients = ({ data, onIngredientClick }) => {
         <div className={styles.menu} ref={bunRef}>
           <p className="text text_type_main-medium" id='bun'>Булки</p>
           <ul className={styles.menu_wrapper}>
-            {data.map((item, i) => {
+            {ingredients.map((item) => {
               if (item.type === 'bun') {
-                return <MenuElement key={i} ingredient={item} onIngredientClick={onIngredientClick} />
+                return <MenuElement key={item._id} ingredient={item} onIngredientClick={onIngredientClick} />
               }
               return null;
             })}
@@ -97,9 +103,9 @@ const BurgerIngredients = ({ data, onIngredientClick }) => {
         <div className={styles.menu} ref={sauceRef}>
           <p className="text text_type_main-medium" id='sauce'>Соусы</p>
           <ul className={styles.menu_wrapper}>
-            {data.map((item, i) => {
+            {ingredients.map((item) => {
               if (item.type === 'sauce') {
-                return <MenuElement key={i} ingredient={item} onIngredientClick={onIngredientClick} />
+                return <MenuElement key={item._id} ingredient={item} onIngredientClick={onIngredientClick} />
               }
               return null;
             })}
@@ -109,9 +115,9 @@ const BurgerIngredients = ({ data, onIngredientClick }) => {
         <div className={styles.menu} ref={mainRef}>
           <p className="text text_type_main-medium" id='main'>Начинки</p>
           <ul className={styles.menu_wrapper}>
-            {data.map((item, i) => {
+            {ingredients.map((item) => {
               if (item.type === 'main') {
-                return <MenuElement key={i} ingredient={item} onIngredientClick={onIngredientClick} />
+                return <MenuElement key={item._id} ingredient={item} onIngredientClick={onIngredientClick} />
               }
               return null;
             })}
@@ -124,9 +130,6 @@ const BurgerIngredients = ({ data, onIngredientClick }) => {
 }
 
 BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape(
-      dataPropTypes.isRequired).isRequired),
   onIngredientClick: PropTypes.func.isRequired
 };
 

@@ -20,8 +20,8 @@ function App() {
   const [modalOrderOpen, setModalOrderOpen] = useState(false);
 
   const dispatch = useDispatch ();
-  const { isLoading, isError, ingredients } = useSelector(store => store.ingredientsReducer);
-  const { orderFailed } = useSelector(store => store.orderReducer);
+  const { isLoading, isError } = useSelector(store => store.ingredientsReducer);
+  const { orderRequest, orderFailed } = useSelector(store => store.orderReducer);
 
   useEffect(() => {
     
@@ -49,12 +49,12 @@ function App() {
 
   return (
     <>
-      {modalOrderOpen && !orderFailed &&
+      {orderRequest && <Modal title={'Отправляем заказ на сервер...'} />}
+      {modalOrderOpen && !orderRequest && !orderFailed &&
       <Modal onClose={onOrderModalClose}>
         <OrderDetails />
-      </Modal>
-      }
-      {modalOrderOpen && orderFailed &&
+      </Modal>}
+      {orderFailed &&
         <Modal title={`Ошибка: Что-то пошло не так :( Попробуйте еще раз`} /> 
       }
 
@@ -69,7 +69,7 @@ function App() {
       :
       <DndProvider backend={HTML5Backend}>
         <main className={styles.main}>
-            <BurgerIngredients data={ingredients} onIngredientClick={onIngredientClick}/>
+            <BurgerIngredients onIngredientClick={onIngredientClick}/>
             <BurgerConstructor onOrderClick={onOrderClick} />
         </main>
       </DndProvider>

@@ -34,6 +34,7 @@ export const selectedIngredientsReducer = (state = initialState, action) => {
     case RESET_INGREDIENTS: {
       return {
         ...state,
+        bun: null,
         selectedIngredients: []
       }
     }

@@ -124,6 +124,8 @@ const BurgerConstructor = ({ onOrderClick }) => {
   const handleRemoveItem = (key) => {
     dispatch(removeIngredient(key))
   }
+  
+  const chekConstructor = selectedIngredients.length || bun ? false : true;
 
   return (
     <section className={'mt-25 ml-10 ' + styles.constructor} ref={dropTarget}>
@@ -152,9 +154,10 @@ const BurgerConstructor = ({ onOrderClick }) => {
           />
         }
       </div>
+      {chekConstructor && 'Перенестите необходимые ингредиенты для бургера в эту часть экрана'}
       <div className={'mt-10 mr-4 ' + styles.order}>
         <p className="text text_type_digits-medium mr-10">{totalValue}<CurrencyIcon /></p>
-        <Button htmlType="button" type="primary" size="large" disabled={selectedIngredients.length || bun ? false : true} onClick={createOrder}>
+        <Button htmlType="button" type="primary" size="large" disabled={chekConstructor} onClick={createOrder}>
           Оформить заказ
         </Button>
       </div>
