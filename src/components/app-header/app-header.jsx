@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from 'prop-types';
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './app-header.module.css'
 
 
 const NavItem = ({Icon, text}) => {
-  const [isActive, setIsActive] = React.useState(false);
+  const [isActive, setIsActive] = useState(false);
 
   const iconHandle = () => {
     setIsActive(!isActive);
