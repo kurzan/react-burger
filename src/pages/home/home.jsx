@@ -13,7 +13,7 @@ import { setCurrentIngredient, resetCurrentIngredient } from '../../services/act
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
-function HomePage() {
+export const HomePage = () => {
   const [modalIngredientsOpen, setModalIngredientsOpen] = useState(false);
   const [modalOrderOpen, setModalOrderOpen] = useState(false);
 
@@ -68,5 +68,3 @@ function HomePage() {
     </>
   );
 }
-
-export default HomePage;
