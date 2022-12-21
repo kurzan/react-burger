@@ -1,0 +1,24 @@
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../../fonts/JetBrainsMono-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: 'Iceland';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../../fonts/Iceland.ttf") format("truetype");
+}
+
+body {
+  font-family: 'JetBrains Mono', Arial, sans-serif;
+}
+
+.main {
+  display: flex;
+  justify-content: center;
+  max-height: 830px;
+}
+

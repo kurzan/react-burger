@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import PropTypes from 'prop-types';
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './app-header.module.css'
+import { NavLink } from 'react-router-dom';
 
 
-const NavItem = ({Icon, text}) => {
+const NavItem = ({Icon, text, to}) => {
   const [isActive, setIsActive] = useState(false);
 
   const iconHandle = () => {
@@ -12,13 +13,10 @@ const NavItem = ({Icon, text}) => {
   }
     
     return (
-      // eslint-disable-next-line jsx-a11y/anchor-is-valid
-      <a href="#" className={'p-5 mr-2 ' + styles.nav_item} onMouseEnter={iconHandle} onMouseLeave={iconHandle}>
+      <NavLink exact={true} to={{ pathname: `${to}` }} className={'p-5 mr-2 ' + styles.nav_item} activeClassName={styles.nav_item__active} onMouseEnter={iconHandle} onMouseLeave={iconHandle} >
         <div className="pr-2"><Icon type={ isActive ? 'primary' : 'secondary'} /></div>
-        <p className="text text_type_main-default">
-              {text}
-            </p>
-      </a>
+        <p className="text text_type_main-default">{text}</p>
+      </NavLink>
     )
 
 }
@@ -34,14 +32,14 @@ const AppHeader = () => {
       <header className={'pt-4 pb-4 ' + styles.header}>
         <div className={styles.container}>
           <nav className={styles.menu}>
-              <NavItem Icon={BurgerIcon} text={'Конструктор'}/>
-              <NavItem Icon={ListIcon} text={'Лента заказов'}/>
+              <NavItem Icon={BurgerIcon} text={'Конструктор'} to={'/'}/>
+              <NavItem Icon={ListIcon} text={'Лента заказов'} to={'/lenta'}/>
           </nav>
           <div className={styles.logo}>
             <Logo />
           </div>
           <nav className={styles.user_menu}>
-              <NavItem Icon={ProfileIcon} text={'Личный кабинет'} />
+              <NavItem Icon={ProfileIcon} text={'Личный кабинет'} to={'/profile'}/>
           </nav>
         </div>
       </header>
