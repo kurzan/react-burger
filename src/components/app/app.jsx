@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { getIngredients } from '../../services/actions/ingrediens';
 import styles from './app.module.css'
 import AppHeader from '../app-header/app-header';
-import { HomePage, Login } from '../../pages';
+import { HomePage, Login, Register, ForgotPassword, ResetPassword, Profile } from '../../pages';
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
@@ -29,16 +29,16 @@ function App() {
               <Login />
             </Route>
             <Route path='/register' exact={true}>
-              'register'
+              <Register />
             </Route>
             <Route path='/forgot-password' exact={true}>
-              'forgot-password'
+              <ForgotPassword />
             </Route>
             <Route path='/reset-password' exact={true}>
-              'reset-password '
+              <ResetPassword />
             </Route>
             <Route path='/profile' exact={true}>
-              'profile  '
+              <Profile />
             </Route>
         </Switch>
         </div>
