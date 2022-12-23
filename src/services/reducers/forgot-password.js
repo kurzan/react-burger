@@ -4,6 +4,7 @@ import {
   FORGOT_PASSWORD_FAILED } from '../actions/forgot-password';
 
 const initialState = {
+  status: null,
   forgotRequest: false,
   forgotFailed: false
 }
@@ -21,6 +22,7 @@ export const passwordForgotReducer = (state = initialState, action) => {
     case FORGOT_PASSWORD_SUCCESS: {
       return {
         ...state,
+        status: action.status,
         forgotRequest: false,
         forgotFailed: false
       }

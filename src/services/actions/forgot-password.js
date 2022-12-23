@@ -18,8 +18,9 @@ export const getForgotPassword = (email) => (dispatch) => {
   })
   
   apiRequest('password-reset', options)
-    .then(() => dispatch({
-      type: FORGOT_PASSWORD_SUCCESS
+    .then(status => dispatch({
+      type: FORGOT_PASSWORD_SUCCESS,
+      status
     }))
     .catch(() => dispatch({
       type: FORGOT_PASSWORD_FAILED

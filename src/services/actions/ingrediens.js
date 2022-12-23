@@ -11,11 +11,12 @@ export const getIngredients = () => (dispatch) => {
   })
 
   apiRequest('ingredients')
-    .then(({ data }) => 
+    .then(({ data }) => {
       dispatch({
         type: GET_INGREDIENTS_SUCCESS,
         ingredients: data
       })
+    }
       )
     .catch(err => {
       dispatch({
