@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import Modal from "../../components/modal/modal";
 import { EmailInput, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './forgot-password.module.css';
@@ -11,24 +11,15 @@ export const ForgotPassword = () => {
 
   const history = useHistory();
 
-  const { forgotRequest, forgotFailed, status } = useSelector(store => store.passwordForgotReducer);
+  const { forgotRequest, forgotFailed } = useSelector(store => store.passwordForgotReducer);
 
   const [email, setEmail] = useState('')
   const onChange = e => {
     setEmail(e.target.value)
   }
 
-  const toResetPassword = useCallback(
-    () => {
-      history.push({ pathname: '/reset-password' });
-    },
-    [history]
-);
-
   const postForgotRequest = () => {
-    dispatch(getForgotPassword(email))
-    
-    toResetPassword();
+    dispatch(getForgotPassword(email, history))
   }
 
 

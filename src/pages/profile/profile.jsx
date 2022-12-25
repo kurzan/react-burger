@@ -1,11 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './profile.module.css';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
+import { logout } from "../../services/actions/logout";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserInfo } from '../../services/actions/user-info';
 
 export const Profile = () => {
-  const [name, setName] = useState('');
-  const [login, setLogin] = useState('');
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const { user } = useSelector(store => store.userInfoReducer);
+
+  useEffect(() => {
+    dispatch(getUserInfo());
+  }, [dispatch])
+
+  // const [name, setName] = useState('');
+  // const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
 
   return (
@@ -14,7 +26,7 @@ export const Profile = () => {
         <div className="mb-20">
           <NavLink exact={true} className={styles.link} to={{ pathname: '/profile' }} activeClassName={styles.link_active}><p>Профиль</p></NavLink>
           <NavLink exact={true} className={styles.link} to={{ pathname: '/orders' }} activeClassName={styles.link_active}>История заказов</NavLink>
-          <NavLink exact={true} className={styles.link} to={{ pathname: '/' }} activeClassName={styles.link_active}>Выход</NavLink>
+          <NavLink exact={true} className={styles.link} to={{ pathname: '/' }}  onClick={() => dispatch(logout(history))} activeClassName={styles.link_active}>Выход</NavLink>
         </div>
         <p className={"text text_type_main-default text_color_inactive " + styles.info}>В этом разделе вы можете изменить свои персональные данные</p>
       </div>
@@ -24,7 +36,7 @@ export const Profile = () => {
           type={'text'}
           placeholder={'Имя'}
           icon={'EditIcon'}
-          value={name}
+          value={user.name}
           name={'name'}
           error={false}
           errorText={'Ошибка'}
@@ -36,8 +48,8 @@ export const Profile = () => {
           type={'text'}
           placeholder={'Логин'}
           icon={'EditIcon'}
-          value={login}
-          name={'login'}
+          value={user.email}
+          name={'email'}
           error={false}
           errorText={'Ошибка'}
           size={'default'}

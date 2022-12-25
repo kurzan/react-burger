@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { Input, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './reset-password.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Modal from "../../components/modal/modal";
 import { postResetPassword } from "../../services/actions/reset-password"; 
 
 export const ResetPassword = () => {
+  const history = useHistory();
+
   const dispatch = useDispatch();
 
   const forgotStatus = useSelector(store => store.passwordForgotReducer.status);
@@ -24,7 +26,7 @@ export const ResetPassword = () => {
   const inputNameRef = React.useRef(null)
 
   const postNewPassword = () => {
-    dispatch(postResetPassword(password, emailCode))
+    dispatch(postResetPassword(password, emailCode, history))
 
   }
 
