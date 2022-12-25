@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { EmailInput, Input, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './register.module.css';
 import { Link } from 'react-router-dom';
-import { registerUser } from '../../services/actions/register';
+import { registerUser } from '../../services/actions/user';
 import { useDispatch, useSelector } from 'react-redux'; 
 import Modal from "../../components/modal/modal";
 
 export const Register = () => {
   const dispatch = useDispatch();
 
-  const { status, registerFailure } = useSelector(store => store.registerReducer);
+  const { status, registerFailure } = useSelector(store => store.userReducer);
 
   const [email, setEmail] = useState('')
   const onChange = e => {

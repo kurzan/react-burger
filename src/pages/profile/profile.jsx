@@ -2,15 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Input, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './profile.module.css';
 import { NavLink, useHistory } from 'react-router-dom';
-import { logout } from "../../services/actions/logout";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserInfo } from '../../services/actions/user-info';
+import { getUserInfo, logout } from '../../services/actions/user';
 
 export const Profile = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const { user } = useSelector(store => store.userInfoReducer);
+  const { user } = useSelector(store => store.userReducer);
 
   useEffect(() => {
     dispatch(getUserInfo());

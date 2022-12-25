@@ -1,0 +1,147 @@
+import { apiRequest } from "../../utils/burger-api"; 
+import { setCookie, deleteCookie, getCookie } from "../../utils/cookie";
+
+export const REGISTER_REQUEST = 'REGISTER_REQUEST';
+export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
+export const REGISTER_FAILED = 'REGISTER_FAILED';
+
+export const LOGIN_REQUEST = 'LOGIN_REQUEST';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGIN_FAILED = 'LOGIN_FAILED';
+
+export const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
+export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
+export const LOGOUT_FAILED = 'LOGOUT_FAILED';
+export const LOGOUT_DEL_STATUS = 'LOGOUT_DEL_STATUS';
+
+export const GET_USER_REQUEST = 'GET_USER_REQUEST';
+export const GET_USER_SUCCESS = 'GET_USER_SUCCESS';
+export const GET_USER_FAILED = 'GET_USER_FAILED';
+
+
+export const registerUser = (name, email, password) => (dispatch) => {
+  const options = {
+    method: 'POST',
+    body: JSON.stringify({
+      "email": email, 
+      "password": password, 
+      "name": name 
+  } ),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }
+
+  dispatch({
+    type: REGISTER_REQUEST
+  });
+
+  apiRequest('auth/register', options)
+    .then((res) => {
+      dispatch({
+        type: REGISTER_SUCCESS
+      })
+      setCookie('accessToken', res.accessToken);
+      setCookie('refreshToken', res.refreshToken);
+    })
+    .catch(err => {
+      dispatch({
+        type: REGISTER_FAILED,
+        err
+      })
+    })
+};
+
+export const loginning = (email, password, history) => (dispatch) => {
+  const options = {
+      method: 'POST',
+      body: JSON.stringify({
+          "email": email, 
+          "password": password 
+      } ),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+  dispatch({type: LOGIN_REQUEST});
+
+  apiRequest('auth/login', options)
+    .then(res => {
+      dispatch({type: LOGIN_SUCCESS});
+      setCookie('accessToken', res.accessToken);
+      setCookie('refreshToken', res.refreshToken);
+    })
+    .then(() => history.push({pathname: '/'}))
+    .catch(status => {
+      dispatch({ 
+          type: LOGIN_FAILED,
+          status
+      });
+    })
+};
+
+export const logout = (history) => (dispatch) => {
+  const options = {
+      method: 'POST',
+      body: JSON.stringify({
+          "token": getCookie('refreshToken')
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+  dispatch({type: LOGOUT_REQUEST});
+
+  apiRequest('auth/logout', options)
+    .then((res) => {
+      dispatch({type: LOGOUT_SUCCESS, res});
+      deleteCookie('accessToken');
+      deleteCookie('refreshToken');
+    })
+    .then(() => history.push({pathname: '/login'}))
+    .catch(err => {
+      dispatch({
+          type: LOGOUT_FAILED,
+          err
+      });
+    })
+}
+
+export const getUserInfo = () => (dispatch) => {
+  const options = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'authorization': getCookie('accessToken')
+    },
+  }
+
+  dispatch({
+    type: GET_USER_REQUEST
+  })
+
+  apiRequest('auth/user', options)
+    .then(({
+      user
+    }) => dispatch({
+      type: GET_USER_SUCCESS,
+      user
+    }))
+    .catch(err => dispatch({
+      type: GET_USER_FAILED
+    }, err))
+
+};
+
+export const updateUserInfo = (form) => (dispatch) => {
+  const options = {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'authorization': getCookie('accessToken')
+    },
+    body: JSON.stringify(form)
+  }
+};

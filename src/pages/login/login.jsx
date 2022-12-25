@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import { EmailInput, Input, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './login.module.css';
 import { Link, useHistory } from 'react-router-dom';
-import { loginning } from "../../services/actions/login";
+import { loginning } from "../../services/actions/user";
 import { useSelector, useDispatch } from "react-redux";
 import Modal from "../../components/modal/modal";
 
@@ -22,7 +22,7 @@ export const Login = () => {
     setEmail(e.target.value)
   }
 
-  const { status, loginFailure } = useSelector(store => store.loginReducer);
+  const { status, loginFailure } = useSelector(store => store.userReducer);
 
   const onLoginClick = () => {
     dispatch(loginning(email, password, history));
