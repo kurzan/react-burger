@@ -11,9 +11,7 @@ export const ResetPassword = () => {
 
   const dispatch = useDispatch();
 
-  const forgotStatus = useSelector(store => store.passwordForgotReducer.status);
-  const resetStatus = useSelector(store => store.resetPasswordReducer.status);
-  const { resetFailure } = useSelector(store => store.resetPasswordReducer);
+  const { resetFailure, status } = useSelector(store => store.resetPasswordReducer);
 
   const [password, setPassword] = React.useState('')
   const inputPasswordRef = React.useRef(null)
@@ -32,9 +30,7 @@ export const ResetPassword = () => {
 
   return (
     <>
-      { forgotStatus ? <Modal title={forgotStatus.message} /> : null}
-      { resetFailure ? <Modal title={resetStatus} /> : null}
-      { resetStatus && !resetFailure ? <Modal title={resetStatus.message} /> : null}
+      { status ? <Modal title={status.message} /> : null}
       <div className={styles.login}>
         <p className="mt-20 mb-6 text text_type_main-medium">Восстановление пароля</p>
 
