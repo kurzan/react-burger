@@ -22,8 +22,6 @@ export const ForgotPassword = () => {
     dispatch(getForgotPassword(email, history))
   }
 
-
-
   return (
     <>
       { forgotRequest && <Modal title={'Отправялем запрос'} />}

@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { getIngredients } from '../../services/actions/ingrediens';
 import styles from './app.module.css'
 import AppHeader from '../app-header/app-header';
-import { HomePage, Login, Register, ForgotPassword, ResetPassword, Profile } from '../../pages';
+import { HomePage, Login, Register, ForgotPassword, ResetPassword, Profile, Page404 } from '../../pages';
 import { ProtectedRoute } from '../protected-route/protected-route';
 import { getUserInfo } from '../../services/actions/user'
 
@@ -43,6 +43,9 @@ function App() {
             <ProtectedRoute path='/profile' exact={true}>
               <Profile />
             </ProtectedRoute>
+            <Route>
+              <Page404 />
+            </Route>
         </Switch>
         </div>
     </Router>
