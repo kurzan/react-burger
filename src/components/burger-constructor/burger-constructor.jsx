@@ -102,7 +102,7 @@ const BurgerConstructor = ({ onOrderClick }) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const { isAuth } = useSelector(store => store.userReducer);
+  const { user } = useSelector(store => store.userReducer);
 
   const [, dropTarget] = useDrop({
     accept: "ingredient",
@@ -121,7 +121,7 @@ const BurgerConstructor = ({ onOrderClick }) => {
   const totalValue = selectedIngredients.reduce((sum, el) => sum + el.price, 0) + (bun ? bun.price * 2 : 0);
 
   const createOrder = () => {
-    if (isAuth) {
+    if (user) {
       dispatch(postOrder(allIngredients));
       onOrderClick();
     } else {

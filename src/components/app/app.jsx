@@ -4,6 +4,8 @@ import { getIngredients } from '../../services/actions/ingrediens';
 import styles from './app.module.css'
 import AppHeader from '../app-header/app-header';
 import { HomePage, Login, Register, ForgotPassword, ResetPassword, Profile } from '../../pages';
+import { ProtectedRoute } from '../protected-route/protected-route';
+import { getUserInfo } from '../../services/actions/user'
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
@@ -12,6 +14,7 @@ function App() {
 
   useEffect(() => {
     dispatch(getIngredients())
+    dispatch(getUserInfo())
   }, [dispatch]);
 
   return (
@@ -37,9 +40,9 @@ function App() {
             <Route path='/reset-password' exact={true}>
               <ResetPassword />
             </Route>
-            <Route path='/profile' exact={true}>
+            <ProtectedRoute path='/profile' exact={true}>
               <Profile />
-            </Route>
+            </ProtectedRoute>
         </Switch>
         </div>
     </Router>

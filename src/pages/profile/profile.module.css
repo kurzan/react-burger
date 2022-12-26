@@ -40,3 +40,9 @@ p {
   flex-direction: column;
   row-gap: 24px;
 }
+
+.buttons_box {
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}

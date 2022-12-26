@@ -10,13 +10,15 @@ import {
   LOGOUT_FAILED,
   GET_USER_REQUEST,
   GET_USER_SUCCESS,
-  GET_USER_FAILED
+  GET_USER_FAILED,
+  EDIT_USER_REQUEST,
+  EDIT_USER_SUCCESS,
+  EDIT_USER_FAILED
  } from '../actions/user';
 
 
 const initialState = {
-  isAuth: false,
-  user: {},
+  user: null,
   status: null,
   registerRequest: false,
   registerFailure: false,
@@ -25,7 +27,10 @@ const initialState = {
   logoutRequest: false,
   logoutFailed: false,
   getUserRequest: false,
-  getUserFailure: false
+  getUserFailure: false,
+  editUserRequest: false,
+  editUserSuccess: false,
+  editUserFailure: false,
 };
 
 export const userReducer = (state = initialState, action) => {
@@ -43,7 +48,7 @@ export const userReducer = (state = initialState, action) => {
       return {
         ...state,
         status: 'Успешная регистрация',
-        isAuth: true,
+        user: action.user,
         registerRequest: false,
         registerFailure: false
       }
@@ -52,7 +57,6 @@ export const userReducer = (state = initialState, action) => {
     case REGISTER_FAILED: {
       return {
         ...state,
-        isAuth: false,
         status: action.err,
         registerRequest: false,
         registerFailure: true
@@ -70,7 +74,7 @@ export const userReducer = (state = initialState, action) => {
   case LOGIN_SUCCESS: {
       return {
           ...state,
-          isAuth: true,
+          user: action.user,
           loginRequest: false,
           loginFailure: false
      }
@@ -79,7 +83,6 @@ export const userReducer = (state = initialState, action) => {
   case LOGIN_FAILED: {
       return {
           ...state,
-          isAuth: false,
           loginRequest: false,
           loginFailure: true,
           status: action.status
@@ -89,7 +92,6 @@ export const userReducer = (state = initialState, action) => {
   case LOGOUT_REQUEST: {
     return {
         ...state,
-        isAuth: true,
         logoutRequest: true,
         logoutFailure: false,
     }
@@ -98,7 +100,7 @@ export const userReducer = (state = initialState, action) => {
   case LOGOUT_SUCCESS: {
       return {
           ...state,
-          isAuth: false,
+          user: null,
           status: action.res.message,
           logoutRequest: false,
           logoutFailure: false,
@@ -108,7 +110,6 @@ export const userReducer = (state = initialState, action) => {
   case LOGOUT_FAILED: {
       return {
           ...state,
-          isAuth: true,
           status: action.message,
           logoutRequest: false,
           logoutFailure: true,
@@ -135,12 +136,39 @@ export const userReducer = (state = initialState, action) => {
   case GET_USER_FAILED: {
     return {
       ...state,
+      status: action.err,
       getUserRequest: false,
       getUserFailure: true
     }
   }
 
-    default:
+  case EDIT_USER_REQUEST: {
+    return {
+      ...state,
+      editUserRequest: true,
+      editUserFailure: false
+    }
+  }
+
+  case EDIT_USER_SUCCESS: {
+    return {
+      ...state,
+      user: action.user,
+      editUserRequest: false,
+      editUserSuccess: true,
+      editUserFailure: false
+    }
+  }
+
+  case EDIT_USER_FAILED: {
+    return {
+      ...state,
+      editUserRequest: false,
+      editUserFailure: true
+    }
+  }
+
+  default:
       return state;
   }
 };

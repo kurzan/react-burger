@@ -1,14 +1,17 @@
 import React, { useState, useCallback } from "react";
 import { EmailInput, Input, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './login.module.css';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, Redirect, useHistory, useLocation } from 'react-router-dom';
 import { loginning } from "../../services/actions/user";
 import { useSelector, useDispatch } from "react-redux";
 import Modal from "../../components/modal/modal";
 
 export const Login = () => {
+  const { user } = useSelector(store => store.userReducer);
+
   const dispatch = useDispatch();
   const history = useHistory();
+  const location = useLocation();
 
   const [password, setPassword] = React.useState('')
   const inputRef = React.useRef(null)
@@ -30,7 +33,9 @@ export const Login = () => {
 
   return (
     <>
-      { loginFailure && <Modal title={status} /> }
+      { loginFailure && <Modal title={status} />}
+
+      { user ? <Redirect to={ location.state?.from || '/' } /> : 
       <div className={styles.login}>
         <p className="mt-20 mb-6 text text_type_main-medium">Вход</p>
         <div className="mb-6" style={{ display: 'flex', flexDirection: 'column' }}>
@@ -64,7 +69,7 @@ export const Login = () => {
         </div>
         <p className="text text_type_main-default text_color_inactive">Вы новый пользователь? <Link to={{ pathname: '/register' }} className={styles.link}>Зарегистрироваться</Link></p>
         <p className="text text_type_main-default text_color_inactive">Забыли пароль? <Link to={{ pathname: '/forgot-password' }} className={styles.link} >Восстановить пароль</Link></p>
-      </div>
+      </div>}
     </>
   );
 };

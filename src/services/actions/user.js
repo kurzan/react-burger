@@ -1,4 +1,4 @@
-import { apiRequest } from "../../utils/burger-api"; 
+import { apiRequest, refreshToken } from "../../utils/burger-api"; 
 import { setCookie, deleteCookie, getCookie } from "../../utils/cookie";
 
 export const REGISTER_REQUEST = 'REGISTER_REQUEST';
@@ -17,6 +17,10 @@ export const LOGOUT_DEL_STATUS = 'LOGOUT_DEL_STATUS';
 export const GET_USER_REQUEST = 'GET_USER_REQUEST';
 export const GET_USER_SUCCESS = 'GET_USER_SUCCESS';
 export const GET_USER_FAILED = 'GET_USER_FAILED';
+
+export const EDIT_USER_REQUEST = 'EDIT_USER_REQUEST';
+export const EDIT_USER_SUCCESS = 'EDIT_USER_SUCCESS';
+export const EDIT_USER_FAILED = 'EDIT_USER_FAILED';
 
 
 export const registerUser = (name, email, password) => (dispatch) => {
@@ -39,7 +43,8 @@ export const registerUser = (name, email, password) => (dispatch) => {
   apiRequest('auth/register', options)
     .then((res) => {
       dispatch({
-        type: REGISTER_SUCCESS
+        type: REGISTER_SUCCESS,
+        user: res.user
       })
       setCookie('accessToken', res.accessToken);
       setCookie('refreshToken', res.refreshToken);
@@ -68,7 +73,7 @@ export const loginning = (email, password, history) => (dispatch) => {
 
   apiRequest('auth/login', options)
     .then(res => {
-      dispatch({type: LOGIN_SUCCESS});
+      dispatch({type: LOGIN_SUCCESS, user: res.user});
       setCookie('accessToken', res.accessToken);
       setCookie('refreshToken', res.refreshToken);
     })
@@ -100,7 +105,7 @@ export const logout = (history) => (dispatch) => {
       deleteCookie('accessToken');
       deleteCookie('refreshToken');
     })
-    .then(() => history.push({pathname: '/login'}))
+    // .then(() => history.push({pathname: '/login'}))
     .catch(err => {
       dispatch({
           type: LOGOUT_FAILED,
@@ -123,15 +128,15 @@ export const getUserInfo = () => (dispatch) => {
   })
 
   apiRequest('auth/user', options)
-    .then(({
-      user
-    }) => dispatch({
-      type: GET_USER_SUCCESS,
-      user
-    }))
-    .catch(err => dispatch({
-      type: GET_USER_FAILED
-    }, err))
+    .then((res) => {
+      dispatch({
+        type: GET_USER_SUCCESS,
+        user: res.user
+      })
+    })
+    .catch(err => {
+        dispatch({type: GET_USER_FAILED, err})
+    })
 
 };
 
@@ -144,4 +149,14 @@ export const updateUserInfo = (form) => (dispatch) => {
     },
     body: JSON.stringify(form)
   }
+
+  dispatch({type: EDIT_USER_REQUEST});
+
+  apiRequest('auth/user', options)
+    .then(({user}) => {
+      dispatch({type: EDIT_USER_SUCCESS, user})
+    })
+    .catch(err => {
+      dispatch({type: EDIT_USER_FAILED, err})
+    })
 };
