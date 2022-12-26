@@ -9,7 +9,7 @@ import Modal from "../../components/modal/modal";
 export const Register = () => {
   const dispatch = useDispatch();
 
-  const { status, registerFailure } = useSelector(store => store.userReducer);
+  const { status, registerFailure, registerSuccess } = useSelector(store => store.userReducer);
 
   const [email, setEmail] = useState('')
   const onChange = e => {
@@ -32,8 +32,8 @@ export const Register = () => {
 
   return (
     <>
+      { registerSuccess && <Modal title={status}/>}
       { registerFailure && <Modal title={status}/>}
-      { status && !registerFailure && <Modal title={status}/>}
       <div className={styles.login}>
         <p className="mt-20 mb-6 text text_type_main-medium">Регистрация</p>
         <div className="mb-6"> 

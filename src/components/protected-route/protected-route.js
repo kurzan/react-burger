@@ -4,7 +4,7 @@ import { Redirect, Route } from 'react-router-dom';
 import { getUserInfo } from '../../services/actions/user';
 
 export const ProtectedRoute = ({ children, ...rest  }) => {
-  const dispatch = useDispatch();
+
   const { user } = useSelector(store => store.userReducer);
 
   return (

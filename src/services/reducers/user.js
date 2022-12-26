@@ -21,6 +21,7 @@ const initialState = {
   user: null,
   status: null,
   registerRequest: false,
+  registerSuccess: false,
   registerFailure: false,
   loginRequest: false,
   loginFailure: false,
@@ -50,6 +51,7 @@ export const userReducer = (state = initialState, action) => {
         status: 'Успешная регистрация',
         user: action.user,
         registerRequest: false,
+        registerSuccess: true,
         registerFailure: false
       }
     }
@@ -59,6 +61,7 @@ export const userReducer = (state = initialState, action) => {
         ...state,
         status: action.err,
         registerRequest: false,
+        registerSuccess: false,
         registerFailure: true
       }
     }

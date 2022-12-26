@@ -77,7 +77,6 @@ export const loginning = (email, password, history) => (dispatch) => {
       setCookie('accessToken', res.accessToken);
       setCookie('refreshToken', res.refreshToken);
     })
-    .then(() => history.push({pathname: '/'}))
     .catch(status => {
       dispatch({ 
           type: LOGIN_FAILED,
@@ -105,7 +104,6 @@ export const logout = (history) => (dispatch) => {
       deleteCookie('accessToken');
       deleteCookie('refreshToken');
     })
-    // .then(() => history.push({pathname: '/login'}))
     .catch(err => {
       dispatch({
           type: LOGOUT_FAILED,
