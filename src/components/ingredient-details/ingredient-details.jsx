@@ -1,10 +1,13 @@
 import styles from './ingredient-details.module.css';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 
 const IngredientDetails = () => {
 
-  const currentIngredient = useSelector(store => store.currentIngredientReducer.currentIngredient)
+  const { id } = useParams(); 
+  const currentIngredient = useSelector(store => store.currentIngredientReducer.currentIngredient);
+
 
   return (
     <div className={"mt-8 " + styles.details}>

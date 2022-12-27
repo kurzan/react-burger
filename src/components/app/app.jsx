@@ -7,10 +7,15 @@ import { HomePage, Login, Register, ForgotPassword, ResetPassword, Profile, Page
 import { ProtectedRoute } from '../protected-route/protected-route';
 import { getUserInfo } from '../../services/actions/user'
 
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { useLocation, BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+
+import IngredientDetails from '../ingredient-details/ingredient-details';
 
 function App() {
   const dispatch = useDispatch ();
+
+
+
 
   useEffect(() => {
     dispatch(getIngredients())
@@ -43,6 +48,9 @@ function App() {
             <ProtectedRoute path='/profile' exact={true}>
               <Profile />
             </ProtectedRoute>
+            <Route path='/ingredients/:id'>
+                <IngredientDetails />
+            </Route>
             <Route>
               <Page404 />
             </Route>

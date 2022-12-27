@@ -6,8 +6,11 @@ import styles from './burger-ingredients.module.css';
 import { useInView } from 'react-intersection-observer';
 import { useDrag } from "react-dnd";
 import { useSelector } from "react-redux";
+import { Link, useHistory, useLocation } from "react-router-dom";
 
 const MenuElement = ({ ingredient, onIngredientClick }) => {
+
+  let location = useLocation();
 
   const { selectedIngredients, bun } = useSelector(store => store.selectedIngredientsReducer)
 
@@ -20,13 +23,13 @@ const MenuElement = ({ ingredient, onIngredientClick }) => {
   const allIngredients = [...selectedIngredients, bun ? bun : ''];
 
   const onClick = () => {
-    onIngredientClick(ingredient)
+    onIngredientClick(ingredient);
   }
 
   const count = allIngredients.filter(item => item._id === ingredient._id).length
 
   return (
-    <div className={styles.menu_element} onClick={onClick} ref={dragRef}>
+    <Link  to={{ pathname: `/ingredients/${ingredient._id}`, state: { background: location }}} className={styles.menu_element} onClick={onClick} ref={dragRef}>
       {count ? <span className={styles.counter} ><Counter count={count}/></span> : null}
       <img className="ml-4 mr-4 mb-1" src={ingredient.image} alt={ingredient.name} />
       <div className={styles.price_wrapper}>
@@ -34,7 +37,7 @@ const MenuElement = ({ ingredient, onIngredientClick }) => {
         <CurrencyIcon />
       </div>
       <p className="text text_type_main-default">{ingredient.name}</p>
-    </div>
+    </Link>
 
   )
 }
