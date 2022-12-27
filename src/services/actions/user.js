@@ -1,4 +1,4 @@
-import { apiRequest, refreshToken } from "../../utils/burger-api"; 
+import { apiRequest } from "../../utils/burger-api"; 
 import { setCookie, deleteCookie, getCookie } from "../../utils/cookie";
 
 export const REGISTER_REQUEST = 'REGISTER_REQUEST';
@@ -57,7 +57,7 @@ export const registerUser = (name, email, password) => (dispatch) => {
     })
 };
 
-export const loginning = (email, password, history) => (dispatch) => {
+export const loginning = (email, password) => (dispatch) => {
   const options = {
       method: 'POST',
       body: JSON.stringify({
@@ -85,7 +85,7 @@ export const loginning = (email, password, history) => (dispatch) => {
     })
 };
 
-export const logout = (history) => (dispatch) => {
+export const logout = () => (dispatch) => {
   const options = {
       method: 'POST',
       body: JSON.stringify({
