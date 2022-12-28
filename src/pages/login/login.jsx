@@ -4,7 +4,6 @@ import styles from './login.module.css';
 import { Link, Redirect, useHistory, useLocation } from 'react-router-dom';
 import { loginning } from "../../services/actions/user";
 import { useSelector, useDispatch } from "react-redux";
-import Modal from "../../components/modal/modal";
 
 export const Login = () => {
   const { user } = useSelector(store => store.userReducer);
@@ -25,7 +24,7 @@ export const Login = () => {
     setEmail(e.target.value)
   }
 
-  const { status, loginFailure } = useSelector(store => store.userReducer);
+  const { status, loginFailure, loginRequest } = useSelector(store => store.userReducer);
 
   const onLoginClick = () => {
     dispatch(loginning(email, password, history));
@@ -33,8 +32,6 @@ export const Login = () => {
 
   return (
     <>
-      { loginFailure && <Modal title={status} />}
-
       { user ? <Redirect to={ location.state?.from || '/' } /> : 
       <div className={styles.login}>
         <p className="mt-20 mb-6 text text_type_main-medium">Вход</p>
@@ -61,6 +58,7 @@ export const Login = () => {
           size={'default'}
           extraClass="ml-1"
         />
+        { loginFailure && <p className="text text_type_main-default text_color_error">{status}</p>}
         </div>
         <div className="mb-20">
           <Button htmlType="button" type="primary" size="medium" onClick={() => onLoginClick()} disabled={ email && password ? false : true }>

@@ -78,6 +78,7 @@ export const loginning = (email, password) => (dispatch) => {
       setCookie('refreshToken', res.refreshToken);
     })
     .catch(status => {
+      console.log(status)
       dispatch({ 
           type: LOGIN_FAILED,
           status

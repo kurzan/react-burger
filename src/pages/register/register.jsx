@@ -4,12 +4,11 @@ import styles from './register.module.css';
 import { Link } from 'react-router-dom';
 import { registerUser } from '../../services/actions/user';
 import { useDispatch, useSelector } from 'react-redux'; 
-import Modal from "../../components/modal/modal";
 
 export const Register = () => {
   const dispatch = useDispatch();
 
-  const { status, registerFailure, registerSuccess } = useSelector(store => store.userReducer);
+  const { status, registerFailure, registerSuccess, registerRequest } = useSelector(store => store.userReducer);
 
   const [email, setEmail] = useState('')
   const onChange = e => {
@@ -32,8 +31,6 @@ export const Register = () => {
 
   return (
     <>
-      { registerSuccess && <Modal title={status}/>}
-      { registerFailure && <Modal title={status}/>}
       <div className={styles.login}>
         <p className="mt-20 mb-6 text text_type_main-medium">Регистрация</p>
         <div className="mb-6"> 
@@ -73,6 +70,9 @@ export const Register = () => {
           size={'default'}
           extraClass="ml-1"
         />
+        { status && registerFailure && <p className="text text_type_main-default text_color_error">{status}</p>}
+        { status && registerRequest && <p className="text text_type_main-default">{status}</p>}
+        { status && registerSuccess && <p className="text text_type_main-default">{status}</p>}
         </div>
         <div className="mb-20">
           <Button htmlType="button" disabled={ name && email && password ? false : true} type="primary" size="medium" onClick={() => postRegister()}>

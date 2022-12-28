@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Modal from "../../components/modal/modal";
 import { EmailInput, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './forgot-password.module.css';
 import { Link, useHistory } from 'react-router-dom';
@@ -11,7 +10,7 @@ export const ForgotPassword = () => {
 
   const history = useHistory();
 
-  const { forgotRequest, forgotFailed } = useSelector(store => store.resetPasswordReducer);
+  const { forgotRequest, forgotFailed, status } = useSelector(store => store.resetPasswordReducer);
 
   const [email, setEmail] = useState('')
   const onChange = e => {
@@ -24,8 +23,6 @@ export const ForgotPassword = () => {
 
   return (
     <>
-      { forgotRequest && <Modal title={'Отправялем запрос'} />}
-      { forgotFailed && <Modal title={'Произошла ошибка. Попробуйте еще раз'} />}
       <div className={styles.login}>
         <p className="mt-20 mb-6 text text_type_main-medium">Восстановление пароля</p>
         <div className="mb-6" style={{ display: 'flex', flexDirection: 'column' }}>
@@ -37,7 +34,9 @@ export const ForgotPassword = () => {
             placeholder={'Укажите e-mail'}
           />
         </div>
-        <div className="mb-20">
+        { forgotFailed && <p className="text text_type_main-default text_color_error">{status}</p>}
+        { forgotRequest && <p className="text text_type_main-default">{status}</p>}
+        <div className="mb-20 mt-4">
           <Button htmlType="button" disabled={ email ? false : true } type="primary" size="medium" onClick={() => postForgotRequest()}>
           Восстановить
           </Button>

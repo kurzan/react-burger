@@ -9,7 +9,7 @@ export const Profile = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const { name, email, status } = useSelector(store => store.userReducer.user);
+  const { name, email } = useSelector(store => store.userReducer.user);
   const { editUserSuccess } = useSelector(store => store.userReducer);
   
   const [state, setState] = useState({

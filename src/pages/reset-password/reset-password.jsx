@@ -3,7 +3,6 @@ import { Input, Button } from "@ya.praktikum/react-developer-burger-ui-component
 import styles from './reset-password.module.css';
 import { Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import Modal from "../../components/modal/modal";
 import { postResetPassword } from "../../services/actions/reset-password"; 
 
 export const ResetPassword = () => {
@@ -11,7 +10,7 @@ export const ResetPassword = () => {
 
   const dispatch = useDispatch();
 
-  const { resetFailure, status } = useSelector(store => store.resetPasswordReducer);
+  const { resetFailure, resetSuccess, resetRequest, status } = useSelector(store => store.resetPasswordReducer);
 
   const [password, setPassword] = React.useState('')
   const inputPasswordRef = React.useRef(null)
@@ -30,7 +29,6 @@ export const ResetPassword = () => {
 
   return (
     <>
-      { status ? <Modal title={status.message} /> : null}
       <div className={styles.login}>
         <p className="mt-20 mb-6 text text_type_main-medium">Восстановление пароля</p>
 
@@ -65,6 +63,9 @@ export const ResetPassword = () => {
           size={'default'}
           extraClass="ml-1"
         />
+        { resetFailure && <p className="text text_type_main-default text_color_error">{status}</p>}
+        { resetRequest && <p className="text text_type_main-default">{status}</p>}
+        { resetSuccess && <p className="text text_type_main-default">{status}</p>}
         </div>
 
         <div className="mb-20">

@@ -12,6 +12,7 @@ const initialState = {
   forgotRequest: false,
   forgotFailed: false,
   resetRequest: false,
+  resetSuccess: false,
   resetFailure: false
 }
 
@@ -29,7 +30,7 @@ export const resetPasswordReducer = (state = initialState, action) => {
     case FORGOT_PASSWORD_SUCCESS: {
       return {
         ...state,
-        status: action.status,
+        status: action.status.message,
         forgotRequest: false,
         forgotFailed: false
       }
@@ -56,7 +57,8 @@ export const resetPasswordReducer = (state = initialState, action) => {
     case RESET_PASSWORD_SUCCESS: {
       return {
         ...state,
-        status: action.status,
+        status: action.status.message,
+        resetSuccess: true,
         resetRequest: false,
         resetFailure: false
       }
@@ -67,6 +69,7 @@ export const resetPasswordReducer = (state = initialState, action) => {
         ...state,
         status: action.err,
         resetRequest: false,
+        resetSuccess: false,
         resetFailure: true
       }
     }

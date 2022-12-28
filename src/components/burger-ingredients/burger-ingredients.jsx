@@ -6,11 +6,11 @@ import styles from './burger-ingredients.module.css';
 import { useInView } from 'react-intersection-observer';
 import { useDrag } from "react-dnd";
 import { useSelector } from "react-redux";
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
-const MenuElement = ({ ingredient, onIngredientClick }) => {
+const MenuElement = ({ ingredient }) => {
 
-  let location = useLocation();
+  const location = useLocation();
 
   const { selectedIngredients, bun } = useSelector(store => store.selectedIngredientsReducer)
 
@@ -22,14 +22,10 @@ const MenuElement = ({ ingredient, onIngredientClick }) => {
 
   const allIngredients = [...selectedIngredients, bun ? bun : ''];
 
-  const onClick = () => {
-    onIngredientClick(ingredient);
-  }
-
   const count = allIngredients.filter(item => item._id === ingredient._id).length
 
   return (
-    <Link  to={{ pathname: `/ingredients/${ingredient._id}`, state: { background: location }}} className={styles.menu_element} onClick={onClick} ref={dragRef}>
+    <Link  to={{ pathname: `/ingredients/${ingredient._id}`, state: { background: location }}} className={styles.menu_element} ref={dragRef}>
       {count ? <span className={styles.counter} ><Counter count={count}/></span> : null}
       <img className="ml-4 mr-4 mb-1" src={ingredient.image} alt={ingredient.name} />
       <div className={styles.price_wrapper}>
@@ -45,11 +41,10 @@ const MenuElement = ({ ingredient, onIngredientClick }) => {
 MenuElement.propTypes = {
   ingredient: PropTypes.shape(
     dataPropTypes.isRequired).isRequired,
-  onIngredientClick: PropTypes.func.isRequired
 };
 
 
-const BurgerIngredients = ({ onIngredientClick }) => {
+const BurgerIngredients = () => {
 
   const { ingredients } = useSelector(store => store.ingredientsReducer);
 
@@ -96,7 +91,7 @@ const BurgerIngredients = ({ onIngredientClick }) => {
           <ul className={styles.menu_wrapper}>
             {ingredients.map((item) => {
               if (item.type === 'bun') {
-                return <MenuElement key={item._id} ingredient={item} onIngredientClick={onIngredientClick} />
+                return <MenuElement key={item._id} ingredient={item} />
               }
               return null;
             })}
@@ -108,7 +103,7 @@ const BurgerIngredients = ({ onIngredientClick }) => {
           <ul className={styles.menu_wrapper}>
             {ingredients.map((item) => {
               if (item.type === 'sauce') {
-                return <MenuElement key={item._id} ingredient={item} onIngredientClick={onIngredientClick} />
+                return <MenuElement key={item._id} ingredient={item} />
               }
               return null;
             })}
@@ -120,7 +115,7 @@ const BurgerIngredients = ({ onIngredientClick }) => {
           <ul className={styles.menu_wrapper}>
             {ingredients.map((item) => {
               if (item.type === 'main') {
-                return <MenuElement key={item._id} ingredient={item} onIngredientClick={onIngredientClick} />
+                return <MenuElement key={item._id} ingredient={item} />
               }
               return null;
             })}
@@ -131,10 +126,5 @@ const BurgerIngredients = ({ onIngredientClick }) => {
     </section>
   )
 }
-
-BurgerIngredients.propTypes = {
-  onIngredientClick: PropTypes.func.isRequired
-};
-
 
 export default BurgerIngredients;

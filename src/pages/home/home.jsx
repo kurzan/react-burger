@@ -5,19 +5,15 @@ import BurgerConstructor from '../../components/burger-constructor/burger-constr
 import Modal from '../../components/modal/modal';
 
 import OrderDetails from "../../components/order-details/order-details";
-import IngredientDetails from "../../components/ingredient-details/ingredient-details";
 
-import { useSelector, useDispatch } from 'react-redux';
-import { setCurrentIngredient, resetCurrentIngredient } from '../../services/actions/current-ingredient';
+import { useSelector } from 'react-redux';
 
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 export const HomePage = () => {
-  const [modalIngredientsOpen, setModalIngredientsOpen] = useState(false);
   const [modalOrderOpen, setModalOrderOpen] = useState(false);
 
-  const dispatch = useDispatch ();
   const { isLoading, isError } = useSelector(store => store.ingredientsReducer);
   const { orderRequest, orderFailed } = useSelector(store => store.orderReducer);
 
@@ -27,16 +23,6 @@ export const HomePage = () => {
 
   const onOrderModalClose = () => {
     setModalOrderOpen(false);
-  }
-
-  const onIngredientClick = (ingredient) => {
-    dispatch(setCurrentIngredient(ingredient));
-    setModalIngredientsOpen(true);
-  }
-
-  const ingredientModalClose = () => {
-    dispatch(resetCurrentIngredient())
-    setModalIngredientsOpen(false);
   }
 
   return (
@@ -50,17 +36,12 @@ export const HomePage = () => {
         <Modal title={`Ошибка: Что-то пошло не так :( Попробуйте еще раз`} /> 
       }
 
-      {modalIngredientsOpen && 
-      <Modal onClose={ingredientModalClose} title={'Детали ингредиента'}> 
-        < IngredientDetails/>
-      </Modal>}
-
       {isLoading && <Modal title={'Загрузка данных...'} />}
       {isError ? <Modal title={`Ошибка: Что-то пошло не так :( Обновите страницу`} /> 
       :
       <DndProvider backend={HTML5Backend}>
         <main className={styles.main}>
-            <BurgerIngredients onIngredientClick={onIngredientClick}/>
+            <BurgerIngredients />
             <BurgerConstructor onOrderClick={onOrderClick} />
         </main>
       </DndProvider>

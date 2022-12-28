@@ -6,16 +6,25 @@ import AppHeader from '../app-header/app-header';
 import { HomePage, Login, Register, ForgotPassword, ResetPassword, Profile, Page404 } from '../../pages';
 import { ProtectedRoute } from '../protected-route/protected-route';
 import { getUserInfo } from '../../services/actions/user'
+import { resetCurrentIngredient } from '../../services/actions/current-ingredient';
 
-import { useLocation, BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { useHistory, useLocation, BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import IngredientDetails from '../ingredient-details/ingredient-details';
+import Modal from '../modal/modal';
 
 function App() {
   const dispatch = useDispatch ();
 
+  const location = useLocation();
+  const background = location.state && location.state.background;
 
+  const history = useHistory();
 
+  const ingredientModalClose = () => {
+    dispatch(resetCurrentIngredient())
+    history.goBack();
+  }
 
   useEffect(() => {
     dispatch(getIngredients())
@@ -23,10 +32,10 @@ function App() {
   }, [dispatch]);
 
   return (
-    <Router>
+    <>
         <AppHeader />
         <div className={styles.main}>
-        <Switch>
+          <Switch>
             <Route path='/' exact={true}>
               <HomePage/>
             </Route>
@@ -48,15 +57,20 @@ function App() {
             <ProtectedRoute path='/profile' exact={true}>
               <Profile />
             </ProtectedRoute>
-            <Route path='/ingredients/:id'>
-                <IngredientDetails />
-            </Route>
+            { background && <Route path='/ingredients/:id'>
+              <Modal onClose={ingredientModalClose} title={'Детали ингредиента'}> 
+                  < IngredientDetails/>
+              </Modal>
+            </Route>}
+            { location && <Route path='/ingredients/:id'>
+                < IngredientDetails/>
+            </Route>}
             <Route>
               <Page404 />
             </Route>
-        </Switch>
+          </Switch>
         </div>
-    </Router>
+    </>
   );
 }
 
