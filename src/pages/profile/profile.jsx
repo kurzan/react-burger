@@ -4,6 +4,7 @@ import styles from './profile.module.css';
 import { NavLink, useHistory, BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { getUserInfo, updateUserInfo, logout } from '../../services/actions/user';
+import { ProtectedRoute } from "../../components/protected-route/protected-route";
 
 export const Profile = () => {
   const dispatch = useDispatch();
@@ -59,7 +60,7 @@ export const Profile = () => {
           <p className={"text text_type_main-default text_color_inactive " + styles.info}>В этом разделе вы можете изменить свои персональные данные</p>
         </div>
         <Switch>
-          <Route path="/profile" exact={true}>
+          <ProtectedRoute path="/profile" exact={true}>
             <form onSubmit={postForm} className={styles.client_details}>
               <Input 
                 type={'text'}
@@ -109,10 +110,10 @@ export const Profile = () => {
               : null }
               { editUserSuccess && <p>Данные успешно обновленны</p> }
             </form>
-          </Route>
-          <Route path="/profile/orders" exact={true}>
+          </ProtectedRoute>
+          <ProtectedRoute path="/profile/orders" exact={true}>
                 <p> Здесь будут заказы</p>
-          </Route>
+          </ProtectedRoute>
         </Switch>
       </div>
     </Router>

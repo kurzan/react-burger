@@ -1,4 +1,4 @@
-import { apiRequest } from "../../utils/burger-api"; 
+import { apiRequest, fetchWithAuth } from "../../utils/burger-api"; 
 import { setCookie, deleteCookie, getCookie } from "../../utils/cookie";
 
 export const REGISTER_REQUEST = 'REGISTER_REQUEST';
@@ -50,10 +50,18 @@ export const registerUser = (name, email, password) => (dispatch) => {
       setCookie('refreshToken', res.refreshToken);
     })
     .catch(err => {
-      dispatch({
-        type: REGISTER_FAILED,
-        err
-      })
+      if (typeof(err) !== 'object' ) {
+        dispatch({
+          type: REGISTER_FAILED,
+          err
+        }) 
+      } else {
+        dispatch({
+          type: REGISTER_FAILED,
+          err: 'Непредвиденная ошибка. Попробуйте заново'
+        }) 
+      }
+
     })
 };
 
@@ -78,7 +86,6 @@ export const loginning = (email, password) => (dispatch) => {
       setCookie('refreshToken', res.refreshToken);
     })
     .catch(status => {
-      console.log(status)
       dispatch({ 
           type: LOGIN_FAILED,
           status
@@ -126,7 +133,7 @@ export const getUserInfo = () => (dispatch) => {
     type: GET_USER_REQUEST
   })
 
-  apiRequest('auth/user', options)
+  fetchWithAuth('auth/user', options)
     .then((res) => {
       dispatch({
         type: GET_USER_SUCCESS,
@@ -151,7 +158,7 @@ export const updateUserInfo = (form) => (dispatch) => {
 
   dispatch({type: EDIT_USER_REQUEST});
 
-  apiRequest('auth/user', options)
+  fetchWithAuth('auth/user', options)
     .then(({user}) => {
       dispatch({type: EDIT_USER_SUCCESS, user})
     })

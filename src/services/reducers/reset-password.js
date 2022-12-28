@@ -10,6 +10,7 @@ import {
 const initialState = {
   status: null,
   forgotRequest: false,
+  fargotSuccess: false,
   forgotFailed: false,
   resetRequest: false,
   resetSuccess: false,
@@ -23,6 +24,7 @@ export const resetPasswordReducer = (state = initialState, action) => {
         ...state,
         status: 'Идет отправка данных',
         forgotRequest: true,
+        fargotSuccess: false,
         forgotFailed: false
       }
     }
@@ -32,6 +34,7 @@ export const resetPasswordReducer = (state = initialState, action) => {
         ...state,
         status: action.status.message,
         forgotRequest: false,
+        fargotSuccess: true,
         forgotFailed: false
       }
     }
@@ -41,6 +44,7 @@ export const resetPasswordReducer = (state = initialState, action) => {
         ...state,
         status: action.err,
         forgotRequest: false,
+        fargotSuccess: false,
         forgotFailed: true
       }
     }

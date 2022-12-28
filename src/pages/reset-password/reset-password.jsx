@@ -1,16 +1,17 @@
 import React from "react";
 import { Input, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './reset-password.module.css';
-import { Link, useHistory } from 'react-router-dom';
+import { Redirect, Link, useHistory, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { postResetPassword } from "../../services/actions/reset-password"; 
 
 export const ResetPassword = () => {
   const history = useHistory();
+  const location = useLocation();
 
   const dispatch = useDispatch();
 
-  const { resetFailure, resetSuccess, resetRequest, status } = useSelector(store => store.resetPasswordReducer);
+  const { resetFailure, resetSuccess, fargotSuccess, resetRequest, status } = useSelector(store => store.resetPasswordReducer);
 
   const [password, setPassword] = React.useState('')
   const inputPasswordRef = React.useRef(null)
@@ -29,6 +30,7 @@ export const ResetPassword = () => {
 
   return (
     <>
+      { !fargotSuccess ? <Redirect to={ location.state?.from || '/' } /> : 
       <div className={styles.login}>
         <p className="mt-20 mb-6 text text_type_main-medium">Восстановление пароля</p>
 
@@ -75,6 +77,7 @@ export const ResetPassword = () => {
         </div>
         <p className="text text_type_main-default text_color_inactive">Вспомнили пароль? <Link to={{ pathname: '/login' }} className={styles.link}>Войти</Link></p>
       </div>
+      }
     </>
 
   );

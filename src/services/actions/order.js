@@ -1,4 +1,4 @@
-import { apiRequest } from '../../utils/burger-api';
+import { fetchWithAuth } from '../../utils/burger-api';
 import { RESET_INGREDIENTS } from '../actions/selected-ingredients';
 import { getCookie } from '../../utils/cookie'; 
 
@@ -20,7 +20,7 @@ export const postOrder = (ingredients) => (dispatch) => {
     type: POST_ORDER_REQUEST
   })
 
-  apiRequest('orders', options)
+  fetchWithAuth('orders', options)
   .then(data => 
     dispatch({
       type: POST_ORDER_SUCCESS,

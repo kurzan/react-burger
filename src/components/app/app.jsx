@@ -40,7 +40,7 @@ function App() {
               <HomePage/>
             </Route>
             <Route path='/orders' exact={true}>
-              <div>'sdfsdfsdf'</div>
+              <p>Здесь будет история заказов</p>
             </Route>
             <Route path='/login' exact={true}>
               <Login />
@@ -54,7 +54,7 @@ function App() {
             <Route path='/reset-password' exact={true}>
               <ResetPassword />
             </Route>
-            <ProtectedRoute path='/profile' exact={true}>
+            <ProtectedRoute path='/profile/'>
               <Profile />
             </ProtectedRoute>
             { background && <Route path='/ingredients/:id'>
