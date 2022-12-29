@@ -1,4 +1,4 @@
-import { apiRequest, fetchWithAuth } from "../../utils/burger-api"; 
+import { apiRequest, refreshToken } from "../../utils/burger-api"; 
 import { setCookie, deleteCookie, getCookie } from "../../utils/cookie";
 
 export const REGISTER_REQUEST = 'REGISTER_REQUEST';
@@ -133,7 +133,7 @@ export const getUserInfo = () => (dispatch) => {
     type: GET_USER_REQUEST
   })
 
-  fetchWithAuth('auth/user', options)
+  apiRequest('auth/user', options)
     .then((res) => {
       dispatch({
         type: GET_USER_SUCCESS,
@@ -141,7 +141,12 @@ export const getUserInfo = () => (dispatch) => {
       })
     })
     .catch(err => {
-        dispatch({type: GET_USER_FAILED, err})
+      if (err === 'jwt expired') {
+        refreshToken()
+        .then(() => dispatch(getUserInfo()))
+      } else {
+        dispatch({type: GET_USER_FAILED})
+      }
     })
 
 };
@@ -158,11 +163,16 @@ export const updateUserInfo = (form) => (dispatch) => {
 
   dispatch({type: EDIT_USER_REQUEST});
 
-  fetchWithAuth('auth/user', options)
+  apiRequest('auth/user', options)
     .then(({user}) => {
       dispatch({type: EDIT_USER_SUCCESS, user})
     })
     .catch(err => {
-      dispatch({type: EDIT_USER_FAILED, err})
+      if (err === 'jwt expired') {
+        refreshToken()
+        .then(() => dispatch(updateUserInfo()))
+      } else {
+        dispatch({type: EDIT_USER_FAILED, err}) 
+      }
     })
 };

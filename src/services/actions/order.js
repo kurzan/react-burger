@@ -1,4 +1,4 @@
-import { fetchWithAuth } from '../../utils/burger-api';
+import { apiRequest, refreshToken } from '../../utils/burger-api';
 import { RESET_INGREDIENTS } from '../actions/selected-ingredients';
 import { getCookie } from '../../utils/cookie'; 
 
@@ -20,7 +20,7 @@ export const postOrder = (ingredients) => (dispatch) => {
     type: POST_ORDER_REQUEST
   })
 
-  fetchWithAuth('orders', options)
+  apiRequest('orders', options)
   .then(data => 
     dispatch({
       type: POST_ORDER_SUCCESS,
@@ -28,8 +28,13 @@ export const postOrder = (ingredients) => (dispatch) => {
     }))
   .then(err => dispatch({type: RESET_INGREDIENTS}))
   .catch(err => {
-    dispatch({
-      type: POST_ORDER_FAILED,
-    })
+    if (err === 'jwt expired') {
+      refreshToken()
+      .then(() => dispatch(postOrder()))
+    } else {
+      dispatch({
+        type: POST_ORDER_FAILED,
+      })
+    }
   })
 };

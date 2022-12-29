@@ -22,7 +22,8 @@ export const apiRequest = (url, options) => {
   })
 };
 
-export const refreshToken = () => {
+
+export const refreshToken = async ()  => {
   const options = {
     method: 'POST',
     body: JSON.stringify({
@@ -33,7 +34,7 @@ export const refreshToken = () => {
     }
   }
 
-  apiRequest('auth/token', options)
+  await apiRequest('auth/token', options)
     .then(res => {
       setCookie('accessToken', res.accessToken);
       setCookie('refreshToken', res.refreshToken);
@@ -46,9 +47,7 @@ export const fetchWithAuth = async (url, options) => {
   await apiRequest(url, options)
     .catch(err => {
       if (err === 'jwt expired') {
-        refreshToken()
+        return apiRequest(url, options)
       }
     })
-
-  return apiRequest(url, options)
 }
