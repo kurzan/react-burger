@@ -40,14 +40,3 @@ export const refreshToken = async ()  => {
       setCookie('refreshToken', res.refreshToken);
     })
 };
-
-
-export const fetchWithAuth = async (url, options) => {
-    
-  await apiRequest(url, options)
-    .catch(err => {
-      if (err === 'jwt expired') {
-        return apiRequest(url, options)
-      }
-    })
-}
