@@ -7,9 +7,9 @@ import ModalOverlay from '../modal-overlay/modal-overlay';
 const modalRoot = document.querySelector('#modals') as HTMLElement;
 
 type TModalProps = {
-  title: string;
-  onClose: () => void;
-  children: React.ReactNode;
+  title?: string;
+  onClose?: () => void;
+  children?: React.ReactNode;
 }
 
 const Modal: FC<TModalProps> = ({children, title, onClose}) => {

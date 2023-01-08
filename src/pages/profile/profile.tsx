@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Input, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './profile.module.css';
 import { NavLink, useHistory, BrowserRouter as Router, Switch, Route } from 'react-router-dom';
@@ -10,8 +10,8 @@ export const Profile = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const { name, email } = useSelector(store => store.userReducer.user);
-  const { editUserSuccess } = useSelector(store => store.userReducer);
+  const { name, email } = useSelector((store: any) => store.userReducer.user);
+  const { editUserSuccess } = useSelector((store: any) => store.userReducer);
   
   const [state, setState] = useState({
     name: '',
@@ -20,6 +20,7 @@ export const Profile = () => {
   });
 
   useEffect(() => {
+    //@ts-ignore
     dispatch(getUserInfo());
 
     if (name && email) {
@@ -27,7 +28,7 @@ export const Profile = () => {
     }
   }, [dispatch, name, email]);
 
-  const hadleInputChange = (evt) => {
+  const hadleInputChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const target = evt.target;
     const value = target.value;
     const name = target.name;
@@ -38,15 +39,21 @@ export const Profile = () => {
     })
   };
 
-  const postForm = (e) => {
+  const postForm = (e: FormEvent) => {
     e.preventDefault();
 
+    // @ts-ignore
     dispatch(updateUserInfo(state));
   };
 
   const cancelEdit = () => {
     setState({...state, name: name, email: email, password: ''});
   };
+
+  const logoutOnClick = () => {
+    //@ts-ignore
+    dispatch(logout(history))
+  }
 
   return (
     <Router>
@@ -55,7 +62,7 @@ export const Profile = () => {
           <div className="mb-20">
             <NavLink exact={true} className={styles.link} to={{ pathname: '/profile' }} activeClassName={styles.link_active}><p>Профиль</p></NavLink>
             <NavLink exact={true} className={styles.link} to={{ pathname: '/profile/orders' }} activeClassName={styles.link_active}>История заказов</NavLink>
-            <NavLink exact={true} className={styles.link} to={{ pathname: '/login' }}  onClick={() => dispatch(logout(history))} activeClassName={styles.link_active}>Выход</NavLink>
+            <NavLink exact={true} className={styles.link} to={{ pathname: '/login' }}  onClick={() => logoutOnClick} activeClassName={styles.link_active}>Выход</NavLink>
           </div>
           <p className={"text text_type_main-default text_color_inactive " + styles.info}>В этом разделе вы можете изменить свои персональные данные</p>
         </div>

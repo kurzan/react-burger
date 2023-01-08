@@ -1,32 +1,38 @@
-import React, { useState, useCallback } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { EmailInput, Input, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './login.module.css';
 import { Link, Redirect, useHistory, useLocation } from 'react-router-dom';
 import { loginning } from "../../services/actions/user";
 import { useSelector, useDispatch } from "react-redux";
+import { TLocationWithFrom } from "../../utils/types";
 
 export const Login = () => {
-  const { user } = useSelector(store => store.userReducer);
+  const { user } = useSelector((store: any) => store.userReducer);
 
   const dispatch = useDispatch();
   const history = useHistory();
-  const location = useLocation();
+  const location = useLocation<TLocationWithFrom>();
 
   const [password, setPassword] = React.useState('')
-  const inputRef = React.useRef(null)
+  const inputRef = React.useRef<HTMLInputElement>(null)
   const onIconClick = () => {
-    setTimeout(() => inputRef.current.focus(), 0)
+    setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus()
+      }
+    }, 0)
     alert('Icon Click Callback')
   }
 
   const [email, setEmail] = useState('')
-  const onChange = e => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value)
   }
 
-  const { status, loginFailure, loginRequest } = useSelector(store => store.userReducer);
+  const { status, loginFailure } = useSelector((store: any) => store.userReducer);
 
   const onLoginClick = () => {
+    //@ts-ignore
     dispatch(loginning(email, password, history));
   }
 

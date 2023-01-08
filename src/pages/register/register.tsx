@@ -1,25 +1,30 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { EmailInput, Input, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './register.module.css';
 import { Redirect, Link, useLocation } from 'react-router-dom';
 import { registerUser } from '../../services/actions/user';
 import { useDispatch, useSelector } from 'react-redux'; 
+import { TLocationWithFrom } from "../../utils/types";
 
 export const Register = () => {
   const dispatch = useDispatch();
-  const location = useLocation();
+  const location = useLocation<TLocationWithFrom>();
 
-  const { user, status, registerFailure, registerSuccess, registerRequest } = useSelector(store => store.userReducer);
+  const { user, status, registerFailure, registerSuccess, registerRequest } = useSelector((store: any) => store.userReducer);
 
   const [email, setEmail] = useState('')
-  const onChange = e => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value)
   }
 
   const [password, setPassword] = React.useState('')
-  const inputPasswordRef = React.useRef(null)
+  const inputPasswordRef = React.useRef<HTMLInputElement>(null)
   const onIconClick = () => {
-    setTimeout(() => inputPasswordRef.current.focus(), 0)
+    setTimeout(() => {
+      if (inputPasswordRef.current) {
+        inputPasswordRef.current.focus()
+      }
+    }, 0)
     alert('Icon Click Callback')
   }
 
@@ -27,6 +32,7 @@ export const Register = () => {
   const inputNameRef = React.useRef(null)
 
   const postRegister = () => {
+    // @ts-ignore
     dispatch(registerUser(name, email, password));
   };
 

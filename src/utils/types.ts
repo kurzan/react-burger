@@ -1,4 +1,6 @@
 
+import { Location } from 'history';
+
 export type TParams = {
   id: string;
 };
@@ -16,4 +18,8 @@ export type TIngredient = {
   image_mobile: string;
   image_large: string;
   __v: number;
+};
+
+export type TLocationWithFrom = Location & {
+  from: string;
 };

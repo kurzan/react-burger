@@ -9,14 +9,15 @@ import { getUserInfo } from '../../services/actions/user'
 import { resetCurrentIngredient } from '../../services/actions/current-ingredient';
 
 import { useHistory, useLocation, BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { Location } from 'history'; 
 
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
 
 function App() {
-  const dispatch = useDispatch ();
+  const dispatch = useDispatch();
 
-  const location = useLocation();
+  const location = useLocation<{background: Location}>();
   const background = location.state && location.state.background;
 
   const history = useHistory();
@@ -27,7 +28,9 @@ function App() {
   }
 
   useEffect(() => {
+    //@ts-ignore
     dispatch(getIngredients())
+    //@ts-ignore
     dispatch(getUserInfo())
   }, [dispatch]);
 
