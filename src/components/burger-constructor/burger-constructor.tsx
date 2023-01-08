@@ -1,9 +1,8 @@
-import React, { useRef } from 'react';
-import dataPropTypes from '../../utils/types';
-import PropTypes from 'prop-types';
+import React, { FC, useRef } from 'react';
 import styles from './burger-constructor.module.css';
 import { Button, CurrencyIcon, DragIcon, ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components/';
 import { useDrop, useDrag } from "react-dnd";
+import type { Identifier, XYCoord } from 'dnd-core';
 
 import { postOrder } from '../../services/actions/order';
 import { removeIngredient, moveIngredient } from '../../services/actions/selected-ingredients';
@@ -12,14 +11,28 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectIngredient, selectBun } from '../../services/actions/selected-ingredients';
 import { v4 as uuid } from 'uuid';
 import { useHistory } from 'react-router-dom';
+import { TIngredient } from '../../utils/types';
 
+type TSelectedIngredientType = TIngredient & { key: any; };
 
-const ConstructorItem = ({ ingredient, index, onDelete }) => {
+type TConstructorItemProps = {
+  ingredient: TSelectedIngredientType;
+  index: number;
+  onDelete: (item?: TSelectedIngredientType) => void;
+};
+
+type DragItem = {
+  index: number
+  id: string
+  type: string
+};
+
+const ConstructorItem: FC<TConstructorItemProps> = ({ ingredient, index, onDelete }) => {
   const dispatch = useDispatch();
 
-  const ref = useRef(null);
+  const ref = useRef<HTMLLIElement>(null);
 
-  const [{ handlerId }, drop] = useDrop({
+  const [{ handlerId }, drop] = useDrop<DragItem, void, { handlerId: Identifier | null }>({
     accept: "constructor",
     collect(monitor) {
       return {
@@ -45,7 +58,7 @@ const ConstructorItem = ({ ingredient, index, onDelete }) => {
 
       const clientOffset = monitor.getClientOffset();
 
-      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+      const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
 
       if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
         return;
@@ -90,23 +103,19 @@ const ConstructorItem = ({ ingredient, index, onDelete }) => {
   )
 }
 
-ConstructorItem.propTypes = {
-  ingredient: PropTypes.shape(
-      dataPropTypes.isRequired).isRequired,
-  index: PropTypes.number.isRequired,
-  onDelete: PropTypes.func.isRequired,
+type TBurrgerConsructorProps = {
+  onOrderClick: () => void;
 };
 
-
-const BurgerConstructor = ({ onOrderClick }) => {
+const BurgerConstructor: FC<TBurrgerConsructorProps> = ({ onOrderClick }) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const { user } = useSelector(store => store.userReducer);
+  const { user } = useSelector((store: any) => store.userReducer);
 
   const [, dropTarget] = useDrop({
     accept: "ingredient",
-    drop(item) {
+    drop(item: any) {
       if (item.ingredient.type === 'bun') {
         dispatch(selectBun(item.ingredient));
       } else {
@@ -115,13 +124,14 @@ const BurgerConstructor = ({ onOrderClick }) => {
     },
   });
 
-  const { bun, selectedIngredients } = useSelector(store => store.selectedIngredientsReducer);
+  const { bun, selectedIngredients } = useSelector((store: any) => store.selectedIngredientsReducer);
   
   const allIngredients = [...selectedIngredients, bun ? bun : ''];
-  const totalValue = selectedIngredients.reduce((sum, el) => sum + el.price, 0) + (bun ? bun.price * 2 : 0);
+  const totalValue = selectedIngredients.reduce((sum: number, el: TIngredient) => sum + el.price, 0) + (bun ? bun.price * 2 : 0);
 
   const createOrder = () => {
     if (user) {
+      //@ts-ignore
       dispatch(postOrder(allIngredients));
       onOrderClick();
     } else {
@@ -129,7 +139,7 @@ const BurgerConstructor = ({ onOrderClick }) => {
     }
   };
 
-  const handleRemoveItem = (key) => {
+  const handleRemoveItem = (key: any) => {
     dispatch(removeIngredient(key))
   }
   
@@ -149,7 +159,7 @@ const BurgerConstructor = ({ onOrderClick }) => {
         }
       </div>
       <ul className={styles.content}>
-        {selectedIngredients.map((item, index) => <ConstructorItem key={item.key} ingredient={item} index={index} onDelete={handleRemoveItem} />)}
+        {selectedIngredients.map((item: TSelectedIngredientType, index: number) => <ConstructorItem key={item.key} ingredient={item} index={index} onDelete={handleRemoveItem} />)}
       </ul>
       <div className={'mt-4 mr-4 ' + styles.bottom}>
         {bun &&
@@ -164,7 +174,7 @@ const BurgerConstructor = ({ onOrderClick }) => {
       </div>
       {chekConstructor && 'Перенестите необходимые ингредиенты для бургера в эту часть экрана'}
       <div className={'mt-10 mr-4 ' + styles.order}>
-        <p className="text text_type_digits-medium mr-10">{totalValue}<CurrencyIcon /></p>
+        <p className="text text_type_digits-medium mr-10">{totalValue}<CurrencyIcon type='primary' /></p>
         <Button htmlType="button" type="primary" size="large" disabled={chekConstructor} onClick={createOrder}>
           Оформить заказ
         </Button>
@@ -172,10 +182,5 @@ const BurgerConstructor = ({ onOrderClick }) => {
     </section>
   )
 }
-
-BurgerConstructor.propTypes = {
-  onOrderClick: PropTypes.func.isRequired,
-};
-
 
 export default BurgerConstructor;

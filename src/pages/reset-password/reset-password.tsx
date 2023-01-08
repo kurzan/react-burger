@@ -4,26 +4,32 @@ import styles from './reset-password.module.css';
 import { Redirect, Link, useHistory, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { postResetPassword } from "../../services/actions/reset-password"; 
+import { TLocationWithFrom } from "../../utils/types";
 
 export const ResetPassword = () => {
   const history = useHistory();
-  const location = useLocation();
+  const location = useLocation<TLocationWithFrom>();
 
   const dispatch = useDispatch();
 
-  const { resetFailure, resetSuccess, fargotSuccess, resetRequest, status } = useSelector(store => store.resetPasswordReducer);
+  const { resetFailure, resetSuccess, fargotSuccess, resetRequest, status } = useSelector((store: any) => store.resetPasswordReducer);
 
   const [password, setPassword] = React.useState('')
-  const inputPasswordRef = React.useRef(null)
+  const inputPasswordRef = React.useRef<HTMLInputElement>(null)
   const onIconClick = () => {
-    setTimeout(() => inputPasswordRef.current.focus(), 0)
+    setTimeout(() => {
+      if (inputPasswordRef.current) {
+        inputPasswordRef.current.focus()
+      }
+    }, 0)
     alert('Icon Click Callback')
   }
 
   const [emailCode, setEmailCode] = React.useState('')
-  const inputNameRef = React.useRef(null)
+  const inputNameRef = React.useRef<HTMLInputElement>(null)
 
   const postNewPassword = () => {
+    // @ts-ignore;
     dispatch(postResetPassword(password, emailCode, history))
 
   }

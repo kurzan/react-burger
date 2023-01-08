@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Redirect, Route } from 'react-router-dom';
-import { getUserInfo } from '../../services/actions/user';
 
-export const ProtectedRoute = ({ children, ...rest  }) => {
+export const ProtectedRoute = ({ children, ...rest  }: any) => {
 
-  const { user } = useSelector(store => store.userReducer);
+  const { user } = useSelector((store: any) => store.userReducer);
 
   return (
     <Route

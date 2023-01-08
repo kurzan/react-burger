@@ -14,8 +14,8 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 export const HomePage = () => {
   const [modalOrderOpen, setModalOrderOpen] = useState(false);
 
-  const { isLoading, isError } = useSelector(store => store.ingredientsReducer);
-  const { orderRequest, orderFailed } = useSelector(store => store.orderReducer);
+  const { isLoading, isError } = useSelector((store: any) => store.ingredientsReducer);
+  const { orderRequest, orderFailed } = useSelector((store: any) => store.orderReducer);
 
   const onOrderClick = () => {
     setModalOrderOpen(true);

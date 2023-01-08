@@ -1,18 +1,21 @@
-import React, { useEffect, useState } from "react";
-import PropTypes from 'prop-types';
-import dataPropTypes from '../../utils/types.js'
+import React, { FC, useEffect, useState } from "react";
 import { Tab, CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import { useInView } from 'react-intersection-observer';
 import { useDrag } from "react-dnd";
 import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
+import { TIngredient } from '../../utils/types';
 
-const MenuElement = ({ ingredient }) => {
+type TMenuElement = {
+  ingredient: TIngredient;
+};
+
+const MenuElement: FC<TMenuElement> = ({ ingredient }) => {
 
   const location = useLocation();
 
-  const { selectedIngredients, bun } = useSelector(store => store.selectedIngredientsReducer)
+  const { selectedIngredients, bun } = useSelector((store: any) => store.selectedIngredientsReducer)
 
   const [, dragRef] = useDrag({
     type: "ingredient",
@@ -25,12 +28,12 @@ const MenuElement = ({ ingredient }) => {
   const count = allIngredients.filter(item => item._id === ingredient._id).length
 
   return (
-    <Link  to={{ pathname: `/ingredients/${ingredient._id}`, state: { background: location }}} className={styles.menu_element} ref={dragRef}>
+    <Link to={{ pathname: `/ingredients/${ingredient._id}`, state: { background: location }}} className={styles.menu_element} ref={dragRef}>
       {count ? <span className={styles.counter} ><Counter count={count}/></span> : null}
       <img className="ml-4 mr-4 mb-1" src={ingredient.image} alt={ingredient.name} />
       <div className={styles.price_wrapper}>
         <p className="text text_type_digits-default">{ingredient.price}</p>
-        <CurrencyIcon />
+        <CurrencyIcon type="primary" />
       </div>
       <p className="text text_type_main-default">{ingredient.name}</p>
     </Link>
@@ -38,15 +41,10 @@ const MenuElement = ({ ingredient }) => {
   )
 }
 
-MenuElement.propTypes = {
-  ingredient: PropTypes.shape(
-    dataPropTypes.isRequired).isRequired,
-};
-
 
 const BurgerIngredients = () => {
 
-  const { ingredients } = useSelector(store => store.ingredientsReducer);
+  const { ingredients } = useSelector((store: any) => store.ingredientsReducer);
 
 
   const tabs = [{ id: 'bun', title: 'Булки' }, { id: 'sauce', title: 'Соусы' }, { id: 'main', title: 'Начинки' }];
@@ -58,7 +56,7 @@ const BurgerIngredients = () => {
   const { ref: mainRef, inView: inMainView } = useInView();
 
   useEffect(() => {
-    const target = document.querySelector(`#${current}`);
+    const target = document.querySelector(`#${current}`) as HTMLElement;
     target.scrollIntoView();
 
   }, [current]);
@@ -89,7 +87,7 @@ const BurgerIngredients = () => {
         <div className={styles.menu} ref={bunRef}>
           <p className="text text_type_main-medium" id='bun'>Булки</p>
           <ul className={styles.menu_wrapper}>
-            {ingredients.map((item) => {
+            {ingredients.map((item: TIngredient) => {
               if (item.type === 'bun') {
                 return <MenuElement key={item._id} ingredient={item} />
               }
@@ -101,7 +99,7 @@ const BurgerIngredients = () => {
         <div className={styles.menu} ref={sauceRef}>
           <p className="text text_type_main-medium" id='sauce'>Соусы</p>
           <ul className={styles.menu_wrapper}>
-            {ingredients.map((item) => {
+            {ingredients.map((item: TIngredient) => {
               if (item.type === 'sauce') {
                 return <MenuElement key={item._id} ingredient={item} />
               }
@@ -113,7 +111,7 @@ const BurgerIngredients = () => {
         <div className={styles.menu} ref={mainRef}>
           <p className="text text_type_main-medium" id='main'>Начинки</p>
           <ul className={styles.menu_wrapper}>
-            {ingredients.map((item) => {
+            {ingredients.map((item: TIngredient) => {
               if (item.type === 'main') {
                 return <MenuElement key={item._id} ingredient={item} />
               }

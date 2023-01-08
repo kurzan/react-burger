@@ -1,11 +1,15 @@
-import React, { useState } from "react";
-import PropTypes from 'prop-types';
+import React, { FC, useState } from "react";
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './app-header.module.css'
 import { NavLink, useLocation } from 'react-router-dom';
 
+type TNavItemProps = {
+  Icon: any;
+  text: string;
+  to: string;
+};
 
-const NavItem = ({Icon, text, to}) => {
+const NavItem: FC<TNavItemProps> = ({Icon, text, to}) => {
   const [isActive, setIsActive] = useState(false);
 
   const location = useLocation();
@@ -20,12 +24,6 @@ const NavItem = ({Icon, text, to}) => {
         <p className="text text_type_main-default">{text}</p>
       </NavLink>
     )
-}
-
-NavItem.propTypes = {
-  text: PropTypes.string.isRequired,
-  Icon: PropTypes.func.isRequired,
-  to: PropTypes.string.isRequired
 }
 
 const AppHeader = () => {
