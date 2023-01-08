@@ -21,7 +21,6 @@
 	border-radius: 6px;
 }
 
-
 .menu {
   margin-bottom: 40px;
 }
@@ -44,6 +43,8 @@
   margin-top: 24px;
   margin-left: 4px;
   margin-right: 4px;
+  text-decoration: none;
+  color: white;
 }
 
 .price_wrapper {

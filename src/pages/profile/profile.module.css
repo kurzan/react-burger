@@ -1,0 +1,48 @@
+p {
+  margin: 0;
+  padding: 0;
+}
+
+.profile {
+  display: flex;
+  column-gap: 60px;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 320px;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 64px;
+  text-decoration: none;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 30px;
+  color: #8585AD;
+}
+
+.link_active {
+  color: white;
+}
+
+.info {
+  opacity: 0.4;
+}
+
+.client_details{
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
+}
+
+.buttons_box {
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}

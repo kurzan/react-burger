@@ -1,10 +1,25 @@
 import styles from './ingredient-details.module.css';
-import { useSelector } from 'react-redux';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { setCurrentIngredient } from '../../services/actions/current-ingredient';
+import { useEffect } from 'react';
 
 const IngredientDetails = () => {
+  const dispatch = useDispatch();
 
-  const currentIngredient = useSelector(store => store.currentIngredientReducer.currentIngredient)
+  const { id } = useParams(); 
+  const ingredients = useSelector(store => store.ingredientsReducer.ingredients);
+
+  useEffect(
+    () => {
+      if (ingredients.length) {
+        dispatch(setCurrentIngredient(ingredients.find(item => item._id === id)));
+      }
+
+    }, [dispatch, ingredients]
+  );
+
+  const { currentIngredient } = useSelector(store => store.currentIngredientReducer)
 
   return (
     <div className={"mt-8 " + styles.details}>

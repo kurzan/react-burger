@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { selectIngredient, selectBun } from '../../services/actions/selected-ingredients';
 import { v4 as uuid } from 'uuid';
+import { useHistory } from 'react-router-dom';
 
 
 const ConstructorItem = ({ ingredient, index, onDelete }) => {
@@ -99,6 +100,9 @@ ConstructorItem.propTypes = {
 
 const BurgerConstructor = ({ onOrderClick }) => {
   const dispatch = useDispatch();
+  const history = useHistory();
+
+  const { user } = useSelector(store => store.userReducer);
 
   const [, dropTarget] = useDrop({
     accept: "ingredient",
@@ -112,13 +116,17 @@ const BurgerConstructor = ({ onOrderClick }) => {
   });
 
   const { bun, selectedIngredients } = useSelector(store => store.selectedIngredientsReducer);
-
+  
   const allIngredients = [...selectedIngredients, bun ? bun : ''];
   const totalValue = selectedIngredients.reduce((sum, el) => sum + el.price, 0) + (bun ? bun.price * 2 : 0);
 
   const createOrder = () => {
-    dispatch(postOrder(allIngredients));
-    onOrderClick();
+    if (user) {
+      dispatch(postOrder(allIngredients));
+      onOrderClick();
+    } else {
+      history.push({pathname: '/login'});
+    }
   };
 
   const handleRemoveItem = (key) => {

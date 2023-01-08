@@ -4,17 +4,16 @@ import PropTypes from 'prop-types';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from "./modal.module.css";
 import ModalOverlay from '../modal-overlay/modal-overlay';
+import { useHistory, useParams } from "react-router-dom";
 
 const modalRoot = document.querySelector('#modals');
 
 
 const Modal = ({children, title, onClose}) => {
 
-  const [isOpen, setIsOpen] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
 
   const close = useCallback(() => {
-    setIsOpen(false)
     onClose && onClose();
   }, [onClose]);
 
@@ -38,8 +37,6 @@ const Modal = ({children, title, onClose}) => {
 
   return ReactDOM.createPortal(
     <>
-    {isOpen &&
-      <>
         <ModalOverlay onClick={close} />
         <div className={styles.modal}>
           <div className={'ml-10 mr-10 mt-10 mb-8 ' + styles.head}>
@@ -50,8 +47,6 @@ const Modal = ({children, title, onClose}) => {
           </div>
           {children}
         </div>
-      </>
-    }
     </>,
     modalRoot
   )
