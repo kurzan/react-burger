@@ -52,7 +52,7 @@ export const Profile = () => {
 
   const logoutOnClick = () => {
     //@ts-ignore
-    dispatch(logout(history))
+    dispatch(logout())
   }
 
   return (
@@ -62,7 +62,7 @@ export const Profile = () => {
           <div className="mb-20">
             <NavLink exact={true} className={styles.link} to={{ pathname: '/profile' }} activeClassName={styles.link_active}><p>Профиль</p></NavLink>
             <NavLink exact={true} className={styles.link} to={{ pathname: '/profile/orders' }} activeClassName={styles.link_active}>История заказов</NavLink>
-            <NavLink exact={true} className={styles.link} to={{ pathname: '/login' }}  onClick={() => logoutOnClick} activeClassName={styles.link_active}>Выход</NavLink>
+            <NavLink exact={true} className={styles.link} to={{ pathname: '/login' }}  onClick={logoutOnClick} activeClassName={styles.link_active}>Выход</NavLink>
           </div>
           <p className={"text text_type_main-default text_color_inactive " + styles.info}>В этом разделе вы можете изменить свои персональные данные</p>
         </div>

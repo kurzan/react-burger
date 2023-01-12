@@ -1,4 +1,4 @@
-import React, { FC, useRef } from 'react';
+import React, { FC, useRef, useState } from 'react';
 import styles from './burger-constructor.module.css';
 import { Button, CurrencyIcon, DragIcon, ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components/';
 import { useDrop, useDrag } from "react-dnd";
@@ -12,6 +12,8 @@ import { selectIngredient, selectBun } from '../../services/actions/selected-ing
 import { v4 as uuid } from 'uuid';
 import { useHistory } from 'react-router-dom';
 import { TIngredient } from '../../utils/types';
+
+import { AnimatePresence, motion } from "framer-motion";
 
 type TSelectedIngredientType = TIngredient & { key: any; };
 
@@ -30,7 +32,7 @@ type DragItem = {
 const ConstructorItem: FC<TConstructorItemProps> = ({ ingredient, index, onDelete }) => {
   const dispatch = useDispatch();
 
-  const ref = useRef<HTMLLIElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   const [{ handlerId }, drop] = useDrop<DragItem, void, { handlerId: Identifier | null }>({
     accept: "constructor",
@@ -90,7 +92,7 @@ const ConstructorItem: FC<TConstructorItemProps> = ({ ingredient, index, onDelet
   const opacity = isDragging ? 0 : 1;
 
   return (
-    <li className={'mr-1 ' + styles.item} style={{ opacity }} ref={ref} data-handler-id={handlerId}>
+    <div className={'mr-1 ' + styles.item} style={{ opacity }} ref={ref} data-handler-id={handlerId}>
       <span className={'mr-10 ' + styles.grug_icon}><DragIcon type="primary" /></span>
       <ConstructorElement
         key={index}
@@ -99,7 +101,7 @@ const ConstructorItem: FC<TConstructorItemProps> = ({ ingredient, index, onDelet
         thumbnail={ingredient.image}
         handleClose={() => onDelete(ingredient.key)}
       />
-    </li>
+    </div>
   )
 }
 
@@ -110,6 +112,8 @@ type TBurrgerConsructorProps = {
 const BurgerConstructor: FC<TBurrgerConsructorProps> = ({ onOrderClick }) => {
   const dispatch = useDispatch();
   const history = useHistory();
+
+  const [popLayout, setPopLayout] = useState(false);
 
   const { user } = useSelector((store: any) => store.userReducer);
 
@@ -147,38 +151,51 @@ const BurgerConstructor: FC<TBurrgerConsructorProps> = ({ onOrderClick }) => {
 
   return (
     <section className={'mt-25 ml-10 ' + styles.constructor} ref={dropTarget}>
-      <div className={'mb-4 mr-4 ' + styles.top} >
-        {bun &&
-          <ConstructorElement
-            type="top"
-            isLocked={true}
-            text={bun.name + ' (верх)'}
-            price={bun.price}
-            thumbnail={bun.image}
-          />
-        }
-      </div>
-      <ul className={styles.content}>
-        {selectedIngredients.map((item: TSelectedIngredientType, index: number) => <ConstructorItem key={item.key} ingredient={item} index={index} onDelete={handleRemoveItem} />)}
-      </ul>
-      <div className={'mt-4 mr-4 ' + styles.bottom}>
-        {bun &&
-          <ConstructorElement
-            type="bottom"
-            isLocked={true}
-            text={bun.name + ' (низ)'}
-            price={bun.price}
-            thumbnail={bun.image}
-          />
-        }
-      </div>
-      {chekConstructor && 'Перенестите необходимые ингредиенты для бургера в эту часть экрана'}
-      <div className={'mt-10 mr-4 ' + styles.order}>
-        <p className="text text_type_digits-medium mr-10">{totalValue}<CurrencyIcon type='primary' /></p>
-        <Button htmlType="button" type="primary" size="large" disabled={chekConstructor} onClick={createOrder}>
-          Оформить заказ
-        </Button>
-      </div>
+      <AnimatePresence mode={popLayout ? "popLayout" : "sync"}>
+        <div className={'mb-4 mr-4 ' + styles.top} >
+          {bun &&
+            <ConstructorElement
+              type="top"
+              isLocked={true}
+              text={bun.name + ' (верх)'}
+              price={bun.price}
+              thumbnail={bun.image}
+            />
+          }
+        </div>
+        <ul className={styles.content}>
+
+            {selectedIngredients.map((item: TSelectedIngredientType, index: number) => 
+              <motion.li
+                layout
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.8, opacity: 0 }}
+                transition={{ type: "spring" }}
+                key={item.key}
+              ><ConstructorItem ingredient={item} index={index} onDelete={handleRemoveItem} /></motion.li>
+            )}
+          
+        </ul>
+        <div className={'mt-4 mr-4 ' + styles.bottom}>
+          {bun &&
+            <ConstructorElement
+              type="bottom"
+              isLocked={true}
+              text={bun.name + ' (низ)'}
+              price={bun.price}
+              thumbnail={bun.image}
+            />
+          }
+        </div>
+        {chekConstructor && 'Перенестите необходимые ингредиенты для бургера в эту часть экрана'}
+        <div className={'mt-10 mr-4 ' + styles.order}>
+          <p className="text text_type_digits-medium mr-10">{totalValue}<CurrencyIcon type='primary' /></p>
+          <Button htmlType="button" type="primary" size="large" disabled={chekConstructor} onClick={createOrder}>
+            Оформить заказ
+          </Button>
+        </div>
+      </AnimatePresence>
     </section>
   )
 }

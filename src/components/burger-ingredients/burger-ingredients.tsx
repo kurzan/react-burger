@@ -7,6 +7,8 @@ import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { TIngredient } from '../../utils/types';
 
+import { motion } from 'framer-motion';
+
 type TMenuElement = {
   ingredient: TIngredient;
 };
@@ -28,7 +30,7 @@ const MenuElement: FC<TMenuElement> = ({ ingredient }) => {
   const count = allIngredients.filter(item => item._id === ingredient._id).length
 
   return (
-    <Link to={{ pathname: `/ingredients/${ingredient._id}`, state: { background: location }}} className={styles.menu_element} ref={dragRef}>
+      <Link to={{ pathname: `/ingredients/${ingredient._id}`, state: { background: location }}} className={styles.menu_element} ref={dragRef}>
       {count ? <span className={styles.counter} ><Counter count={count}/></span> : null}
       <img className="ml-4 mr-4 mb-1" src={ingredient.image} alt={ingredient.name} />
       <div className={styles.price_wrapper}>
@@ -36,7 +38,7 @@ const MenuElement: FC<TMenuElement> = ({ ingredient }) => {
         <CurrencyIcon type="primary" />
       </div>
       <p className="text text_type_main-default">{ingredient.name}</p>
-    </Link>
+      </Link>
 
   )
 }
@@ -71,6 +73,21 @@ const BurgerIngredients = () => {
     }
   }, [inBunView, inSauceView, inMainView])
 
+  const ingredientsContainer = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.3
+      }
+    }
+  };
+
+  const listItem = {
+    hidden: { opacity: 0 },
+    show: { opacity: 10 }
+  };
+
   return (
     <section className={styles.build_burger}>
       <h1 className="mt-10 text text_type_main-large">Соберите бургер</h1>
@@ -86,38 +103,38 @@ const BurgerIngredients = () => {
 
         <div className={styles.menu} ref={bunRef}>
           <p className="text text_type_main-medium" id='bun'>Булки</p>
-          <ul className={styles.menu_wrapper}>
+          <motion.ul className={styles.menu_wrapper} variants={ingredientsContainer} initial="hidden" animate="show" >
             {ingredients.map((item: TIngredient) => {
               if (item.type === 'bun') {
-                return <MenuElement key={item._id} ingredient={item} />
+                return <motion.li key={item._id} variants={listItem}><MenuElement  ingredient={item} /></motion.li>
               }
               return null;
             })}
-          </ul>
+          </motion.ul>
         </div>
 
         <div className={styles.menu} ref={sauceRef}>
           <p className="text text_type_main-medium" id='sauce'>Соусы</p>
-          <ul className={styles.menu_wrapper}>
+          <motion.ul className={styles.menu_wrapper} variants={ingredientsContainer} initial="hidden" animate="show" >
             {ingredients.map((item: TIngredient) => {
               if (item.type === 'sauce') {
-                return <MenuElement key={item._id} ingredient={item} />
+                return <motion.li key={item._id} variants={listItem}><MenuElement  ingredient={item} /></motion.li>
               }
               return null;
             })}
-          </ul>
+          </motion.ul>
         </div>
 
         <div className={styles.menu} ref={mainRef}>
           <p className="text text_type_main-medium" id='main'>Начинки</p>
-          <ul className={styles.menu_wrapper}>
+          <motion.ul className={styles.menu_wrapper} variants={ingredientsContainer} initial="hidden" animate="show" >
             {ingredients.map((item: TIngredient) => {
               if (item.type === 'main') {
-                return <MenuElement key={item._id} ingredient={item} />
+                return <motion.li key={item._id} variants={listItem}><MenuElement  ingredient={item} /></motion.li>
               }
               return null;
             })}
-          </ul>
+          </motion.ul>
         </div>
       </div>
 
