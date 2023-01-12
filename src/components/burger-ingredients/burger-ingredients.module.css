@@ -57,3 +57,9 @@
   width: 272px;
   position: relative;
  }
+
+ .content {
+  display: flex;
+  flex-direction: column;
+  column-gap: 5px;
+ }

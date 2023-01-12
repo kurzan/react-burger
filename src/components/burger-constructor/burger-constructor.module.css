@@ -20,6 +20,9 @@
   list-style: none;
   overflow-y: scroll;
   max-height: 450px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
 }
 
 .item {
