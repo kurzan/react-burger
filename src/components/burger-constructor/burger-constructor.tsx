@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useRef } from 'react';
 import styles from './burger-constructor.module.css';
 import { Button, CurrencyIcon, DragIcon, ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components/';
 import { useDrop, useDrag } from "react-dnd";
@@ -12,8 +12,6 @@ import { selectIngredient, selectBun } from '../../services/actions/selected-ing
 import { v4 as uuid } from 'uuid';
 import { useHistory } from 'react-router-dom';
 import { TIngredient } from '../../utils/types';
-
-import { AnimatePresence, motion } from "framer-motion";
 
 type TSelectedIngredientType = TIngredient & { key: any; };
 
@@ -113,8 +111,6 @@ const BurgerConstructor: FC<TBurrgerConsructorProps> = ({ onOrderClick }) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const [popLayout, setPopLayout] = useState(false);
-
   const { user } = useSelector((store: any) => store.userReducer);
 
   const [, dropTarget] = useDrop({
@@ -151,7 +147,6 @@ const BurgerConstructor: FC<TBurrgerConsructorProps> = ({ onOrderClick }) => {
 
   return (
     <section className={'mt-25 ml-10 ' + styles.constructor} ref={dropTarget}>
-      <AnimatePresence mode={popLayout ? "popLayout" : "sync"}>
         <div className={'mb-4 mr-4 ' + styles.top} >
           {bun &&
             <ConstructorElement
@@ -166,14 +161,7 @@ const BurgerConstructor: FC<TBurrgerConsructorProps> = ({ onOrderClick }) => {
         <ul className={styles.content}>
 
             {selectedIngredients.map((item: TSelectedIngredientType, index: number) => 
-              <motion.li
-                layout
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.8, opacity: 0 }}
-                transition={{ type: "spring" }}
-                key={item.key}
-              ><ConstructorItem ingredient={item} index={index} onDelete={handleRemoveItem} /></motion.li>
+              <ConstructorItem ingredient={item} key={item.key} index={index} onDelete={handleRemoveItem} />
             )}
           
         </ul>
@@ -188,14 +176,13 @@ const BurgerConstructor: FC<TBurrgerConsructorProps> = ({ onOrderClick }) => {
             />
           }
         </div>
-        {chekConstructor && 'Перенестите необходимые ингредиенты для бургера в эту часть экрана'}
+        {chekConstructor && <p>Перенестите необходимые ингредиенты для бургера в эту часть экрана</p>}
         <div className={'mt-10 mr-4 ' + styles.order}>
           <p className="text text_type_digits-medium mr-10">{totalValue}<CurrencyIcon type='primary' /></p>
           <Button htmlType="button" type="primary" size="large" disabled={chekConstructor} onClick={createOrder}>
             Оформить заказ
           </Button>
         </div>
-      </AnimatePresence>
     </section>
   )
 }
