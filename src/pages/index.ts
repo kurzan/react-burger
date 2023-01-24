@@ -5,5 +5,6 @@ import { ForgotPassword } from './forgot-password/forgot-password';
 import { ResetPassword } from './reset-password/reset-password';
 import { Profile } from "./profile/profile";
 import { Page404 } from './page-404/page-404';
+import { Feed } from "./feed/feed"; 
 
-export { HomePage, Login, Register, ForgotPassword, ResetPassword, Profile, Page404 };
+export { HomePage, Login, Register, ForgotPassword, ResetPassword, Profile, Page404, Feed };

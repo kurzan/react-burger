@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { getIngredients } from '../../services/actions/ingrediens';
 import styles from './app.module.css'
 import AppHeader from '../app-header/app-header';
-import { HomePage, Login, Register, ForgotPassword, ResetPassword, Profile, Page404 } from '../../pages';
+import { HomePage, Login, Register, ForgotPassword, ResetPassword, Profile, Page404, Feed } from '../../pages';
 import { ProtectedRoute } from '../protected-route/protected-route';
 import { getUserInfo } from '../../services/actions/user'
 import { resetCurrentIngredient } from '../../services/actions/current-ingredient';
@@ -42,8 +42,8 @@ function App() {
             <Route path='/' exact={true}>
               <HomePage/>
             </Route>
-            <Route path='/orders' exact={true}>
-              <p>Здесь будет история заказов</p>
+            <Route path='/feed' exact={true}>
+              <Feed />
             </Route>
             <Route path='/login' exact={true}>
               <Login />

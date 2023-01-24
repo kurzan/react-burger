@@ -146,7 +146,7 @@ const BurgerConstructor: FC<TBurrgerConsructorProps> = ({ onOrderClick }) => {
   const chekConstructor = selectedIngredients.length || bun ? false : true;
 
   return (
-    <section className={'mt-25 ml-10 ' + styles.constructor} ref={dropTarget}>
+    <section className={'ml-10 ' + styles.constructor} ref={dropTarget}>
         <div className={'mb-4 mr-4 ' + styles.top} >
           {bun &&
             <ConstructorElement

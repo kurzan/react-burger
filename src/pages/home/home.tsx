@@ -40,9 +40,12 @@ export const HomePage = () => {
       {isError ? <Modal title={`Ошибка: Что-то пошло не так :( Обновите страницу`} /> 
       :
       <DndProvider backend={HTML5Backend}>
-        <main className={styles.main}>
-            <BurgerIngredients />
-            <BurgerConstructor onOrderClick={onOrderClick} />
+        <main>
+            <h1 className="mt-10 text text_type_main-large">Соберите бургер</h1>
+            <div className={styles.main}>
+              <BurgerIngredients />
+              <BurgerConstructor onOrderClick={onOrderClick} />
+            </div>
         </main>
       </DndProvider>
       }
