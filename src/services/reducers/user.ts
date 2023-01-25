@@ -16,8 +16,28 @@ import {
   EDIT_USER_FAILED
  } from '../actions/user';
 
+ import type { TUserActions } from '../actions/user';
+ import type { TUser } from '../../utils/types';
 
-const initialState = {
+
+ type TUserState = {
+  user: TUser | null;
+  status: string | null;
+  registerRequest: boolean;
+  registerSuccess: boolean;
+  registerFailure: boolean;
+  loginRequest: boolean;
+  loginFailure: boolean;
+  logoutRequest: boolean;
+  logoutFailed: boolean;
+  getUserRequest: boolean;
+  getUserFailure: boolean;
+  editUserRequest: boolean;
+  editUserSuccess: boolean;
+  editUserFailure: boolean;
+};
+
+const initialState: TUserState = {
   user: null,
   status: null,
   registerRequest: false,
@@ -34,7 +54,7 @@ const initialState = {
   editUserFailure: false,
 };
 
-export const userReducer = (state = initialState, action) => {
+export const userReducer = (state = initialState, action: TUserActions) => {
   switch (action.type) {
     case REGISTER_REQUEST: {
       return {

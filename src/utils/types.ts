@@ -1,4 +1,3 @@
-
 import { Location } from 'history';
 
 export type TParams = {
@@ -18,8 +17,27 @@ export type TIngredient = {
   image_mobile: string;
   image_large: string;
   __v: number;
+  key?: string;
 };
 
 export type TLocationWithFrom = Location & {
   from: string;
+};
+
+export type TUser = {
+  createdAt?: string;
+  email?: string;
+  name?: string;
+  updatedAt?: string;
+}
+
+export type TOrder = {
+  createdAt: string;
+  ingredients: TIngredient[];
+  name: string;
+  owner: TUser;
+  price: number;
+  status: string;
+  updatedAt: string;
+  _id: string;
 };

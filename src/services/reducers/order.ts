@@ -3,13 +3,22 @@ import {
   POST_ORDER_SUCCESS, 
   POST_ORDER_FAILED } from '../actions/order';
 
-const initialState = {
+import type { TOrder } from '../../utils/types';
+import type { TOrderActions } from '../actions/order'; 
+
+type TOrderState = {
+  order: Partial<TOrder>;
+  orderRequest: boolean;
+  orderFailed: boolean;
+}
+
+const initialState: TOrderState = {
   order: {},
   orderRequest: false,
   orderFailed: false
 }
 
-export const orderReducer = (state = initialState, action) => {
+export const orderReducer = (state = initialState, action: TOrderActions) => {
   switch (action.type) {
     case POST_ORDER_REQUEST: {
       return {

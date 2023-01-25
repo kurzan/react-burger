@@ -5,12 +5,20 @@ import {
   ADD_BUN,
   MOVE_INGREDIENT } from '../actions/selected-ingredients';
 
-const initialState = {
+import type { TIngredient } from '../../utils/types';
+import type { TSelectedIngredientActions } from '../actions/selected-ingredients'; 
+
+type TSelectedIngredientsState = {
+  bun: TIngredient | null;
+  selectedIngredients: TIngredient[];
+}
+
+const initialState: TSelectedIngredientsState = {
   bun: null,
   selectedIngredients: [],
 }
 
-export const selectedIngredientsReducer = (state = initialState, action) => {
+export const selectedIngredientsReducer = (state = initialState, action: TSelectedIngredientActions) => {
   switch (action.type) {
     case ADD_BUN: {
       return {
