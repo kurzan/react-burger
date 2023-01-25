@@ -1,6 +1,6 @@
 import { SET_CURRENT_INGREDIENT, RESET_CURRENT_INGREDIENT } from '../actions/current-ingredient';
 import type { TCurrentIngredientActions } from '../actions/current-ingredient';
-import type { TIngredient } from '../../utils/types';
+import type { TIngredient } from '../types/types';
 
 type TCurrentIngredientState = {
   currentIngredient: Partial<TIngredient>;

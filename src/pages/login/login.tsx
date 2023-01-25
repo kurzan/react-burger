@@ -4,7 +4,7 @@ import styles from './login.module.css';
 import { Link, Redirect, useHistory, useLocation } from 'react-router-dom';
 import { loginning } from "../../services/actions/user";
 import { useSelector, useDispatch } from "react-redux";
-import { TLocationWithFrom } from "../../utils/types";
+import { TLocationWithFrom } from "../../services/types/types";
 
 export const Login = () => {
   const { user } = useSelector((store: any) => store.userReducer);

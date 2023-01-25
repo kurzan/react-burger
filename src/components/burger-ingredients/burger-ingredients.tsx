@@ -5,7 +5,7 @@ import { useInView } from 'react-intersection-observer';
 import { useDrag } from "react-dnd";
 import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
-import { TIngredient } from '../../utils/types';
+import { TIngredient } from '../../services/types/types';
 
 import { motion } from 'framer-motion';
 

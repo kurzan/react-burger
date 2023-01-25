@@ -1,9 +1,10 @@
 import { apiRequest, refreshToken } from '../../utils/burger-api';
 import { RESET_INGREDIENTS } from '../actions/selected-ingredients';
 import { getCookie } from '../../utils/cookie'; 
+import { AppDispatch, AppThunk } from '../types/index';
 
-import { TIngredient } from '../../utils/types';
-import { TOrder } from '../../utils/types';
+import { TIngredient } from '../types/types';
+import { TOrder } from '../types/types';
 
 export const POST_ORDER_REQUEST: 'POST_ORDER_REQUEST' = 'POST_ORDER_REQUEST';
 export const POST_ORDER_SUCCESS: 'POST_ORDER_SUCCESS' = 'POST_ORDER_SUCCESS';

@@ -1,6 +1,7 @@
 import { apiRequest, refreshToken } from "../../utils/burger-api"; 
 import { setCookie, deleteCookie, getCookie } from "../../utils/cookie";
-import { TUser } from "../../utils/types";
+import { TUser } from "../types/types";
+import { AppDispatch, AppThunk } from '../types/index';
 
 export const REGISTER_REQUEST: 'REGISTER_REQUEST' = 'REGISTER_REQUEST';
 export const REGISTER_SUCCESS: 'REGISTER_SUCCESS' = 'REGISTER_SUCCESS';
@@ -114,8 +115,21 @@ export type TUserActions =
   | IEditUserSuccessAction
   | IEditUserFailedAction;
 
+const getRegisterRequestAction = (): IRegisterRequestAction => ({
+  type: REGISTER_REQUEST
+})
 
-export const registerUser = (name: TUser, email: TUser, password: TUser) => (dispatch: any) => {
+const getRegisterSuccessAction = (user: TUser): IRegisterSuccessAction => ({
+  type: REGISTER_SUCCESS,
+  user
+})
+
+const getRegisterFaledAction = (err: string): IRegisterFailedAction => ({
+    type: REGISTER_FAILED,
+    err
+})
+
+export const registerUser: AppThunk = (name: TUser, email: TUser, password: TUser) => (dispatch: AppDispatch) => {
   const options = {
     method: 'POST',
     body: JSON.stringify({
@@ -128,36 +142,25 @@ export const registerUser = (name: TUser, email: TUser, password: TUser) => (dis
     }
   }
 
-  dispatch({
-    type: REGISTER_REQUEST
-  });
+  dispatch(getRegisterRequestAction());
 
   apiRequest('auth/register', options)
     .then((res) => {
-      dispatch({
-        type: REGISTER_SUCCESS,
-        user: res.user
-      })
+      dispatch(getRegisterSuccessAction(res))
       setCookie('accessToken', res.accessToken);
       setCookie('refreshToken', res.refreshToken);
     })
     .catch(err => {
       if (typeof(err) !== 'object' ) {
-        dispatch({
-          type: REGISTER_FAILED,
-          err
-        }) 
+        dispatch(getRegisterFaledAction(err)) 
       } else {
-        dispatch({
-          type: REGISTER_FAILED,
-          err: 'Непредвиденная ошибка. Попробуйте заново'
-        }) 
+        dispatch(getRegisterFaledAction('Непредвиденная ошибка. Попробуйте заново')) 
       }
 
     })
 };
 
-export const loginning = (email: TUser, password: TUser) => (dispatch: any) => {
+export const loginning: AppThunk = (email: TUser, password: TUser) => (dispatch: AppDispatch) => {
   const options = {
       method: 'POST',
       body: JSON.stringify({
@@ -185,7 +188,7 @@ export const loginning = (email: TUser, password: TUser) => (dispatch: any) => {
     })
 };
 
-export const logout = () => (dispatch: any) => {
+export const logout: AppThunk = () => (dispatch: AppDispatch) => {
   const options = {
       method: 'POST',
       body: JSON.stringify({
@@ -212,7 +215,7 @@ export const logout = () => (dispatch: any) => {
     })
 }
 
-export const getUserInfo = () => (dispatch: any) => {
+export const getUserInfo: AppThunk = () => (dispatch: AppDispatch) => {
   const options = {
     method: 'GET',
     headers: {
@@ -243,7 +246,7 @@ export const getUserInfo = () => (dispatch: any) => {
 
 };
 
-export const updateUserInfo = (form: TUser) => (dispatch: any) => {
+export const updateUserInfo: AppThunk = (form: TUser) => (dispatch: AppDispatch) => {
   const options = {
     method: 'PATCH',
     headers: {

@@ -4,7 +4,7 @@ import styles from './forgot-password.module.css';
 import { Link, useHistory, Redirect, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getForgotPassword } from '../../services/actions/reset-password';
-import { TLocationWithFrom } from "../../utils/types";
+import { TLocationWithFrom } from "../../services/types/types";
 
 export const ForgotPassword = () => {
   const dispatch = useDispatch();

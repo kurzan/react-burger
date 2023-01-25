@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectIngredient, selectBun } from '../../services/actions/selected-ingredients';
 import { v4 as uuid } from 'uuid';
 import { useHistory } from 'react-router-dom';
-import { TIngredient } from '../../utils/types';
+import { TIngredient } from '../../services/types/types';
 
 type TSelectedIngredientType = TIngredient & { key: any; };
 

@@ -1,4 +1,5 @@
 import { apiRequest } from '../../utils/burger-api';
+import { AppDispatch, AppThunk } from '../types/index';
 
 export const FORGOT_PASSWORD_REQUEST: 'FORGOT_PASSWORD_REQUEST' = 'FORGOT_PASSWORD_REQUEST';
 export const FORGOT_PASSWORD_SUCCESS: 'FORGOT_PASSWORD_SUCCESS' = 'FORGOT_PASSWORD_SUCCESS';
@@ -45,7 +46,7 @@ export type TResetPasswordActions =
   | IResetPasswordFailedAction;
 
 
-export const getForgotPassword = (email: string, history: any) => (dispatch: any) => {
+export const getForgotPassword: AppThunk = (email: string, history: any) => (dispatch: AppDispatch) => {
   const options = {
     method: 'POST',
     body: JSON.stringify({ 'email': email }),
@@ -70,7 +71,7 @@ export const getForgotPassword = (email: string, history: any) => (dispatch: any
     }))
 };
 
-export const postResetPassword = (password: string, emailCode: string, history: any) => (dispatch: any) => {
+export const postResetPassword: AppThunk = (password: string, emailCode: string, history: any) => (dispatch: AppDispatch) => {
   const options = {
     method: 'POST',
     body: JSON.stringify(  {

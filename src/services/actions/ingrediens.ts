@@ -1,5 +1,6 @@
 import { apiRequest } from '../../utils/burger-api';
-import type { TIngredient } from '../../utils/types';
+import type { TIngredient } from '../types/types';
+import { AppDispatch, AppThunk } from '../types/index';
 
 export const GET_INGREDIENTS_REQUEST: 'GET_INGREDIENTS_REQUEST' = 'GET_INGREDIENTS_REQUEST';
 export const GET_INGREDIENTS_SUCCESS: 'GET_INGREDIENTS_SUCCESS' = 'GET_INGREDIENTS_SUCCESS';
@@ -23,7 +24,7 @@ export type TIngredientsActions =
     | IGetIngredientsSuccessAction
     | IGetIngredientsSuccessFailed;
 
-export const getIngredients = () => (dispatch: any) => {
+export const getIngredients: AppThunk = () => (dispatch: AppDispatch) => {
 
   dispatch({
     type: GET_INGREDIENTS_REQUEST

@@ -17,7 +17,7 @@ import {
  } from '../actions/user';
 
  import type { TUserActions } from '../actions/user';
- import type { TUser } from '../../utils/types';
+ import type { TUser } from '../types/types';
 
 
  type TUserState = {

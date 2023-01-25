@@ -1,4 +1,4 @@
-import type { TIngredient } from '../../utils/types';
+import type { TIngredient } from '../types/types';
 import type { TIngredientsActions } from '../actions/ingrediens';
 
 import { 

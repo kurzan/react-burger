@@ -4,7 +4,7 @@ import styles from './reset-password.module.css';
 import { Redirect, Link, useHistory, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { postResetPassword } from "../../services/actions/reset-password"; 
-import { TLocationWithFrom } from "../../utils/types";
+import { TLocationWithFrom } from "../../services/types/types";
 
 export const ResetPassword = () => {
   const history = useHistory();

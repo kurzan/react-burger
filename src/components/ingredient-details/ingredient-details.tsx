@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { setCurrentIngredient } from '../../services/actions/current-ingredient';
 import { useEffect } from 'react';
-import { TIngredient, TParams } from '../../utils/types';
+import { TIngredient, TParams } from '../../services/types/types';
 
 const IngredientDetails = () => {
   const dispatch = useDispatch();

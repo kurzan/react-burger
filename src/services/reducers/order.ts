@@ -3,7 +3,7 @@ import {
   POST_ORDER_SUCCESS, 
   POST_ORDER_FAILED } from '../actions/order';
 
-import type { TOrder } from '../../utils/types';
+import type { TOrder } from '../types/types';
 import type { TOrderActions } from '../actions/order'; 
 
 type TOrderState = {

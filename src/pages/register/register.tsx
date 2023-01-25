@@ -4,7 +4,7 @@ import styles from './register.module.css';
 import { Redirect, Link, useLocation } from 'react-router-dom';
 import { registerUser } from '../../services/actions/user';
 import { useDispatch, useSelector } from 'react-redux'; 
-import { TLocationWithFrom } from "../../utils/types";
+import { TLocationWithFrom } from "../../services/types/types";
 
 export const Register = () => {
   const dispatch = useDispatch();

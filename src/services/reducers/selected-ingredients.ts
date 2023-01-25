@@ -5,7 +5,7 @@ import {
   ADD_BUN,
   MOVE_INGREDIENT } from '../actions/selected-ingredients';
 
-import type { TIngredient } from '../../utils/types';
+import type { TIngredient } from '../types/types';
 import type { TSelectedIngredientActions } from '../actions/selected-ingredients'; 
 
 type TSelectedIngredientsState = {
