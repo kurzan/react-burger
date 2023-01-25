@@ -5,6 +5,7 @@ import { NavLink, useHistory, BrowserRouter as Router, Switch, Route } from 'rea
 import { useDispatch, useSelector } from "react-redux";
 import { getUserInfo, updateUserInfo, logout } from '../../services/actions/user';
 import { ProtectedRoute } from "../../components/protected-route/protected-route";
+import OrdersList from '../../components/orders-list/orders-list';
 
 export const Profile = () => {
   const dispatch = useDispatch();
@@ -119,7 +120,9 @@ export const Profile = () => {
             </form>
           </ProtectedRoute>
           <ProtectedRoute path="/profile/orders" exact={true}>
-                <p> Здесь будут заказы</p>
+            <div className={styles.orders_history} >
+              <OrdersList/>
+            </div>
           </ProtectedRoute>
         </Switch>
       </div>

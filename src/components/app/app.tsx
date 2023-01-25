@@ -14,6 +14,8 @@ import { Location } from 'history';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
 
+import { OrderInfo } from '../order-info/order-info';
+
 function App() {
   const dispatch = useDispatch();
 
@@ -39,6 +41,9 @@ function App() {
         <AppHeader />
         <div className={styles.main}>
           <Switch>
+            <Route path='/orderinfo' exact={true}>
+              <OrderInfo/>
+            </Route>
             <Route path='/' exact={true}>
               <HomePage/>
             </Route>
