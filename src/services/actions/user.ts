@@ -63,7 +63,7 @@ export interface ILogutSuccessAction {
 
 export interface ILogutFailedAction {
   readonly type: typeof LOGOUT_FAILED;
-  readonly message: string;
+  readonly err: string;
 }
 
 export interface ILogutDelStatusAction {
@@ -115,6 +115,8 @@ export type TUserActions =
   | IEditUserSuccessAction
   | IEditUserFailedAction;
 
+//REGISTER USER
+
 const getRegisterRequestAction = (): IRegisterRequestAction => ({
   type: REGISTER_REQUEST
 })
@@ -128,6 +130,24 @@ const getRegisterFaledAction = (err: string): IRegisterFailedAction => ({
     type: REGISTER_FAILED,
     err
 })
+
+
+// GET USER
+
+const getUserReguestAction = (): IGetUserReguestAction =>({
+  type: GET_USER_REQUEST
+})
+
+const getUserSuccessAction = (res: TUser): IGetUserSuccessAction =>({
+  type: GET_USER_SUCCESS,
+  user: res
+})
+
+const getUserFailedAction = (err: string): IGetUserFailedAction=>({
+  type: GET_USER_FAILED, 
+  err
+})
+
 
 export const registerUser: AppThunk = (name: TUser, email: TUser, password: TUser) => (dispatch: AppDispatch) => {
   const options = {
@@ -224,23 +244,18 @@ export const getUserInfo: AppThunk = () => (dispatch: AppDispatch) => {
     },
   }
 
-  dispatch({
-    type: GET_USER_REQUEST
-  })
+  dispatch(getUserReguestAction())
 
   apiRequest('auth/user', options)
     .then((res) => {
-      dispatch({
-        type: GET_USER_SUCCESS,
-        user: res.user
-      })
+      dispatch(getUserSuccessAction(res))
     })
     .catch(err => {
       if (err === 'jwt expired') {
         refreshToken()
         .then(() => dispatch(getUserInfo()))
       } else {
-        dispatch({type: GET_USER_FAILED})
+        dispatch(getUserFailedAction(err))
       }
     })
 
