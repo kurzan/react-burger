@@ -1,5 +1,5 @@
-import { ThunkAction } from 'redux-thunk';
-import { Action, ActionCreator } from 'redux';
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
+import { ActionCreator } from 'redux';
 import { store } from '../store';
 import { TCurrentIngredientActions } from '../actions/current-ingredient';
 import { TIngredientsActions } from '../actions/ingrediens';
@@ -17,7 +17,7 @@ type TApplicationActions =
   | TUserActions;
 
 export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
-export type AppThunk<TReturn = void> = ActionCreator<
-  ThunkAction<TReturn, Action, RootState, TApplicationActions>
+export type AppThunk<ReturnType = void> = ActionCreator<
+  ThunkAction<ReturnType, RootState, never, TApplicationActions>
 >;
+export type AppDispatch = ThunkDispatch<RootState, never, TApplicationActions>;

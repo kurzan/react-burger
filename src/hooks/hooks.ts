@@ -1,4 +1,3 @@
-// hooks.ts
 import {
   TypedUseSelectorHook,
   useDispatch as dispatchHook,
@@ -6,8 +5,9 @@ import {
 } from 'react-redux';
 import { AppDispatch, AppThunk, RootState  } from '../services/types';
 
-// Теперь этот хук «знает» структуру хранилища
+
 export const useSelector: TypedUseSelectorHook<RootState> = selectorHook;
 
-// Хук не даст отправить экшен, который ему не знаком
-export const useDispatch = () => dispatchHook<AppDispatch | AppThunk>(); 
+
+export const useDispatch = () => dispatchHook<AppDispatch>(); 
+

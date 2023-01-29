@@ -138,9 +138,9 @@ const getUserReguestAction = (): IGetUserReguestAction =>({
   type: GET_USER_REQUEST
 })
 
-const getUserSuccessAction = (res: TUser): IGetUserSuccessAction =>({
+const getUserSuccessAction = (res: any): any =>({
   type: GET_USER_SUCCESS,
-  user: res
+  user: res.user
 })
 
 const getUserFailedAction = (err: string): IGetUserFailedAction=>({
