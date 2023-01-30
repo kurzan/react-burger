@@ -3,11 +3,11 @@ import { EmailInput, Input, Button } from "@ya.praktikum/react-developer-burger-
 import styles from './login.module.css';
 import { Link, Redirect, useHistory, useLocation } from 'react-router-dom';
 import { loginning } from "../../services/actions/user";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from '../../hooks/hooks';
 import { TLocationWithFrom } from "../../services/types/types";
 
 export const Login = () => {
-  const { user } = useSelector((store: any) => store.userReducer);
+  const { user } = useSelector((store) => store.userReducer);
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -29,10 +29,9 @@ export const Login = () => {
     setEmail(e.target.value)
   }
 
-  const { status, loginFailure } = useSelector((store: any) => store.userReducer);
+  const { status, loginFailure } = useSelector((store) => store.userReducer);
 
   const onLoginClick = () => {
-    //@ts-ignore
     dispatch(loginning(email, password, history));
   }
 

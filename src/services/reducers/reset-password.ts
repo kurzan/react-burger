@@ -1,13 +1,5 @@
-import {
-  RESET_PASSWORD_REQUEST,
-  RESET_PASSWORD_SUCCESS,
-  RESET_PASSWORD_FAILED,
-  FORGOT_PASSWORD_REQUEST, 
-  FORGOT_PASSWORD_SUCCESS, 
-  FORGOT_PASSWORD_FAILED
-} from '../actions/reset-password';
-
-import type { TResetPasswordActions } from '../actions/reset-password';
+import { createReducer } from '@reduxjs/toolkit';
+import { fargotPasswordFailed, fargotPasswordRequest, fargotPasswordSuccess, resetPasswordFailed, resetPasswordRequest, resetPasswordSuccess, TResetPasswordActions } from '../actions/reset-password';
 
 type TResetPasswortState = {
   status: string | null;
@@ -16,7 +8,8 @@ type TResetPasswortState = {
   forgotFailed: boolean;
   resetRequest: boolean;
   resetSuccess: boolean;
-  resetFailure: boolean;}
+  resetFailure: boolean;
+}
 
 const initialState: TResetPasswortState = {
   status: null,
@@ -28,67 +21,39 @@ const initialState: TResetPasswortState = {
   resetFailure: false
 }
 
-export const resetPasswordReducer = (state = initialState, action: TResetPasswordActions) => {
-  switch (action.type) {
-    case FORGOT_PASSWORD_REQUEST: {
-      return {
-        ...state,
-        status: 'Идет отправка данных',
-        forgotRequest: true,
-        fargotSuccess: false,
-        forgotFailed: false
-      }
-    }
-
-    case FORGOT_PASSWORD_SUCCESS: {
-      return {
-        ...state,
-        status: action.status.message,
-        forgotRequest: false,
-        fargotSuccess: true,
-        forgotFailed: false
-      }
-    }
-
-    case FORGOT_PASSWORD_FAILED: {
-      return {
-        ...state,
-        status: action.err,
-        forgotRequest: false,
-        fargotSuccess: false,
-        forgotFailed: true
-      }
-    }
-    
-    case RESET_PASSWORD_REQUEST: {
-      return {
-        ...state,
-        status: 'Идет отправка данных',
-        resetRequest: true,
-        resetFailure: false
-      }
-    }
-
-    case RESET_PASSWORD_SUCCESS: {
-      return {
-        ...state,
-        status: action.status.message,
-        resetSuccess: true,
-        resetRequest: false,
-        resetFailure: false
-      }
-    }
-
-    case RESET_PASSWORD_FAILED: {
-      return {
-        ...state,
-        status: action.err,
-        resetRequest: false,
-        resetSuccess: false,
-        resetFailure: true
-      }
-    }
-    default:
-      return state;
-  }
-}
+export const resetPasswordReducer = createReducer(initialState, builder => {
+  builder
+    .addCase(fargotPasswordRequest, (state) => {
+      state.status = 'Идет отправка данных';
+      state.forgotRequest = true;
+      state.fargotSuccess = false;
+      state.forgotFailed = false;
+    })
+    .addCase(fargotPasswordSuccess, (state, action) => {
+      state.status = action.payload;
+      state.forgotRequest = false;
+      state.fargotSuccess = true;
+      state.forgotFailed = false;
+    })
+    .addCase(fargotPasswordFailed, (state, action) => {
+      state.status = action.payload;
+      state.forgotRequest = false;
+      state.fargotSuccess = false;
+      state.forgotFailed = true;
+    })
+    .addCase(resetPasswordRequest, (state) => {
+      state.status = 'Идет отправка данных';
+      state.resetRequest = true;
+      state.resetFailure = false;
+    })
+    .addCase(resetPasswordSuccess, (state, action) => {
+      state.status = action.payload;
+      state.resetRequest = false;
+      state.resetFailure = false;
+    })
+    .addCase(resetPasswordFailed, (state, action) => {
+      state.status = action.payload;
+      state.resetRequest = false;
+      state.resetFailure = true;
+    })
+})

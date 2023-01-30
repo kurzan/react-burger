@@ -1,24 +1,6 @@
-import { 
-  REGISTER_REQUEST, 
-  REGISTER_SUCCESS, 
-  REGISTER_FAILED,
-  LOGIN_REQUEST,
-  LOGIN_SUCCESS,
-  LOGIN_FAILED,
-  LOGOUT_REQUEST,
-  LOGOUT_SUCCESS,
-  LOGOUT_FAILED,
-  GET_USER_REQUEST,
-  GET_USER_SUCCESS,
-  GET_USER_FAILED,
-  EDIT_USER_REQUEST,
-  EDIT_USER_SUCCESS,
-  EDIT_USER_FAILED
- } from '../actions/user';
-
- import type { TUserActions } from '../actions/user';
- import type { TUser } from '../types/types';
-
+import { createReducer } from '@reduxjs/toolkit';
+import { editUserFailed, editUserRequest, editUserSuccess, getUserFailed, getUserRequest, getUserSuccess, loginFailed, loginRequest, loginSuccess, logoutFailed, logoutRequest, logoutSuccess, registerFailed, registerRequest, registerSuccess, TUserActions } from '../actions/user';
+import type { TUser } from '../types/types';
 
  type TUserState = {
   user: TUser | null;
@@ -54,145 +36,85 @@ const initialState: TUserState = {
   editUserFailure: false,
 };
 
-export const userReducer = (state = initialState, action: TUserActions) => {
-  switch (action.type) {
-    case REGISTER_REQUEST: {
-      return {
-        ...state,
-        status: null,
-        registerRequest: true,
-        registerFailure: false
-      }
-    }
-
-    case REGISTER_SUCCESS: {
-      return {
-        ...state,
-        status: 'Успешная регистрация',
-        user: action.user,
-        registerRequest: false,
-        registerSuccess: true,
-        registerFailure: false
-      }
-    }
-
-    case REGISTER_FAILED: {
-      return {
-        ...state,
-        status: action.err,
-        registerRequest: false,
-        registerSuccess: false,
-        registerFailure: true
-      }
-    }
-
-    case LOGIN_REQUEST: {
-      return {
-          ...state,
-          loginRequest: true,
-          loginFailure: false
-     }
-  }
-
-  case LOGIN_SUCCESS: {
-      return {
-          ...state,
-          user: action.user,
-          loginRequest: false,
-          loginFailure: false
-     }
-  }
-
-  case LOGIN_FAILED: {
-      return {
-          ...state,
-          loginRequest: false,
-          loginFailure: true,
-          status: action.status
-     }
-  }
-
-  case LOGOUT_REQUEST: {
-    return {
-        ...state,
-        user: null,
-        logoutRequest: true,
-        logoutFailure: false,
-    }
-  }
-
-  case LOGOUT_SUCCESS: {
-      return {
-          ...state,
-          user: null,
-          status: action.res.message,
-          logoutRequest: false,
-          logoutFailure: false,
-      }
-  }
-
-  case LOGOUT_FAILED: {
-      return {
-          ...state,
-          status: action.err,
-          logoutRequest: false,
-          logoutFailure: true,
-      }
-  }
-
-  case GET_USER_REQUEST: {
-    return {
-      ...state,
-      getUserRequest: true,
-      getUserFailure: false
-    }
-  }
-
-  case GET_USER_SUCCESS: {
-    return {
-      ...state,
-      user: action.user,
-      getUserRequest: false,
-      getUserFailure: false
-    }
-  }
-
-  case GET_USER_FAILED: {
-    return {
-      ...state,
-      status: action.err,
-      getUserRequest: false,
-      getUserFailure: true
-    }
-  }
-
-  case EDIT_USER_REQUEST: {
-    return {
-      ...state,
-      editUserRequest: true,
-      editUserFailure: false
-    }
-  }
-
-  case EDIT_USER_SUCCESS: {
-    return {
-      ...state,
-      user: action.user,
-      editUserRequest: false,
-      editUserSuccess: true,
-      editUserFailure: false
-    }
-  }
-
-  case EDIT_USER_FAILED: {
-    return {
-      ...state,
-      editUserRequest: false,
-      editUserFailure: true
-    }
-  }
-
-  default:
+export const userReducer = createReducer(initialState, builder => {
+  builder
+    .addCase(registerRequest, (state) => {
+      state.status = null;
+      state.registerRequest = true;
+      state.registerFailure = false;
+    })
+    .addCase(registerSuccess, (state, action) => {
+      state.status = 'Успешная регистрация';
+      state.user = action.payload;
+      state.registerRequest = false;
+      state.registerSuccess = true;
+      state.registerFailure = false;
+    })
+    .addCase(registerFailed, (state, action) => {
+      state.status = action.payload;
+      state.registerRequest = false;
+      state.registerSuccess = false;
+      state.registerFailure = true;
+    })
+    .addCase(loginRequest, (state) => {
+      state.loginRequest = true;
+      state.loginFailure = false;
+    })
+    .addCase(loginSuccess, (state, action) => {
+      state.user = action.payload;
+      state.loginRequest = false;
+      state.loginFailure = false;
+    })
+    .addCase(loginFailed, (state, action) => {
+      state.loginRequest = false;
+      state.loginFailure = true;
+      state.status = action.payload;
+    })
+    .addCase(logoutRequest, (state) => {
+      state.logoutRequest = true;
+      state.logoutFailed = false;
+    })
+    .addCase(logoutSuccess, (state, action) => {
+      state.user = null;
+      state.status = action.payload;
+      state.logoutRequest = false;
+      state.logoutFailed = false;
+    })
+    .addCase(logoutFailed, (state, action) => {
+      state.status = action.payload;
+      state.logoutRequest = false;
+      state.logoutFailed = true;
+    })
+    .addCase(getUserRequest, (state) => {
+      state.getUserRequest = true;
+      state.getUserFailure = false;
+    })
+    .addCase(getUserSuccess, (state, action) => {
+      state.user = action.payload.user;
+      state.getUserRequest = true;
+      state.getUserFailure = false;
+    })
+    .addCase(getUserFailed, (state, action) => {
+      state.status = action.payload;
+      state.getUserRequest = false;
+      state.getUserFailure = true;
+    })
+    .addCase(editUserRequest, (state) => {
+      state.editUserRequest = true;
+      state.editUserFailure = false;
+    })
+    .addCase(editUserSuccess, (state, action) => {
+      state.user = action.payload;
+      state.editUserRequest = false;
+      state.editUserSuccess = true;
+      state.editUserFailure = false;
+    })
+    .addCase(editUserFailed, (state) => {
+      state.editUserRequest = false;
+      state.editUserFailure = true;
+    })
+    .addDefaultCase((state) => {
       return state;
-  }
-};
+    })
+})
+

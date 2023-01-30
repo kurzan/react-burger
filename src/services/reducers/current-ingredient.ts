@@ -1,5 +1,5 @@
-import { SET_CURRENT_INGREDIENT, RESET_CURRENT_INGREDIENT } from '../actions/current-ingredient';
-import type { TCurrentIngredientActions } from '../actions/current-ingredient';
+import { createReducer } from '@reduxjs/toolkit';
+import { resetCurrentIngredient, setCurrentIngredient } from '../actions/current-ingredient';
 import type { TIngredient } from '../types/types';
 
 type TCurrentIngredientState = {
@@ -10,23 +10,12 @@ const initialState: TCurrentIngredientState = {
   currentIngredient: {}
 }
 
-export const currentIngredientReducer = (state = initialState, action: TCurrentIngredientActions) => {
-  switch (action.type) {
-
-    case SET_CURRENT_INGREDIENT: {
-      return {
-        currentIngredient: action.currentIngredient
-      }
-    }
-
-    case RESET_CURRENT_INGREDIENT: {
-      return {
-        currentIngredient: {}
-      }
-    }
-  
-    default:
-      return state;
-  }
-
-};
+export const currentIngredientReducer = createReducer(initialState, builder => {
+  builder
+    .addCase(setCurrentIngredient, (state, action) => {
+      state.currentIngredient = action.payload;
+    })
+    .addCase(resetCurrentIngredient, (state) => {
+      state.currentIngredient = {};
+    })
+})

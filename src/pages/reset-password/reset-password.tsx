@@ -2,7 +2,7 @@ import React from "react";
 import { Input, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './reset-password.module.css';
 import { Redirect, Link, useHistory, useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from '../../hooks/hooks';
 import { postResetPassword } from "../../services/actions/reset-password"; 
 import { TLocationWithFrom } from "../../services/types/types";
 
@@ -12,7 +12,7 @@ export const ResetPassword = () => {
 
   const dispatch = useDispatch();
 
-  const { resetFailure, resetSuccess, fargotSuccess, resetRequest, status } = useSelector((store: any) => store.resetPasswordReducer);
+  const { resetFailure, resetSuccess, fargotSuccess, resetRequest, status } = useSelector((store) => store.resetPasswordReducer);
 
   const [password, setPassword] = React.useState('')
   const inputPasswordRef = React.useRef<HTMLInputElement>(null)
@@ -29,7 +29,6 @@ export const ResetPassword = () => {
   const inputNameRef = React.useRef<HTMLInputElement>(null)
 
   const postNewPassword = () => {
-    // @ts-ignore;
     dispatch(postResetPassword(password, emailCode, history))
 
   }

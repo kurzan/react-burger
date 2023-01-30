@@ -1,60 +1,44 @@
+import { createAction } from "@reduxjs/toolkit";
 import { TIngredient } from "../types/types";
 
-export const ADD_INGREDIENT: 'ADD_INGREDIENT' = 'ADD_INGREDIENT';
-export const REMOVE_INGREDIENT: 'REMOVE_INGREDIENT' = 'REMOVE_INGREDIENT';
-export const RESET_INGREDIENTS: 'RESET_INGREDIENTS' = 'RESET_INGREDIENTS';
-export const ADD_BUN: 'ADD_BUN' = 'ADD_BUN';
-export const MOVE_INGREDIENT: 'MOVE_INGREDIENT' = 'MOVE_INGREDIENT';
+export const selectIngredient = createAction('ADD_INGREDIENT', (ingredient: TIngredient, key: string) => {
+  return {
+    payload: {
+      ingredient: {...ingredient, key}
+    }
+  }
+});
 
-export interface IAddIngredientAction {
-  readonly type: typeof ADD_INGREDIENT;
-  readonly ingredient: TIngredient;
-}
+export const removeIngredient = createAction('REMOVE_INGREDIENT', (key: string) => {
+  return {
+    payload: {
+      key
+    }
+  }
+});
 
-export interface IRemoveIngredientAction {
-  readonly type: typeof REMOVE_INGREDIENT;
-  readonly key: string;
-}
+export const resetIngredient = createAction('RESET_INGREDIENTS');
 
-export interface IResetIngredientsAction {
-  readonly type: typeof RESET_INGREDIENTS;
-}
+export const selectBun = createAction('ADD_BUN', (bun: TIngredient) => {
+  return {
+    payload: {
+      bun
+    }
+  }
+});
 
-export interface IAddBunAction {
-  readonly type: typeof ADD_BUN;
-  readonly bun: TIngredient;
-}
-
-export interface IMoveIngredientAction {
-  readonly type: typeof MOVE_INGREDIENT;
-  readonly dragIndex: number;
-  readonly hoverIndex: number;
-}
+export const moveIngredient = createAction('MOVE_INGREDIENT', (dragIndex: number, hoverIndex: number) => {
+  return {
+    payload: {
+      dragIndex,
+      hoverIndex
+    }
+  }
+});
 
 export type TSelectedIngredientActions = 
-  | IAddIngredientAction
-  | IRemoveIngredientAction 
-  | IResetIngredientsAction
-  | IAddBunAction
-  | IMoveIngredientAction;
-
-export const selectIngredient = (ingredient: TIngredient, key: string): IAddIngredientAction => ({
-  type: ADD_INGREDIENT,
-  ingredient: {...ingredient, key}
-})
-
-export const selectBun = (bun: TIngredient): IAddBunAction => ({
-  type: ADD_BUN,
-  bun
-})
-
-export const removeIngredient = (key: string): IRemoveIngredientAction => ({
-  type: REMOVE_INGREDIENT,
-  key
-})
-
-export const moveIngredient = (dragIndex: number, hoverIndex: number) => ({
-  type: MOVE_INGREDIENT,
-  dragIndex: dragIndex,
-  hoverIndex: hoverIndex,
-})
+| ReturnType<typeof selectIngredient>
+| ReturnType<typeof removeIngredient>
+| ReturnType<typeof resetIngredient>
+| ReturnType<typeof selectBun>
+| ReturnType<typeof moveIngredient>;

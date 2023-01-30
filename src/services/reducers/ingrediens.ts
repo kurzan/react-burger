@@ -1,11 +1,6 @@
 import type { TIngredient } from '../types/types';
-import type { TIngredientsActions } from '../actions/ingrediens';
-
-import { 
-  GET_INGREDIENTS_REQUEST, 
-  GET_INGREDIENTS_SUCCESS, 
-  GET_INGREDIENTS_FAILED,
- } from '../actions/ingrediens';
+import { getIngredientsFailed, getIngredientsRequest, getIngredientsSuccess, TIngredientsActions } from '../actions/ingrediens';
+import { createReducer } from '@reduxjs/toolkit';
 
 type TIngredientsState = {
   ingredients: TIngredient[];
@@ -19,34 +14,20 @@ const initialState: TIngredientsState = {
   isError: false,
 }
 
-export const ingredientsReducer = (state = initialState, action: TIngredientsActions) => {
-  switch (action.type) {
-    case GET_INGREDIENTS_REQUEST: {
-      return {
-        ...state,
-        isLoading: true,
-        isError: false
-      }
-    }
-    case GET_INGREDIENTS_SUCCESS: {
-      return {
-        ...state,
-        ingredients: action.ingredients,
-        isLoading: false,
-        isError: false
-      }
-    }
-    case GET_INGREDIENTS_FAILED: {
-      return {
-        ...state,
-        ingredients: [],
-        isLoading: false,
-        isError: true
-      }
-    }
-
-    default:
-      return state;
-  }
-
-};
+export const ingredientsReducer = createReducer(initialState, builder => {
+  builder
+    .addCase(getIngredientsRequest, (state) => {
+      state.isLoading = true;
+      state.isError = false;
+    })
+    .addCase(getIngredientsSuccess, (state, action) => {
+      state.ingredients = action.payload;
+      state.isLoading = false;
+      state.isError = false;
+    })
+    .addCase(getIngredientsFailed, (state) => {
+      state.ingredients = [];
+      state.isLoading = false;
+      state.isError = true;
+    })
+})

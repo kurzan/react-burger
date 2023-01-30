@@ -1,34 +1,22 @@
 import { apiRequest, refreshToken } from '../../utils/burger-api';
-import { RESET_INGREDIENTS } from '../actions/selected-ingredients';
+import { resetIngredient } from '../actions/selected-ingredients';
 import { getCookie } from '../../utils/cookie'; 
-import { AppDispatch, AppThunk } from '../types/index';
+import { AppDispatch, AppThunk } from '../types';
 
 import { TIngredient } from '../types/types';
 import { TOrder } from '../types/types';
+import { createAction } from '@reduxjs/toolkit';
 
-export const POST_ORDER_REQUEST: 'POST_ORDER_REQUEST' = 'POST_ORDER_REQUEST';
-export const POST_ORDER_SUCCESS: 'POST_ORDER_SUCCESS' = 'POST_ORDER_SUCCESS';
-export const POST_ORDER_FAILED:'POST_ORDER_FAILED' = 'POST_ORDER_FAILED';
-
-export interface IPostOrderRequestAction {
-  readonly type: typeof POST_ORDER_REQUEST;
-}
-
-export interface IPostOrderSuccessAction {
-  readonly type: typeof POST_ORDER_SUCCESS;
-  readonly order: {order: TOrder};
-}
-
-export interface IPostOrderFailedAction {
-  readonly type: typeof POST_ORDER_FAILED;
-}
+export const postOrderRequest = createAction('POST_ORDER_REQUEST');
+export const postOrderSuccess = createAction<TOrder,'POST_ORDER_SUCCESS'>('POST_ORDER_SUCCESS');
+export const postOrderFailed = createAction('POST_ORDER_FAILED');
 
 export type TOrderActions =
-  | IPostOrderRequestAction
-  | IPostOrderSuccessAction
-  | IPostOrderFailedAction;
+  | ReturnType<typeof postOrderRequest>
+  | ReturnType<typeof postOrderSuccess>
+  | ReturnType<typeof postOrderFailed>;
 
-export const postOrder = (ingredients:TIngredient[]) => (dispatch: any) => {
+export const postOrder: AppThunk = (ingredients:TIngredient[]) => (dispatch: AppDispatch) => {
   const options = {
     method: 'POST',
     body: JSON.stringify({ingredients: ingredients && ingredients.map(elem => elem._id)}),
@@ -38,25 +26,18 @@ export const postOrder = (ingredients:TIngredient[]) => (dispatch: any) => {
     },
   }
 
-  dispatch({
-    type: POST_ORDER_REQUEST
-  })
+  dispatch(postOrderRequest())
 
   apiRequest('orders', options)
   .then(data => 
-    dispatch({
-      type: POST_ORDER_SUCCESS,
-      order: data
-    }))
-  .then(err => dispatch({type: RESET_INGREDIENTS}))
+    dispatch(postOrderSuccess(data.order)))
+  .then(err => dispatch(resetIngredient()))
   .catch(err => {
     if (err === 'jwt expired') {
       refreshToken()
       .then(() => dispatch(postOrder(ingredients)))
     } else {
-      dispatch({
-        type: POST_ORDER_FAILED,
-      })
+      dispatch(postOrderFailed())
     }
   })
 };

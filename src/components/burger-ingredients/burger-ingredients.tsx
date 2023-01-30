@@ -3,7 +3,7 @@ import { Tab, CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger
 import styles from './burger-ingredients.module.css';
 import { useInView } from 'react-intersection-observer';
 import { useDrag } from "react-dnd";
-import { useSelector } from "react-redux";
+import { useSelector } from '../../hooks/hooks';
 import { Link, useLocation } from "react-router-dom";
 import { TIngredient } from '../../services/types/types';
 
@@ -17,7 +17,7 @@ const MenuElement: FC<TMenuElement> = ({ ingredient }) => {
 
   const location = useLocation();
 
-  const { selectedIngredients, bun } = useSelector((store: any) => store.selectedIngredientsReducer)
+  const { selectedIngredients, bun } = useSelector((store) => store.selectedIngredientsReducer)
 
   const [, dragRef] = useDrag({
     type: "ingredient",
@@ -46,7 +46,7 @@ const MenuElement: FC<TMenuElement> = ({ ingredient }) => {
 
 const BurgerIngredients = () => {
 
-  const { ingredients } = useSelector((store: any) => store.ingredientsReducer);
+  const { ingredients } = useSelector((store) => store.ingredientsReducer);
 
 
   const tabs = [{ id: 'bun', title: 'Булки' }, { id: 'sauce', title: 'Соусы' }, { id: 'main', title: 'Начинки' }];

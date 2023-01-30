@@ -6,19 +6,17 @@ import type { Identifier, XYCoord } from 'dnd-core';
 
 import { postOrder } from '../../services/actions/order';
 import { removeIngredient, moveIngredient } from '../../services/actions/selected-ingredients';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../hooks/hooks'; 
 
 import { selectIngredient, selectBun } from '../../services/actions/selected-ingredients';
 import { v4 as uuid } from 'uuid';
 import { useHistory } from 'react-router-dom';
 import { TIngredient } from '../../services/types/types';
 
-type TSelectedIngredientType = TIngredient & { key: any; };
-
 type TConstructorItemProps = {
-  ingredient: TSelectedIngredientType;
+  ingredient: TIngredient;
   index: number;
-  onDelete: (item?: TSelectedIngredientType) => void;
+  onDelete: (item?: string | undefined) => void;
 };
 
 type DragItem = {
@@ -111,7 +109,7 @@ const BurgerConstructor: FC<TBurrgerConsructorProps> = ({ onOrderClick }) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const { user } = useSelector((store: any) => store.userReducer);
+  const { user } = useSelector((store) => store.userReducer);
 
   const [, dropTarget] = useDrop({
     accept: "ingredient",
@@ -124,14 +122,13 @@ const BurgerConstructor: FC<TBurrgerConsructorProps> = ({ onOrderClick }) => {
     },
   });
 
-  const { bun, selectedIngredients } = useSelector((store: any) => store.selectedIngredientsReducer);
+  const { bun, selectedIngredients } = useSelector((store) => store.selectedIngredientsReducer);
   
   const allIngredients = [...selectedIngredients, bun ? bun : ''];
   const totalValue = selectedIngredients.reduce((sum: number, el: TIngredient) => sum + el.price, 0) + (bun ? bun.price * 2 : 0);
 
   const createOrder = () => {
     if (user) {
-      //@ts-ignore
       dispatch(postOrder(allIngredients));
       onOrderClick();
     } else {
@@ -160,7 +157,7 @@ const BurgerConstructor: FC<TBurrgerConsructorProps> = ({ onOrderClick }) => {
         </div>
         <ul className={styles.content}>
 
-            {selectedIngredients.map((item: TSelectedIngredientType, index: number) => 
+            {selectedIngredients.map((item, index: number) => 
               <ConstructorItem ingredient={item} key={item.key} index={index} onDelete={handleRemoveItem} />
             )}
           

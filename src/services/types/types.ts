@@ -29,12 +29,14 @@ export type TUser = {
   email?: string;
   name?: string;
   updatedAt?: string;
+  password?: string;
 }
 
 export type TOrder = {
   createdAt: string;
   ingredients: TIngredient[];
   name: string;
+  number: number;
   owner: TUser;
   price: number;
   status: string;

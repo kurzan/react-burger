@@ -1,50 +1,12 @@
+import { createAction } from '@reduxjs/toolkit';
 import { apiRequest } from '../../utils/burger-api';
 import { AppDispatch, AppThunk } from '../types/index';
 
-export const FORGOT_PASSWORD_REQUEST: 'FORGOT_PASSWORD_REQUEST' = 'FORGOT_PASSWORD_REQUEST';
-export const FORGOT_PASSWORD_SUCCESS: 'FORGOT_PASSWORD_SUCCESS' = 'FORGOT_PASSWORD_SUCCESS';
-export const FORGOT_PASSWORD_FAILED: 'FORGOT_PASSWORD_FAILED' = 'FORGOT_PASSWORD_FAILED';
+//FARGOT PASSWORD
 
-export const RESET_PASSWORD_REQUEST: 'RESET_PASSWORD_REQUEST' = 'RESET_PASSWORD_REQUEST';
-export const RESET_PASSWORD_SUCCESS: 'RESET_PASSWORD_SUCCESS' = 'RESET_PASSWORD_SUCCESS';
-export const RESET_PASSWORD_FAILED: 'RESET_PASSWORD_FAILED' = 'RESET_PASSWORD_FAILED';
-
-export interface IForgotPasswordRequestAction {
-  readonly type: typeof FORGOT_PASSWORD_REQUEST;
-}
-
-export interface IForgotPasswordSuccessAction {
-  readonly type: typeof FORGOT_PASSWORD_SUCCESS;
-  readonly status: { message: string };
-}
-
-export interface IForgotPasswordFailedAction {
-  readonly type: typeof FORGOT_PASSWORD_FAILED;
-  readonly err: string;
-}
-
-export interface IResetPasswordRequestAction {
-  readonly type: typeof RESET_PASSWORD_REQUEST;
-}
-
-export interface IResetPasswordSuccessAction {
-  readonly type: typeof RESET_PASSWORD_SUCCESS;
-  readonly status: { message: string }
-}
-
-export interface IResetPasswordFailedAction {
-  readonly type: typeof RESET_PASSWORD_FAILED;
-  readonly err: string;
-}
-
-export type TResetPasswordActions = 
-  | IForgotPasswordRequestAction
-  | IForgotPasswordSuccessAction
-  | IForgotPasswordFailedAction
-  | IResetPasswordRequestAction
-  | IResetPasswordSuccessAction
-  | IResetPasswordFailedAction;
-
+export const fargotPasswordRequest = createAction('FORGOT_PASSWORD_REQUEST');
+export const fargotPasswordSuccess = createAction<string, 'FORGOT_PASSWORD_SUCCESS'>('FORGOT_PASSWORD_SUCCESS');
+export const fargotPasswordFailed = createAction<string, 'FORGOT_PASSWORD_FAILED'>('FORGOT_PASSWORD_FAILED');
 
 export const getForgotPassword: AppThunk = (email: string, history: any) => (dispatch: AppDispatch) => {
   const options = {
@@ -55,21 +17,19 @@ export const getForgotPassword: AppThunk = (email: string, history: any) => (dis
     }
   }
 
-  dispatch({
-    type: FORGOT_PASSWORD_REQUEST
-  })
+  dispatch(fargotPasswordRequest())
   
   apiRequest('password-reset', options)
-    .then(status => dispatch({
-      type: FORGOT_PASSWORD_SUCCESS,
-      status
-    }))
+    .then(status => dispatch(fargotPasswordSuccess(status)))
     .then(() => history.push({pathname: '/reset-password'}))
-    .catch((err) => dispatch({
-      type: FORGOT_PASSWORD_FAILED,
-      err
-    }))
+    .catch((err) => dispatch(fargotPasswordFailed(err)))
 };
+
+//RESET_PASSWORD
+
+export const resetPasswordRequest = createAction('RESET_PASSWORD_REQUEST');
+export const resetPasswordSuccess = createAction<string, 'RESET_PASSWORD_SUCCESS'>('RESET_PASSWORD_SUCCESS');
+export const resetPasswordFailed = createAction<string, 'RESET_PASSWORD_FAILED'>('RESET_PASSWORD_FAILED');
 
 export const postResetPassword: AppThunk = (password: string, emailCode: string, history: any) => (dispatch: AppDispatch) => {
   const options = {
@@ -83,19 +43,18 @@ export const postResetPassword: AppThunk = (password: string, emailCode: string,
     }
   }
 
-  dispatch({
-    type: RESET_PASSWORD_REQUEST
-  })
+  dispatch(resetPasswordRequest())
 
   apiRequest('password-reset/reset', options)
-    .then(status => dispatch({
-      type: RESET_PASSWORD_SUCCESS,
-      status
-    }))
+    .then(status => dispatch(resetPasswordSuccess(status)))
     .then(() => history.push({pathname: '/login'}))
-    .catch(err => dispatch({
-      type: RESET_PASSWORD_FAILED,
-      err
-    }))
-
+    .catch(err => dispatch(resetPasswordFailed(err)))
 };
+
+export type TResetPasswordActions = 
+| ReturnType<typeof fargotPasswordRequest>
+| ReturnType<typeof fargotPasswordSuccess>
+| ReturnType<typeof fargotPasswordFailed>
+| ReturnType<typeof resetPasswordRequest>
+| ReturnType<typeof resetPasswordSuccess>
+| ReturnType<typeof resetPasswordFailed>;
