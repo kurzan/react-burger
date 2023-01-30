@@ -7,6 +7,8 @@ import { TOrderActions } from '../actions/order';
 import { TResetPasswordActions } from '../actions/reset-password';
 import { TSelectedIngredientActions } from '../actions/selected-ingredients';
 import { TUserActions } from '../actions/user';
+import { rootReducer } from '../reducers';
+import { TWsOrdersActions } from '../actions/ws-orders';
 
 type TApplicationActions = 
   | TCurrentIngredientActions
@@ -14,9 +16,10 @@ type TApplicationActions =
   | TOrderActions
   | TResetPasswordActions
   | TSelectedIngredientActions
-  | TUserActions;
+  | TUserActions
+  | TWsOrdersActions;
 
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof rootReducer>;
 export type AppThunk<ReturnType = void> = ActionCreator<
   ThunkAction<ReturnType, RootState, never, TApplicationActions>
 >;

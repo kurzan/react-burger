@@ -1,8 +1,10 @@
 import styles from "./orders-list.module.css";
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components/';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from "../../hooks/hooks";
+import { connect as connectToOrders, disconnect as disconnectFromOrders } from "../../services/actions/ws-orders";
 
-const OrderCard = () => {
-
+const OrderCard = ({order}: any) => {
 
   return (
     <li className={styles.card}>
@@ -43,13 +45,25 @@ const OrderCard = () => {
 
 
 const OrdersList = () => {
+  const dispatch = useDispatch();
+
+  const url = 'wss://norma.nomoreparties.space/orders/all'
+
+  useEffect(() => {
+    dispatch(connectToOrders(url))
+
+    return () => {
+      dispatch(disconnectFromOrders());
+    }
+  }, []) 
+
+  const { orders } = useSelector(store => store.WsOrdersReducer)
+
+
+
   return (
     <div className={styles.orders_list} >
       <ul>
-        <OrderCard />
-        <OrderCard />
-        <OrderCard />
-        <OrderCard />
         <OrderCard />
       </ul>
     </div>

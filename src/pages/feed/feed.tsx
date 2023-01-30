@@ -1,33 +1,8 @@
 import styles from './feed.module.css';
 import OrdersList from '../../components/orders-list/orders-list';
-import { useSocket } from '../../hooks/use-socket';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 export const Feed = () => {
-
-  // const { connect } = useSocket('wss://norma.nomoreparties.space/orders/all');
-
-  const [orders, setOrders] = useState();
-
-  useEffect(() => {
-    const ws = new WebSocket('wss://norma.nomoreparties.space/orders/all');
-
-
-    ws.onmessage = function(e) {
-      setOrders(e.data)
-    }
-
-    ws.onclose = function(e) {
-      console.log('closed')
-    }
-
-    console.log(orders)
-
-    return () => {
-      ws.close();
-
-    }
-  }, [])
 
   return (
 

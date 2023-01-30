@@ -14,10 +14,11 @@ const IngredientDetails = () => {
   useEffect(
     () => {
       if (ingredients && ingredients.length) {
-        dispatch(setCurrentIngredient(ingredients.find((item: TIngredient) => item._id === id)));
+        const ingredient = ingredients.find((item: TIngredient) => item._id === id);
+        ingredient && dispatch(setCurrentIngredient(ingredient));
       }
 
-    }, [dispatch, ingredients]
+    }, [dispatch, ingredients, id]
   );
 
   const { currentIngredient } = useSelector((store) => store.currentIngredientReducer)

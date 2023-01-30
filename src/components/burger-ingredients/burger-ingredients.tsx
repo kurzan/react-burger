@@ -25,9 +25,9 @@ const MenuElement: FC<TMenuElement> = ({ ingredient }) => {
 
   });
 
-  const allIngredients = [...selectedIngredients, bun ? bun : ''];
+  const allIngredients = [...selectedIngredients, bun];
 
-  const count = allIngredients.filter(item => item._id === ingredient._id).length
+  const count = allIngredients.filter(item => item?._id === ingredient._id).length
 
   return (
       <Link to={{ pathname: `/ingredients/${ingredient._id}`, state: { background: location }}} className={styles.menu_element} ref={dragRef}>
