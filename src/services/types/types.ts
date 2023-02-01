@@ -1,4 +1,3 @@
-import { getIngredients } from './../actions/ingrediens';
 import { Location } from 'history';
 
 export type TParams = {
@@ -45,16 +44,21 @@ export type TOrder = {
   _id: string;
 };
 
+
+export type TWsOrder = {
+  ingredients: string[];
+  _id: string;
+  name: string;
+  status: string;
+  number: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+
 export type WsOrders = {
   sucess: boolean;
-  orders: Array<{
-    ingredients: string[];
-    _id: string;
-    status: string;
-    nimber: number;
-    createdAt: string;
-    updatedAt: string;
-  }>;
+  orders: Array<TWsOrder>;
   total: number;
   totalToday: number;
 };

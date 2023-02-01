@@ -121,7 +121,7 @@ export const Profile = () => {
           </ProtectedRoute>
           <ProtectedRoute path="/profile/orders" exact={true}>
             <div className={styles.orders_history} >
-              <OrdersList/>
+              <OrdersList isShow={true}/>
             </div>
           </ProtectedRoute>
         </Switch>

@@ -1,41 +1,70 @@
 import styles from "./orders-list.module.css";
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components/';
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from "../../hooks/hooks";
 import { connect as connectToOrders, disconnect as disconnectFromOrders } from "../../services/actions/ws-orders";
+import { TIngredient } from "../../services/types/types";
+import { getOrderStatus } from "../../utils/utils";
+import { ALL_ORDERS_URL } from "../../utils/burger-ws";
+import moment from "moment";
 
-const OrderCard = ({order}: any) => {
+const VISIBLE_INGREDIENTS_SLICE = 6;
+
+
+type TOrderCard = {
+  order: { 
+    ingredients: (TIngredient | undefined)[];
+    _id: string;
+    name: string;
+    status: string;
+    number: number;
+    createdAt: string;
+    updatedAt: string};
+  isShow: boolean;
+};
+
+const OrderCard: FC<TOrderCard> = ({order, isShow}) => {
+
+  // useEffect(() => {
+  //   console.log(ingredients)
+  // }, []) 
+
+  const totalPrice = useMemo(() => {
+    const buns = order.ingredients.filter((ingredient) => ingredient?.type === 'bun').reduce((acc, cur) => cur ? acc + cur.price * 2 : 0, 0) 
+    const others = order.ingredients.filter((ingredient) => ingredient?.type !== 'bun').reduce((acc, cur) => cur ? acc + cur.price: 0, 0) 
+    const total = buns + others;
+    return total
+  }, [order])
+
+    useEffect(() => {
+      
+  }, []) 
 
   return (
     <li className={styles.card}>
       <div className={styles.card_head}>
-        <p className="text text_type_digits-default">#034535</p>
-        <p className="text text_type_text-default text_color_inactive">Сегодня, 16:20</p>
+        <p className="text text_type_digits-default"># {order.number}</p>
+        <p className="text text_type_text-default text_color_inactive">{moment(order.createdAt).calendar()}</p>
       </div>
-        <p className="mt-6 text text_type_main-medium"> Death Star Starship Main бургер</p>
+      <p className="mt-6 mb-2 text text_type_main-medium">{order.name}</p>
+      {isShow ? <p style={{ color: getOrderStatus(order.status).color }} className="text text_type_main-default">{getOrderStatus(order.status).text}</p> : null}
       <div className={'mt-6 ' + styles.card_summary}>
         <div className={styles.card_imgbox} >
-          <div className={styles.img_border} >
-            <div className={styles.img_border_back}>
-              <img className={styles.card_img} src="https://code.s3.yandex.net/react/code/bun-02-mobile.png" alt=""/>
-            </div>
-          </div>
 
-          <div className={styles.img_border} >
-            <div className={styles.img_border_back}>
-              <img className={styles.card_img} src="https://code.s3.yandex.net/react/code/bun-02-mobile.png" alt="" />
+          {order && order.ingredients.slice(0, VISIBLE_INGREDIENTS_SLICE).map((item, index) => (
+            <div key={index} className={styles.img_border} >
+              <div className={styles.img_border_back} style={{ opacity: order.ingredients.length > VISIBLE_INGREDIENTS_SLICE && (index === VISIBLE_INGREDIENTS_SLICE - 1) ? 0.6 : 1 }}>
+                <img className={styles.card_img} src={item?.image_mobile} alt="" />
+              </div>
+              {order.ingredients.length > VISIBLE_INGREDIENTS_SLICE && (index === VISIBLE_INGREDIENTS_SLICE - 1) &&
+                <div className={styles.image_text}>+{order.ingredients.length - VISIBLE_INGREDIENTS_SLICE}</div>
+              }
             </div>
-          </div>
-
-          <div className={styles.img_border} >
-            <div className={styles.img_border_back}>
-              <img className={styles.card_img} src="https://code.s3.yandex.net/react/code/bun-02-mobile.png" alt="" />
-            </div>
-          </div>
+          ))}
 
         </div>
         <div className={styles.card_total_sum} >
-          <p className="mr-2 text text_type_digits-default">480</p>
+          <p className="mr-2 text text_type_digits-default">{totalPrice}</p>
           <CurrencyIcon type="primary" />
         </div>
       </div>
@@ -44,27 +73,30 @@ const OrderCard = ({order}: any) => {
 }
 
 
-const OrdersList = () => {
+const OrdersList = ({isShow}: {isShow: boolean}) => {
   const dispatch = useDispatch();
 
-  const url = 'wss://norma.nomoreparties.space/orders/all'
+  const { orders } = useSelector(store => store.WsOrdersReducer)
+  const { ingredients } = useSelector((store) => store.ingredientsReducer);
+
+  const data = orders?.orders.map(item => ({ ...item, ingredients: item.ingredients.filter(x => x !== null).map(item => ingredients.find(i => i._id === item)).filter(x => x !== undefined) }));
 
   useEffect(() => {
-    dispatch(connectToOrders(url))
+    console.log(data)
+  }, [data]) 
+
+  useEffect(() => {
+    dispatch(connectToOrders(ALL_ORDERS_URL))
 
     return () => {
       dispatch(disconnectFromOrders());
     }
-  }, []) 
-
-  const { orders } = useSelector(store => store.WsOrdersReducer)
-
-
+  }, [])
 
   return (
     <div className={styles.orders_list} >
       <ul>
-        <OrderCard />
+        {data && data.map((order, index) => order.status === 'done' && <OrderCard key={index} isShow={isShow} order={order} />)}
       </ul>
     </div>
   )

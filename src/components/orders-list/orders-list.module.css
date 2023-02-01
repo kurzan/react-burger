@@ -78,3 +78,15 @@ ul {
 	border: 3px solid #2F2F37;
 	border-radius: 6px;
 }
+
+.image_text {
+  width: 64px;
+  height: 64px;
+  border-radius: 100px;
+  margin-top: -68px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  font-weight: bold;
+}
