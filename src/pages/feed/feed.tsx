@@ -34,7 +34,7 @@ export const Feed = () => {
               <ul className={styles.list} >
                 {orders && orders.orders.slice(0, VISIBLE_ORDERS_SLICE).map((order, index) => {
                   if (order.status === 'done') {
-                    return <li key={index}><p style={{ color: '#00CCCC' }} className="mb-2 text text_type_digits-default">{order.number}</p></li>
+                    return <li key={index}><p className={"mb-2 text text_type_digits-default " + styles.done_number }>{order.number}</p></li>
                   }
                   return null;
                 })}

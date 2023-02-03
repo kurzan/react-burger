@@ -48,12 +48,12 @@ export const loginRequest = createAction('LOGIN_REQUEST');
 export const loginSuccess = createAction<TUser, 'LOGIN_SUCCESS'>('LOGIN_SUCCESS');
 export const loginFailed = createAction<string, 'LOGIN_FAILED'>('LOGIN_FAILED');
 
-export const loginning: AppThunk = (email: string, password: string) => (dispatch: AppDispatch) => {
+export const loginning: AppThunk = (form: TUser) => (dispatch: AppDispatch) => {
   const options = {
       method: 'POST',
       body: JSON.stringify({
-          "email": email, 
-          "password": password 
+          "email": form.email, 
+          "password": form.password 
       } ),
       headers: {
         'Content-Type': 'application/json'

@@ -7,8 +7,8 @@ import { getUserInfo, updateUserInfo, logout } from '../../services/actions/user
 import OrdersList from '../../components/orders-list/orders-list';
 import { USER_ORDERS_URL } from "../../utils/burger-ws";
 import { connect as connectToOrders, disconnect as disconnectFromOrders } from "../../services/actions/ws-orders";
-import { getCookie } from "../../utils/cookie";
-import { TUser } from "../../services/types/types";  
+import { getCookie } from "../../utils/cookie"; 
+import { useForm } from "../../hooks/useForms";
 
 export const Profile = () => {
   const dispatch = useDispatch();
@@ -24,40 +24,27 @@ export const Profile = () => {
 
   const { user } = useSelector((store) => store.userReducer);
   const { editUserSuccess } = useSelector((store) => store.userReducer);
-  
-  const [state, setState] = useState<TUser>({
-    name: '',
-    email: '',
-    password: ''
-  });
+
+
+  const {values, handleChange, setValues} = useForm({});
 
   useEffect(() => {
     dispatch(getUserInfo());
 
     if (user?.name && user?.email) {
-      setState({...state, name: user.name, email: user.email})
+      setValues({...values, name: user.name, email: user.email})
     }
 
   }, [dispatch, user?.name, user?.email]);
 
-  const hadleInputChange = (evt: ChangeEvent<HTMLInputElement>) => {
-    const target = evt.target;
-    const value = target.value;
-    const name = target.name;
-
-    setState({
-      ...state,
-      [name]: value
-    })
-  };
 
   const postForm = (e: FormEvent) => {
     e.preventDefault();
-    dispatch(updateUserInfo(state));
+    dispatch(updateUserInfo(values));
   };
 
   const cancelEdit = () => {
-    setState({...state, name: user?.name, email: user?.email, password: ''});
+    setValues({...values, name: user?.name, email: user?.email, password: ''});
   };
 
   const logoutOnClick = () => {
@@ -82,39 +69,39 @@ export const Profile = () => {
                 type={'text'}
                 placeholder={'Имя'}
                 icon={'EditIcon'}
-                value={state.name || ''}
+                value={values.name || ''}
                 name='name'
                 error={false}
                 errorText={'Ошибка'}
                 size={'default'}
                 extraClass="ml-1"
-                onChange={hadleInputChange}
+                onChange={handleChange}
               />
               <Input 
                 type={'text'}
                 placeholder={'Логин'}
                 icon={'EditIcon'}
-                value={state.email || ''}
+                value={values.email || ''}
                 name='email'
                 error={false}
                 errorText={'Ошибка'}
                 size={'default'}
                 extraClass="ml-1"
-                onChange={hadleInputChange}
+                onChange={handleChange}
               />
               <Input 
                 type={'password'}
                 placeholder={'Пароль'}
                 icon={'EditIcon'}
-                value={state.password || ''}
+                value={values.password || ''}
                 name='password'
                 error={false}
                 errorText={'Ошибка'}
                 size={'default'}
                 extraClass="ml-1"
-                onChange={hadleInputChange}
+                onChange={handleChange}
               />
-              { state.name !== user?.name || state.email !== user?.email ?
+              { values.name !== user?.name || values.email !== user?.email ?
               <div className={styles.buttons_box}>
                 <Button htmlType="submit" type="primary" size="small" extraClass="ml-2">
                   Сохранить

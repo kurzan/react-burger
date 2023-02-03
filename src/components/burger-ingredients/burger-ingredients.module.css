@@ -25,6 +25,10 @@
   margin-bottom: 40px;
 }
 
+.tabs {
+  display: flex;
+}
+
 .menu_wrapper {
   display: flex;
   flex-wrap: wrap;

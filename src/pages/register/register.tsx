@@ -3,14 +3,14 @@ import { EmailInput, Input, Button } from "@ya.praktikum/react-developer-burger-
 import styles from './register.module.css';
 import { Redirect, Link, useLocation } from 'react-router-dom';
 import { registerUser } from '../../services/actions/user';
-import { useDispatch, useSelector } from 'react-redux'; 
+import { useDispatch, useSelector } from "../../hooks/hooks";
 import { TLocationWithFrom } from "../../services/types/types";
 
 export const Register = () => {
   const dispatch = useDispatch();
   const location = useLocation<TLocationWithFrom>();
 
-  const { user, status, registerFailure, registerSuccess, registerRequest } = useSelector((store: any) => store.userReducer);
+  const { user, status, registerFailure, registerSuccess, registerRequest } = useSelector((store) => store.userReducer);
 
   const [email, setEmail] = useState('')
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -32,7 +32,6 @@ export const Register = () => {
   const inputNameRef = React.useRef(null)
 
   const postRegister = () => {
-    // @ts-ignore
     dispatch(registerUser(name, email, password));
   };
 

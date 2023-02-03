@@ -90,7 +90,7 @@ const BurgerIngredients = () => {
 
   return (
     <section className={styles.build_burger}>
-      <div className="mt-5 mb-10" style={{ display: 'flex' }}>
+      <div className={'mt-5 mb-10 ' + styles.tabs}>
         {tabs.map(tabItem => (
           <Tab key={tabItem.id} value={tabItem.id} active={current === tabItem.id} onClick={setCurrent}>
             {tabItem.title}

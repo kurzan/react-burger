@@ -157,7 +157,7 @@ const BurgerConstructor: FC<TBurrgerConsructorProps> = ({ onOrderClick }) => {
         </div>
         <ul className={styles.content}>
 
-            {selectedIngredients.map((item, index: number) => 
+            {selectedIngredients.map((item, index) => 
               <ConstructorItem ingredient={item} key={item.key} index={index} onDelete={handleRemoveItem} />
             )}
           
