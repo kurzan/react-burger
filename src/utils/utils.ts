@@ -1,4 +1,4 @@
-export const getOrderStatus = (status: string) => {
+export const getOrderStatus = (status: string | undefined) => {
   switch (status) {
     case 'created':
       return { text: 'Создан', color: 'white' }

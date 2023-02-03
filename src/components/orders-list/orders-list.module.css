@@ -5,7 +5,8 @@ ul {
 
 
 .card {
-  list-style: none;
+  text-decoration: none;
+  color: white;
   margin: 0;
   margin-bottom: 16px;
   padding: 24px;

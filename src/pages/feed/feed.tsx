@@ -1,11 +1,22 @@
 import styles from './feed.module.css';
 import OrdersList from '../../components/orders-list/orders-list';
 import { useEffect } from 'react';
-import { useSelector } from '../../hooks/hooks';
+import { ALL_ORDERS_URL } from "../../utils/burger-ws";
+import { useDispatch, useSelector } from "../../hooks/hooks";
+import { connect as connectToOrders, disconnect as disconnectFromOrders } from "../../services/actions/ws-orders";
 
 const VISIBLE_ORDERS_SLICE = 10;
 
 export const Feed = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(connectToOrders(ALL_ORDERS_URL))
+
+    return () => {
+      dispatch(disconnectFromOrders());
+    }
+  }, [])
 
   const { orders } = useSelector(store => store.WsOrdersReducer)
 
@@ -33,7 +44,7 @@ export const Feed = () => {
               <p className="mb-6 text text_type_main-medium">В работе:</p>
               <ul className={styles.list} >
                 {orders && orders.orders.map((order, index) => {
-                  if (order.status === 'pending') {
+                  if (order.status === 'pending' || order.status === 'created') {
                     return <li key={index}><p className="text text_type_digits-default">{order.number}</p></li>
                   }
                   return null;

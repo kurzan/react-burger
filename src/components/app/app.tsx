@@ -12,9 +12,9 @@ import { useHistory, useLocation, BrowserRouter as Router, Switch, Route } from 
 import { Location } from 'history'; 
 
 import IngredientDetails from '../ingredient-details/ingredient-details';
+import { OrderInfo } from '../order-info/order-info';
 import Modal from '../modal/modal';
 
-import { OrderInfo } from '../order-info/order-info';
 
 function App() {
   const dispatch = useDispatch();
@@ -38,7 +38,7 @@ function App() {
     <>
         <AppHeader />
         <div className={styles.main}>
-          <Switch>
+          <Switch location={background || location}>
             <Route path='/orderinfo' exact={true}>
               <OrderInfo/>
             </Route>
@@ -60,21 +60,47 @@ function App() {
             <Route path='/reset-password' exact={true}>
               <ResetPassword />
             </Route>
-            <ProtectedRoute path='/profile/'>
+            <ProtectedRoute path='/profile/' exact={true}>
               <Profile />
             </ProtectedRoute>
-            { background && <Route path='/ingredients/:id'>
-              <Modal onClose={ingredientModalClose} title={'Детали ингредиента'}> 
-                  < IngredientDetails/>
-              </Modal>
-            </Route>}
-            { location && <Route path='/ingredients/:id'>
+            <ProtectedRoute path='/profile/orders' exact={true}>
+              <Profile />
+            </ProtectedRoute>
+            <ProtectedRoute path='/profile/orders/:id' exact={true}>
+              < OrderInfo/>
+            </ProtectedRoute>
+            <Route path='/ingredients/:id' exact={true}>
                 < IngredientDetails/>
-            </Route>}
+            </Route>
+            <Route path='/feed/:id' exact={true}>
+                < OrderInfo/>
+            </Route>
             <Route>
               <Page404 />
             </Route>
           </Switch>
+          { background && (
+            <>
+              <Route path='/ingredients/:id'>
+              <Modal onClose={ingredientModalClose} title={'Детали ингредиента'}> 
+                  < IngredientDetails/>
+              </Modal>
+              </Route>
+
+              <Route path='/feed/:id'>
+                <Modal onClose={ingredientModalClose}> 
+                    < OrderInfo/>
+                </Modal>
+              </Route>
+
+              <ProtectedRoute path='/profile/orders/:id' exact={true}>
+                <Modal onClose={ingredientModalClose}> 
+                    < OrderInfo/>
+                </Modal>
+              </ProtectedRoute>
+              
+            </>
+          )}
         </div>
     </>
   );

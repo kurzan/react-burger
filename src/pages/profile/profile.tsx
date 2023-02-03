@@ -1,33 +1,44 @@
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Input, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './profile.module.css';
-import { NavLink, useHistory, BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { useDispatch, useSelector } from "react-redux";
+import { useLocation, NavLink } from 'react-router-dom';
+import { useDispatch, useSelector } from "../../hooks/hooks";
 import { getUserInfo, updateUserInfo, logout } from '../../services/actions/user';
-import { ProtectedRoute } from "../../components/protected-route/protected-route";
 import OrdersList from '../../components/orders-list/orders-list';
+import { USER_ORDERS_URL } from "../../utils/burger-ws";
+import { connect as connectToOrders, disconnect as disconnectFromOrders } from "../../services/actions/ws-orders";
+import { getCookie } from "../../utils/cookie";
+import { TUser } from "../../services/types/types";  
 
 export const Profile = () => {
   const dispatch = useDispatch();
-  const history = useHistory();
 
-  const { name, email } = useSelector((store: any) => store.userReducer.user);
-  const { editUserSuccess } = useSelector((store: any) => store.userReducer);
+  useEffect(() => {
+    dispatch(connectToOrders(`${USER_ORDERS_URL}?token=${getCookie('accessToken')?.replace('Bearer ','')}`))
+    return () => {
+      dispatch(disconnectFromOrders());
+    }
+  }, [])
+
+  const location = useLocation<{background: Location}>();
+
+  const { user } = useSelector((store) => store.userReducer);
+  const { editUserSuccess } = useSelector((store) => store.userReducer);
   
-  const [state, setState] = useState({
+  const [state, setState] = useState<TUser>({
     name: '',
     email: '',
     password: ''
   });
 
   useEffect(() => {
-    //@ts-ignore
     dispatch(getUserInfo());
 
-    if (name && email) {
-      setState({...state, name: name, email: email})
+    if (user?.name && user?.email) {
+      setState({...state, name: user.name, email: user.email})
     }
-  }, [dispatch, name, email]);
+
+  }, [dispatch, user?.name, user?.email]);
 
   const hadleInputChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const target = evt.target;
@@ -42,22 +53,20 @@ export const Profile = () => {
 
   const postForm = (e: FormEvent) => {
     e.preventDefault();
-
-    // @ts-ignore
     dispatch(updateUserInfo(state));
   };
 
   const cancelEdit = () => {
-    setState({...state, name: name, email: email, password: ''});
+    setState({...state, name: user?.name, email: user?.email, password: ''});
   };
 
   const logoutOnClick = () => {
-    //@ts-ignore
     dispatch(logout())
   }
 
+
   return (
-    <Router>
+
       <div className={'mt-20 ' + styles.profile}>
         <div className={styles.sidebar}>
           <div className="mb-20">
@@ -67,14 +76,13 @@ export const Profile = () => {
           </div>
           <p className={"text text_type_main-default text_color_inactive " + styles.info}>В этом разделе вы можете изменить свои персональные данные</p>
         </div>
-        <Switch>
-          <ProtectedRoute path="/profile" exact={true}>
-            <form onSubmit={postForm} className={styles.client_details}>
+
+            {location.pathname === '/profile' && <form onSubmit={postForm} className={styles.client_details}>
               <Input 
                 type={'text'}
                 placeholder={'Имя'}
                 icon={'EditIcon'}
-                value={state.name}
+                value={state.name || ''}
                 name='name'
                 error={false}
                 errorText={'Ошибка'}
@@ -86,7 +94,7 @@ export const Profile = () => {
                 type={'text'}
                 placeholder={'Логин'}
                 icon={'EditIcon'}
-                value={state.email}
+                value={state.email || ''}
                 name='email'
                 error={false}
                 errorText={'Ошибка'}
@@ -98,7 +106,7 @@ export const Profile = () => {
                 type={'password'}
                 placeholder={'Пароль'}
                 icon={'EditIcon'}
-                value={state.password}
+                value={state.password || ''}
                 name='password'
                 error={false}
                 errorText={'Ошибка'}
@@ -106,7 +114,7 @@ export const Profile = () => {
                 extraClass="ml-1"
                 onChange={hadleInputChange}
               />
-              { state.name !== name || state.email !== email ?
+              { state.name !== user?.name || state.email !== user?.email ?
               <div className={styles.buttons_box}>
                 <Button htmlType="submit" type="primary" size="small" extraClass="ml-2">
                   Сохранить
@@ -117,15 +125,12 @@ export const Profile = () => {
               </div>
               : null }
               { editUserSuccess && <p>Данные успешно обновленны</p> }
-            </form>
-          </ProtectedRoute>
-          <ProtectedRoute path="/profile/orders" exact={true}>
-            <div className={styles.orders_history} >
+            </form>}
+
+            {location.pathname.startsWith('/profile/orders') && <div className={styles.orders_history} >
               <OrdersList isShow={true}/>
-            </div>
-          </ProtectedRoute>
-        </Switch>
+            </div>}
+
       </div>
-    </Router>
   );
 };

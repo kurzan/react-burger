@@ -11,7 +11,7 @@ export const registerSuccess = createAction<TUser, 'REGISTER_SUCCESS'>('REGISTER
 export const registerFailed = createAction<string, 'REGISTER_FAILED'>('REGISTER_FAILED');
 
 
-export const registerUser: AppThunk = (name: TUser, email: TUser, password: TUser) => (dispatch: AppDispatch) => {
+export const registerUser: AppThunk = (name: string, email: string, password: string) => (dispatch: AppDispatch) => {
   const options = {
     method: 'POST',
     body: JSON.stringify({
@@ -48,7 +48,7 @@ export const loginRequest = createAction('LOGIN_REQUEST');
 export const loginSuccess = createAction<TUser, 'LOGIN_SUCCESS'>('LOGIN_SUCCESS');
 export const loginFailed = createAction<string, 'LOGIN_FAILED'>('LOGIN_FAILED');
 
-export const loginning: AppThunk = (email: TUser, password: TUser) => (dispatch: AppDispatch) => {
+export const loginning: AppThunk = (email: string, password: string) => (dispatch: AppDispatch) => {
   const options = {
       method: 'POST',
       body: JSON.stringify({

@@ -124,7 +124,7 @@ const BurgerConstructor: FC<TBurrgerConsructorProps> = ({ onOrderClick }) => {
 
   const { bun, selectedIngredients } = useSelector((store) => store.selectedIngredientsReducer);
   
-  const allIngredients = [...selectedIngredients, bun ? bun : ''];
+  const allIngredients = [...selectedIngredients, bun ? bun : '', bun ? bun : ''];
   const totalValue = selectedIngredients.reduce((sum: number, el: TIngredient) => sum + el.price, 0) + (bun ? bun.price * 2 : 0);
 
   const createOrder = () => {

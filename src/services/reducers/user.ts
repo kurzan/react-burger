@@ -72,6 +72,7 @@ export const userReducer = createReducer(initialState, builder => {
     })
     .addCase(logoutRequest, (state) => {
       state.logoutRequest = true;
+      state.user = null;
       state.logoutFailed = false;
     })
     .addCase(logoutSuccess, (state, action) => {

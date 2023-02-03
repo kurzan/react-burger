@@ -31,6 +31,7 @@ export const WsOrdersReducer = createReducer(initialState, builder => {
     })
     .addCase(wsMessage, (state, action) => {
       state.orders = action.payload;
+      // state.orders.orders = [];
     })
 
 })

@@ -20,8 +20,10 @@
 }
 
 .container {
+  margin: 0 auto;
+  margin-bottom: 24px;
   max-width: 640px;
-  height: 620px;
+  max-height: 620px;
   display: flex;
   flex-direction: column;
 }
@@ -34,7 +36,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  height: 312px;
+  max-height: 100%;
   overflow-y: scroll;
   padding-right: 24px;
 }
@@ -53,6 +55,8 @@
 
 .ingrediens_item {
   width: 100%;
+  padding-top: 4px;
+  padding-bottom: 4px;
   display: flex;
   align-items: center;
   gap: 16px;

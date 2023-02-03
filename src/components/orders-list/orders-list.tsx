@@ -1,15 +1,15 @@
 import styles from "./orders-list.module.css";
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components/';
-import { FC, useEffect, useMemo } from 'react';
-import { useDispatch, useSelector } from "../../hooks/hooks";
-import { connect as connectToOrders, disconnect as disconnectFromOrders } from "../../services/actions/ws-orders";
+import { FC, useMemo } from 'react';
+import { useSelector } from "../../hooks/hooks";
 import { TIngredient } from "../../services/types/types";
 import { getOrderStatus } from "../../utils/utils";
-import { ALL_ORDERS_URL } from "../../utils/burger-ws";
+import { Link, useLocation, useRouteMatch } from "react-router-dom";
+
 import moment from "moment";
 
 const VISIBLE_INGREDIENTS_SLICE = 6;
-
+moment.locale()
 
 type TOrderCard = {
   order: { 
@@ -25,23 +25,16 @@ type TOrderCard = {
 
 const OrderCard: FC<TOrderCard> = ({order, isShow}) => {
 
-  // useEffect(() => {
-  //   console.log(ingredients)
-  // }, []) 
+  const location = useLocation();
+  const { path } = useRouteMatch();
 
   const totalPrice = useMemo(() => {
-    const buns = order.ingredients.filter((ingredient) => ingredient?.type === 'bun').reduce((acc, cur) => cur ? acc + cur.price * 2 : 0, 0) 
-    const others = order.ingredients.filter((ingredient) => ingredient?.type !== 'bun').reduce((acc, cur) => cur ? acc + cur.price: 0, 0) 
-    const total = buns + others;
-    return total
+    return order.ingredients.reduce((acc, cur) => cur ? acc + cur.price: 0, 0) 
+
   }, [order])
 
-    useEffect(() => {
-      
-  }, []) 
-
   return (
-    <li className={styles.card}>
+    <Link to={{ pathname: `${path}/${order._id}`, state: { background: location }}} className={styles.card}>
       <div className={styles.card_head}>
         <p className="text text_type_digits-default"># {order.number}</p>
         <p className="text text_type_text-default text_color_inactive">{moment(order.createdAt).calendar()}</p>
@@ -53,11 +46,11 @@ const OrderCard: FC<TOrderCard> = ({order, isShow}) => {
 
           {order && order.ingredients.slice(0, VISIBLE_INGREDIENTS_SLICE).map((item, index) => (
             <div key={index} className={styles.img_border} >
-              <div className={styles.img_border_back} style={{ opacity: order.ingredients.length > VISIBLE_INGREDIENTS_SLICE && (index === VISIBLE_INGREDIENTS_SLICE - 1) ? 0.6 : 1 }}>
-                <img className={styles.card_img} src={item?.image_mobile} alt="" />
+              <div className={styles.img_border_back} style={{ opacity: order.ingredients.length >= VISIBLE_INGREDIENTS_SLICE && (index === VISIBLE_INGREDIENTS_SLICE - 1) ? 0.6 : 1 }}>
+                <img className={styles.card_img} src={item?.image_mobile} alt={item?.name} />
               </div>
-              {order.ingredients.length > VISIBLE_INGREDIENTS_SLICE && (index === VISIBLE_INGREDIENTS_SLICE - 1) &&
-                <div className={styles.image_text}>+{order.ingredients.length - VISIBLE_INGREDIENTS_SLICE}</div>
+              {order.ingredients.length >= VISIBLE_INGREDIENTS_SLICE && (index === VISIBLE_INGREDIENTS_SLICE - 1) &&
+                <div className={styles.image_text}>+{order.ingredients.length - VISIBLE_INGREDIENTS_SLICE +1}</div>
               }
             </div>
           ))}
@@ -68,36 +61,23 @@ const OrderCard: FC<TOrderCard> = ({order, isShow}) => {
           <CurrencyIcon type="primary" />
         </div>
       </div>
-    </li>
+    </Link>
   )
 }
 
 
 const OrdersList = ({isShow}: {isShow: boolean}) => {
-  const dispatch = useDispatch();
 
   const { orders } = useSelector(store => store.WsOrdersReducer)
   const { ingredients } = useSelector((store) => store.ingredientsReducer);
 
-  const data = orders?.orders.map(item => ({ ...item, ingredients: item.ingredients.filter(x => x !== null).map(item => ingredients.find(i => i._id === item)).filter(x => x !== undefined) }));
-
-  useEffect(() => {
-    console.log(data)
-  }, [data]) 
-
-  useEffect(() => {
-    dispatch(connectToOrders(ALL_ORDERS_URL))
-
-    return () => {
-      dispatch(disconnectFromOrders());
-    }
-  }, [])
+  const data = useMemo(() => {
+      return orders?.orders.map(item => ({ ...item, ingredients: item.ingredients.filter(x => x !== null).map(item => ingredients.find(i => i._id === item)).filter(x => x !== undefined) }));
+  }, [orders, ingredients])
 
   return (
     <div className={styles.orders_list} >
-      <ul>
-        {data && data.map((order, index) => order.status === 'done' && <OrderCard key={index} isShow={isShow} order={order} />)}
-      </ul>
+      {data && data.sort((a, b) => b.number - a.number).map((order, index) => <OrderCard key={index} isShow={isShow} order={order} />)}
     </div>
   )
 }

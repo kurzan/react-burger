@@ -3,6 +3,9 @@ import styles from './home.module.css'
 import BurgerIngredients from '../../components/burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../../components/burger-constructor/burger-constructor';
 import Modal from '../../components/modal/modal';
+import {
+  BrowserRouter as Router
+} from "react-router-dom";
 
 import OrderDetails from "../../components/order-details/order-details";
 
