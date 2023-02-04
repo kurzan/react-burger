@@ -6,6 +6,8 @@ import { registerUser } from '../../services/actions/user';
 import { useDispatch, useSelector } from "../../hooks/hooks";
 import { TLocationWithFrom } from "../../services/types/types";
 import { useForm } from "../../hooks/useForms";
+import { TFormUser } from "../../services/types/types";
+
 
 export const Register = () => {
   const dispatch = useDispatch();
@@ -13,7 +15,7 @@ export const Register = () => {
 
   const { user, status, registerFailure, registerSuccess, registerRequest } = useSelector((store) => store.userReducer);
 
-  const {values, handleChange} = useForm({});
+  const {values, handleChange} = useForm<TFormUser>({});
 
   const inputPasswordRef = React.useRef<HTMLInputElement>(null)
   const onIconClick = () => {

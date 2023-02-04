@@ -6,6 +6,8 @@ import { useSelector, useDispatch } from '../../hooks/hooks';
 import { postResetPassword } from "../../services/actions/reset-password"; 
 import { TLocationWithFrom } from "../../services/types/types";
 import { useForm } from "../../hooks/useForms";
+import { TFormUser } from "../../services/types/types";
+
 
 export const ResetPassword = () => {
   const history = useHistory();
@@ -15,7 +17,7 @@ export const ResetPassword = () => {
 
   const { resetFailure, resetSuccess, fargotSuccess, resetRequest, status } = useSelector((store) => store.resetPasswordReducer);
 
-  const {values, handleChange} = useForm({});
+  const {values, handleChange} = useForm<TFormUser>({});
 
   const inputPasswordRef = React.useRef<HTMLInputElement>(null)
   const onIconClick = () => {

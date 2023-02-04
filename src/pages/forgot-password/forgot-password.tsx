@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from '../../hooks/hooks';
 import { getForgotPassword } from '../../services/actions/reset-password';
 import { TLocationWithFrom } from "../../services/types/types";
 import { useForm } from "../../hooks/useForms";
+import { TFormUser } from "../../services/types/types";
 
 export const ForgotPassword = () => {
   const dispatch = useDispatch();
@@ -15,7 +16,7 @@ export const ForgotPassword = () => {
   const { user } = useSelector((store) => store.userReducer);
   const { forgotRequest, forgotFailed, status } = useSelector((store) => store.resetPasswordReducer);
 
-  const {values, handleChange} = useForm({});
+  const {values, handleChange} = useForm<TFormUser>({});
 
   const postForgotRequest = (e: FormEvent) => {
     e.preventDefault();

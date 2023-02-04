@@ -9,6 +9,8 @@ import { USER_ORDERS_URL } from "../../utils/burger-ws";
 import { connect as connectToOrders, disconnect as disconnectFromOrders } from "../../services/actions/ws-orders";
 import { getCookie } from "../../utils/cookie"; 
 import { useForm } from "../../hooks/useForms";
+import { TFormUser } from "../../services/types/types";
+
 
 export const Profile = () => {
   const dispatch = useDispatch();
@@ -26,7 +28,7 @@ export const Profile = () => {
   const { editUserSuccess } = useSelector((store) => store.userReducer);
 
 
-  const {values, handleChange, setValues} = useForm({});
+  const {values, handleChange, setValues} = useForm<TFormUser>({});
 
   useEffect(() => {
     dispatch(getUserInfo());

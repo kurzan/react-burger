@@ -32,6 +32,8 @@ export type TUser = {
   password?: string;
 }
 
+export type TFormUser = TUser & { emailCode?: string };
+
 export type TOrder = {
   createdAt: string;
   ingredients: TIngredient[];

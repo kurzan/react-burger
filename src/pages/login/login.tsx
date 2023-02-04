@@ -6,11 +6,12 @@ import { loginning } from "../../services/actions/user";
 import { useSelector, useDispatch } from '../../hooks/hooks';
 import { TLocationWithFrom } from "../../services/types/types";
 import { useForm } from "../../hooks/useForms";
+import { TFormUser } from "../../services/types/types";
 
 export const Login = () => {
   const { user } = useSelector((store) => store.userReducer);
 
-  const {values, handleChange} = useForm({});
+  const {values, handleChange} = useForm<TFormUser>({});
 
   const dispatch = useDispatch();
   const history = useHistory();
