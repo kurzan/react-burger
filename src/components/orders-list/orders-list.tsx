@@ -5,7 +5,6 @@ import { useSelector } from "../../hooks/hooks";
 import { TIngredient } from "../../services/types/types";
 import { getOrderStatus } from "../../utils/utils";
 import { Link, useLocation, useRouteMatch } from "react-router-dom";
-import { v4 as uuid } from 'uuid';
 
 import moment from "moment";
 
@@ -78,7 +77,7 @@ const OrdersList = ({isShow}: {isShow: boolean}) => {
 
   return (
     <div className={styles.orders_list} >
-      {data && data.sort((a, b) => b.number - a.number).map((order) => <OrderCard key={uuid()} isShow={isShow} order={order} />)}
+      {data && data.sort((a, b) => b.number - a.number).map((order) => <OrderCard key={order._id} isShow={isShow} order={order} />)}
     </div>
   )
 }
