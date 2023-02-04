@@ -42,7 +42,7 @@ export const Login = () => {
         <div className="mb-6" style={{ display: 'flex', flexDirection: 'column' }}>
           <EmailInput
             onChange={handleChange}
-            value={values.email}
+            value={values.email || ''}
             name={'email'}
             isIcon={false}
           />
@@ -53,7 +53,7 @@ export const Login = () => {
           placeholder={'Пароль'}
           onChange={handleChange}
           icon={'ShowIcon'}
-          value={values.password}
+          value={values.password || ''}
           name={'password'}
           error={false}
           ref={inputRef}

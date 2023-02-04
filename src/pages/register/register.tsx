@@ -1,10 +1,11 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { FormEvent } from "react";
 import { EmailInput, Input, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './register.module.css';
 import { Redirect, Link, useLocation } from 'react-router-dom';
 import { registerUser } from '../../services/actions/user';
 import { useDispatch, useSelector } from "../../hooks/hooks";
 import { TLocationWithFrom } from "../../services/types/types";
+import { useForm } from "../../hooks/useForms";
 
 export const Register = () => {
   const dispatch = useDispatch();
@@ -12,12 +13,8 @@ export const Register = () => {
 
   const { user, status, registerFailure, registerSuccess, registerRequest } = useSelector((store) => store.userReducer);
 
-  const [email, setEmail] = useState('')
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value)
-  }
+  const {values, handleChange} = useForm({});
 
-  const [password, setPassword] = React.useState('')
   const inputPasswordRef = React.useRef<HTMLInputElement>(null)
   const onIconClick = () => {
     setTimeout(() => {
@@ -28,24 +25,24 @@ export const Register = () => {
     alert('Icon Click Callback')
   }
 
-  const [name, setName] = React.useState('')
   const inputNameRef = React.useRef(null)
 
-  const postRegister = () => {
-    dispatch(registerUser(name, email, password));
+  const postRegister = (e: FormEvent) => {
+    e.preventDefault()
+    dispatch(registerUser(values.name, values.email, values.password));
   };
 
   return (
     <>
       { user ? <Redirect to={ location.state?.from || '/' } /> : 
-      <div className={styles.login}>
+      <form onSubmit={postRegister} className={styles.login}>
         <p className="mt-20 mb-6 text text_type_main-medium">Регистрация</p>
         <div className="mb-6"> 
         <Input 
           type={'text'}
           placeholder={'Имя'}
-          onChange={e => setName(e.target.value)}
-          value={name}
+          onChange={handleChange}
+          value={values.name || ''}
           name={'name'}
           error={false}
           ref={inputNameRef}
@@ -56,8 +53,8 @@ export const Register = () => {
         </div>
         <div className="mb-6" style={{ display: 'flex', flexDirection: 'column' }}>
           <EmailInput
-            onChange={onChange}
-            value={email}
+            onChange={handleChange}
+            value={values.email || ''}
             name={'email'}
             isIcon={false}
           />
@@ -66,10 +63,10 @@ export const Register = () => {
         <Input 
           type={'password'}
           placeholder={'Пароль'}
-          onChange={e => setPassword(e.target.value)}
+          onChange={handleChange}
           icon={'ShowIcon'}
-          value={password}
-          name={'name'}
+          value={values.password || ''}
+          name={'password'}
           error={false}
           ref={inputPasswordRef}
           onIconClick={onIconClick}
@@ -82,12 +79,12 @@ export const Register = () => {
         { registerSuccess && <p className="text text_type_main-default">{status}</p>}
         </div>
         <div className="mb-20">
-          <Button htmlType="button" disabled={ name && email && password ? false : true} type="primary" size="medium" onClick={() => postRegister()}>
+          <Button htmlType="submit" disabled={ values.name && values.email && values.password ? false : true} type="primary" size="medium">
             Зарегистрироваться
           </Button>
         </div>
         <p className="text text_type_main-default text_color_inactive">Уже зарегистрированы? <Link to={{ pathname: '/login' }} className={styles.link}>Войти</Link></p>
-      </div>
+      </form>
       }
     </>
   );

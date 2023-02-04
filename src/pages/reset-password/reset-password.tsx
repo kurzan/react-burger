@@ -1,10 +1,11 @@
-import React from "react";
+import React, { FormEvent } from "react";
 import { Input, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './reset-password.module.css';
 import { Redirect, Link, useHistory, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from '../../hooks/hooks';
 import { postResetPassword } from "../../services/actions/reset-password"; 
 import { TLocationWithFrom } from "../../services/types/types";
+import { useForm } from "../../hooks/useForms";
 
 export const ResetPassword = () => {
   const history = useHistory();
@@ -14,7 +15,8 @@ export const ResetPassword = () => {
 
   const { resetFailure, resetSuccess, fargotSuccess, resetRequest, status } = useSelector((store) => store.resetPasswordReducer);
 
-  const [password, setPassword] = React.useState('')
+  const {values, handleChange} = useForm({});
+
   const inputPasswordRef = React.useRef<HTMLInputElement>(null)
   const onIconClick = () => {
     setTimeout(() => {
@@ -25,28 +27,27 @@ export const ResetPassword = () => {
     alert('Icon Click Callback')
   }
 
-  const [emailCode, setEmailCode] = React.useState('')
   const inputNameRef = React.useRef<HTMLInputElement>(null)
 
-  const postNewPassword = () => {
-    dispatch(postResetPassword(password, emailCode, history))
-
+  const postNewPassword = (e: FormEvent) => {
+    e.preventDefault();
+    dispatch(postResetPassword(values.password, values.emailCode, history))
   }
 
   return (
     <>
       { !fargotSuccess ? <Redirect to={ location.state?.from || '/' } /> : 
-      <div className={styles.login}>
+      <form onSubmit={postNewPassword} className={styles.login}>
         <p className="mt-20 mb-6 text text_type_main-medium">Восстановление пароля</p>
 
         <div className="mb-6"> 
         <Input 
           type={'text'}
           placeholder={'Введите новый пароль'}
-          onChange={e => setPassword(e.target.value)}
+          onChange={handleChange}
           icon={'ShowIcon'}
-          value={password}
-          name={'name'}
+          value={values.password || ''}
+          name={'password'}
           error={false}
           ref={inputPasswordRef}
           onIconClick={onIconClick}
@@ -60,8 +61,8 @@ export const ResetPassword = () => {
         <Input 
           type={'text'}
           placeholder={'Введите код из письма'}
-          onChange={e => setEmailCode(e.target.value)}
-          value={emailCode}
+          onChange={handleChange}
+          value={values.emailCode || ''}
           name={'emailCode'}
           error={false}
           ref={inputNameRef}
@@ -76,12 +77,12 @@ export const ResetPassword = () => {
         </div>
 
         <div className="mb-20">
-          <Button htmlType="button" type="primary" size="medium" onClick={() => postNewPassword()}>
+          <Button htmlType="submit" type="primary" size="medium">
             Сохранить
           </Button>
         </div>
         <p className="text text_type_main-default text_color_inactive">Вспомнили пароль? <Link to={{ pathname: '/login' }} className={styles.link}>Войти</Link></p>
-      </div>
+      </form>
       }
     </>
 
