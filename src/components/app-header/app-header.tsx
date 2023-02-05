@@ -33,7 +33,7 @@ const AppHeader = () => {
           <div className={styles.container}>
             <nav className={styles.menu}>
                 <NavItem Icon={BurgerIcon} text={'Конструктор'} to={'/'}/>
-                <NavItem Icon={ListIcon} text={'Лента заказов'} to={'/orders'}/>
+                <NavItem Icon={ListIcon} text={'Лента заказов'} to={'/feed'}/>
             </nav>
             <div className={styles.logo}>
               <Logo />

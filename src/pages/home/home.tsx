@@ -6,7 +6,7 @@ import Modal from '../../components/modal/modal';
 
 import OrderDetails from "../../components/order-details/order-details";
 
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../hooks/hooks';
 
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -14,8 +14,8 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 export const HomePage = () => {
   const [modalOrderOpen, setModalOrderOpen] = useState(false);
 
-  const { isLoading, isError } = useSelector((store: any) => store.ingredientsReducer);
-  const { orderRequest, orderFailed } = useSelector((store: any) => store.orderReducer);
+  const { isLoading, isError } = useSelector((store) => store.ingredientsReducer);
+  const { orderRequest, orderFailed } = useSelector((store) => store.orderReducer);
 
   const onOrderClick = () => {
     setModalOrderOpen(true);
@@ -40,9 +40,12 @@ export const HomePage = () => {
       {isError ? <Modal title={`Ошибка: Что-то пошло не так :( Обновите страницу`} /> 
       :
       <DndProvider backend={HTML5Backend}>
-        <main className={styles.main}>
-            <BurgerIngredients />
-            <BurgerConstructor onOrderClick={onOrderClick} />
+        <main>
+            <h1 className="mt-10 text text_type_main-large">Соберите бургер</h1>
+            <div className={styles.main}>
+              <BurgerIngredients />
+              <BurgerConstructor onOrderClick={onOrderClick} />
+            </div>
         </main>
       </DndProvider>
       }

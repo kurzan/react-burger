@@ -1,11 +1,11 @@
 import React from "react";
 import styles from './order-details.module.css';
 import donePng from '../../images/done.svg';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../hooks/hooks';
 
 
 const OrderDetails = () => {
-  const { order } = useSelector((store: any) => store.orderReducer);
+  const { order } = useSelector((store) => store.orderReducer);
 
   return (
     <div className={styles.order}>

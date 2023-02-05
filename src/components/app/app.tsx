@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../../hooks/hooks'; 
 import { getIngredients } from '../../services/actions/ingrediens';
 import styles from './app.module.css'
 import AppHeader from '../app-header/app-header';
-import { HomePage, Login, Register, ForgotPassword, ResetPassword, Profile, Page404 } from '../../pages';
+import { HomePage, Login, Register, ForgotPassword, ResetPassword, Profile, Page404, Feed } from '../../pages';
 import { ProtectedRoute } from '../protected-route/protected-route';
 import { getUserInfo } from '../../services/actions/user'
 import { resetCurrentIngredient } from '../../services/actions/current-ingredient';
@@ -12,7 +12,9 @@ import { useHistory, useLocation, BrowserRouter as Router, Switch, Route } from 
 import { Location } from 'history'; 
 
 import IngredientDetails from '../ingredient-details/ingredient-details';
+import { OrderInfo } from '../order-info/order-info';
 import Modal from '../modal/modal';
+
 
 function App() {
   const dispatch = useDispatch();
@@ -28,9 +30,7 @@ function App() {
   }
 
   useEffect(() => {
-    //@ts-ignore
     dispatch(getIngredients())
-    //@ts-ignore
     dispatch(getUserInfo())
   }, [dispatch]);
 
@@ -38,12 +38,15 @@ function App() {
     <>
         <AppHeader />
         <div className={styles.main}>
-          <Switch>
+          <Switch location={background || location}>
+            <Route path='/orderinfo' exact={true}>
+              <OrderInfo/>
+            </Route>
             <Route path='/' exact={true}>
               <HomePage/>
             </Route>
-            <Route path='/orders' exact={true}>
-              <p>Здесь будет история заказов</p>
+            <Route path='/feed' exact={true}>
+              <Feed />
             </Route>
             <Route path='/login' exact={true}>
               <Login />
@@ -57,21 +60,47 @@ function App() {
             <Route path='/reset-password' exact={true}>
               <ResetPassword />
             </Route>
-            <ProtectedRoute path='/profile/'>
+            <ProtectedRoute path='/profile/' exact={true}>
               <Profile />
             </ProtectedRoute>
-            { background && <Route path='/ingredients/:id'>
-              <Modal onClose={ingredientModalClose} title={'Детали ингредиента'}> 
-                  < IngredientDetails/>
-              </Modal>
-            </Route>}
-            { location && <Route path='/ingredients/:id'>
+            <ProtectedRoute path='/profile/orders' exact={true}>
+              <Profile />
+            </ProtectedRoute>
+            <ProtectedRoute path='/profile/orders/:id' exact={true}>
+              < OrderInfo/>
+            </ProtectedRoute>
+            <Route path='/ingredients/:id' exact={true}>
                 < IngredientDetails/>
-            </Route>}
+            </Route>
+            <Route path='/feed/:id' exact={true}>
+                < OrderInfo/>
+            </Route>
             <Route>
               <Page404 />
             </Route>
           </Switch>
+          { background && (
+            <>
+              <Route path='/ingredients/:id'>
+              <Modal onClose={ingredientModalClose} title={'Детали ингредиента'}> 
+                  < IngredientDetails/>
+              </Modal>
+              </Route>
+
+              <Route path='/feed/:id'>
+                <Modal onClose={ingredientModalClose}> 
+                    < OrderInfo/>
+                </Modal>
+              </Route>
+
+              <ProtectedRoute path='/profile/orders/:id' exact={true}>
+                <Modal onClose={ingredientModalClose}> 
+                    < OrderInfo/>
+                </Modal>
+              </ProtectedRoute>
+              
+            </>
+          )}
         </div>
     </>
   );

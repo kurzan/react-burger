@@ -5,6 +5,7 @@ import { orderReducer } from './order';
 import { selectedIngredientsReducer } from './selected-ingredients';
 import { resetPasswordReducer } from './reset-password';
 import { userReducer } from './user';
+import { WsOrdersReducer } from './ws-orders';
 
 export const rootReducer = combineReducers({
   currentIngredientReducer,
@@ -12,5 +13,6 @@ export const rootReducer = combineReducers({
   orderReducer,
   selectedIngredientsReducer,
   userReducer,
-  resetPasswordReducer
+  resetPasswordReducer,
+  WsOrdersReducer
 })

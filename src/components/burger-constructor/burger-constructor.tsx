@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useRef } from 'react';
 import styles from './burger-constructor.module.css';
 import { Button, CurrencyIcon, DragIcon, ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components/';
 import { useDrop, useDrag } from "react-dnd";
@@ -6,21 +6,17 @@ import type { Identifier, XYCoord } from 'dnd-core';
 
 import { postOrder } from '../../services/actions/order';
 import { removeIngredient, moveIngredient } from '../../services/actions/selected-ingredients';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../hooks/hooks'; 
 
 import { selectIngredient, selectBun } from '../../services/actions/selected-ingredients';
 import { v4 as uuid } from 'uuid';
 import { useHistory } from 'react-router-dom';
-import { TIngredient } from '../../utils/types';
-
-import { AnimatePresence, motion } from "framer-motion";
-
-type TSelectedIngredientType = TIngredient & { key: any; };
+import { TIngredient } from '../../services/types/types';
 
 type TConstructorItemProps = {
-  ingredient: TSelectedIngredientType;
+  ingredient: TIngredient;
   index: number;
-  onDelete: (item?: TSelectedIngredientType) => void;
+  onDelete: (item?: string | undefined) => void;
 };
 
 type DragItem = {
@@ -113,9 +109,7 @@ const BurgerConstructor: FC<TBurrgerConsructorProps> = ({ onOrderClick }) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const [popLayout, setPopLayout] = useState(false);
-
-  const { user } = useSelector((store: any) => store.userReducer);
+  const { user } = useSelector((store) => store.userReducer);
 
   const [, dropTarget] = useDrop({
     accept: "ingredient",
@@ -128,14 +122,13 @@ const BurgerConstructor: FC<TBurrgerConsructorProps> = ({ onOrderClick }) => {
     },
   });
 
-  const { bun, selectedIngredients } = useSelector((store: any) => store.selectedIngredientsReducer);
+  const { bun, selectedIngredients } = useSelector((store) => store.selectedIngredientsReducer);
   
-  const allIngredients = [...selectedIngredients, bun ? bun : ''];
+  const allIngredients = [...selectedIngredients, bun ? bun : '', bun ? bun : ''];
   const totalValue = selectedIngredients.reduce((sum: number, el: TIngredient) => sum + el.price, 0) + (bun ? bun.price * 2 : 0);
 
   const createOrder = () => {
     if (user) {
-      //@ts-ignore
       dispatch(postOrder(allIngredients));
       onOrderClick();
     } else {
@@ -150,8 +143,7 @@ const BurgerConstructor: FC<TBurrgerConsructorProps> = ({ onOrderClick }) => {
   const chekConstructor = selectedIngredients.length || bun ? false : true;
 
   return (
-    <section className={'mt-25 ml-10 ' + styles.constructor} ref={dropTarget}>
-      <AnimatePresence mode={popLayout ? "popLayout" : "sync"}>
+    <section className={'ml-10 ' + styles.constructor} ref={dropTarget}>
         <div className={'mb-4 mr-4 ' + styles.top} >
           {bun &&
             <ConstructorElement
@@ -165,15 +157,8 @@ const BurgerConstructor: FC<TBurrgerConsructorProps> = ({ onOrderClick }) => {
         </div>
         <ul className={styles.content}>
 
-            {selectedIngredients.map((item: TSelectedIngredientType, index: number) => 
-              <motion.li
-                layout
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.8, opacity: 0 }}
-                transition={{ type: "spring" }}
-                key={item.key}
-              ><ConstructorItem ingredient={item} index={index} onDelete={handleRemoveItem} /></motion.li>
+            {selectedIngredients.map((item, index) => 
+              <ConstructorItem ingredient={item} key={item.key} index={index} onDelete={handleRemoveItem} />
             )}
           
         </ul>
@@ -188,14 +173,13 @@ const BurgerConstructor: FC<TBurrgerConsructorProps> = ({ onOrderClick }) => {
             />
           }
         </div>
-        {chekConstructor && 'Перенестите необходимые ингредиенты для бургера в эту часть экрана'}
+        {chekConstructor && <p>Перенестите необходимые ингредиенты для бургера в эту часть экрана</p>}
         <div className={'mt-10 mr-4 ' + styles.order}>
           <p className="text text_type_digits-medium mr-10">{totalValue}<CurrencyIcon type='primary' /></p>
           <Button htmlType="button" type="primary" size="large" disabled={chekConstructor} onClick={createOrder}>
             Оформить заказ
           </Button>
         </div>
-      </AnimatePresence>
     </section>
   )
 }

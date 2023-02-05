@@ -3,9 +3,9 @@ import { Tab, CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger
 import styles from './burger-ingredients.module.css';
 import { useInView } from 'react-intersection-observer';
 import { useDrag } from "react-dnd";
-import { useSelector } from "react-redux";
+import { useSelector } from '../../hooks/hooks';
 import { Link, useLocation } from "react-router-dom";
-import { TIngredient } from '../../utils/types';
+import { TIngredient } from '../../services/types/types';
 
 import { motion } from 'framer-motion';
 
@@ -17,7 +17,7 @@ const MenuElement: FC<TMenuElement> = ({ ingredient }) => {
 
   const location = useLocation();
 
-  const { selectedIngredients, bun } = useSelector((store: any) => store.selectedIngredientsReducer)
+  const { selectedIngredients, bun } = useSelector((store) => store.selectedIngredientsReducer)
 
   const [, dragRef] = useDrag({
     type: "ingredient",
@@ -25,9 +25,9 @@ const MenuElement: FC<TMenuElement> = ({ ingredient }) => {
 
   });
 
-  const allIngredients = [...selectedIngredients, bun ? bun : ''];
+  const allIngredients = [...selectedIngredients, bun];
 
-  const count = allIngredients.filter(item => item._id === ingredient._id).length
+  const count = allIngredients.filter(item => item?._id === ingredient._id).length
 
   return (
       <Link to={{ pathname: `/ingredients/${ingredient._id}`, state: { background: location }}} className={styles.menu_element} ref={dragRef}>
@@ -46,7 +46,7 @@ const MenuElement: FC<TMenuElement> = ({ ingredient }) => {
 
 const BurgerIngredients = () => {
 
-  const { ingredients } = useSelector((store: any) => store.ingredientsReducer);
+  const { ingredients } = useSelector((store) => store.ingredientsReducer);
 
 
   const tabs = [{ id: 'bun', title: 'Булки' }, { id: 'sauce', title: 'Соусы' }, { id: 'main', title: 'Начинки' }];
@@ -90,9 +90,7 @@ const BurgerIngredients = () => {
 
   return (
     <section className={styles.build_burger}>
-      <h1 className="mt-10 text text_type_main-large">Соберите бургер</h1>
-
-      <div className="mt-5 mb-10" style={{ display: 'flex' }}>
+      <div className={'mt-5 mb-10 ' + styles.tabs}>
         {tabs.map(tabItem => (
           <Tab key={tabItem.id} value={tabItem.id} active={current === tabItem.id} onClick={setCurrent}>
             {tabItem.title}
