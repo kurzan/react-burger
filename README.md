@@ -1,5 +1,7 @@
 # Проект Stellar Burger на React + Redux + TS
 
+## Деплой https://kurzan.github.io/react-burger/
+
 ![image](https://user-images.githubusercontent.com/112556583/212009307-d37a606e-7efb-4f35-b37c-a6962c770079.png)
 
 
