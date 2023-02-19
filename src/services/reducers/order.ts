@@ -1,5 +1,5 @@
 import type { TOrder } from '../types/types';
-import { postOrderFailed, postOrderRequest, postOrderSuccess, TOrderActions } from '../actions/order'; 
+import { postOrderFailed, postOrderRequest, postOrderSuccess } from '../actions/order'; 
 import { createReducer } from '@reduxjs/toolkit';
 
 type TOrderState = {
