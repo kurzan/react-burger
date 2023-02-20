@@ -1,5 +1,5 @@
 import type { TIngredient } from '../types/types';
-import { getIngredientsFailed, getIngredientsRequest, getIngredientsSuccess, TIngredientsActions } from '../actions/ingrediens';
+import { getIngredientsFailed, getIngredientsRequest, getIngredientsSuccess } from '../actions/ingrediens';
 import { createReducer } from '@reduxjs/toolkit';
 
 type TIngredientsState = {

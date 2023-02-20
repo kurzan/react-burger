@@ -24,7 +24,7 @@ const IngredientDetails = () => {
   const { currentIngredient } = useSelector((store) => store.currentIngredientReducer)
 
   return (
-    <div className={"mt-8 " + styles.details}>
+    <div className={"mt-8 " + styles.details} data-cy='ingredientDetails'>
       <img src={currentIngredient.image_large} alt="ingredient" />
       <p className={"mb-8 text text_type_main-medium " + styles.text}>{currentIngredient.name}</p>
       <div className={"mb-15 " + styles.substance} >

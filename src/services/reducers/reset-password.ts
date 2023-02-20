@@ -11,7 +11,7 @@ type TResetPasswortState = {
   resetFailure: boolean;
 }
 
-const initialState: TResetPasswortState = {
+export const initialState: TResetPasswortState = {
   status: null,
   forgotRequest: false,
   fargotSuccess: false,
@@ -50,6 +50,7 @@ export const resetPasswordReducer = createReducer(initialState, builder => {
       state.status = action.payload;
       state.resetRequest = false;
       state.resetFailure = false;
+      state.resetSuccess = true;
     })
     .addCase(resetPasswordFailed, (state, action) => {
       state.status = action.payload;

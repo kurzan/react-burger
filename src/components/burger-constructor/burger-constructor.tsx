@@ -143,9 +143,10 @@ const BurgerConstructor: FC<TBurrgerConsructorProps> = ({ onOrderClick }) => {
   const chekConstructor = selectedIngredients.length || bun ? false : true;
 
   return (
-    <section className={'ml-10 ' + styles.constructor} ref={dropTarget}>
-        <div className={'mb-4 mr-4 ' + styles.top} >
-          {bun &&
+    <section className={'ml-10 ' + styles.constructor} ref={dropTarget} data-cy='dropTarget'>
+        
+        {bun &&
+          <div data-cy="constructorItem" className={'mb-4 mr-4 ' + styles.top} >
             <ConstructorElement
               type="top"
               isLocked={true}
@@ -153,8 +154,9 @@ const BurgerConstructor: FC<TBurrgerConsructorProps> = ({ onOrderClick }) => {
               price={bun.price}
               thumbnail={bun.image}
             />
-          }
+          
         </div>
+        }
         <ul className={styles.content}>
 
             {selectedIngredients.map((item, index) => 
@@ -176,7 +178,7 @@ const BurgerConstructor: FC<TBurrgerConsructorProps> = ({ onOrderClick }) => {
         {chekConstructor && <p>Перенестите необходимые ингредиенты для бургера в эту часть экрана</p>}
         <div className={'mt-10 mr-4 ' + styles.order}>
           <p className="text text_type_digits-medium mr-10">{totalValue}<CurrencyIcon type='primary' /></p>
-          <Button htmlType="button" type="primary" size="large" disabled={chekConstructor} onClick={createOrder}>
+          <Button data-cy="orderButton" htmlType="button" type="primary" size="large" disabled={chekConstructor} onClick={createOrder}>
             Оформить заказ
           </Button>
         </div>

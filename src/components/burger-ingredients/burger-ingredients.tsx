@@ -30,7 +30,7 @@ const MenuElement: FC<TMenuElement> = ({ ingredient }) => {
   const count = allIngredients.filter(item => item?._id === ingredient._id).length
 
   return (
-      <Link to={{ pathname: `/ingredients/${ingredient._id}`, state: { background: location }}} className={styles.menu_element} ref={dragRef}>
+      <Link to={{ pathname: `/ingredients/${ingredient._id}`, state: { background: location }}} className={styles.menu_element}  data-cy='ingredient' ref={dragRef}>
       {count ? <span className={styles.counter} ><Counter count={count}/></span> : null}
       <img className="ml-4 mr-4 mb-1" src={ingredient.image} alt={ingredient.name} />
       <div className={styles.price_wrapper}>
