@@ -16,7 +16,6 @@ export const OrderInfo = () => {
   const location = useLocation<{background: Location}>();
   const background = location.state && location.state.background;
 
-  const dispatch = useDispatch();
   const { orders: allOrders } = useSelector(store => store.WsOrdersReducer);
 
   const [orders, setOrders] = useState(allOrders)

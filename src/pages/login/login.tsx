@@ -40,7 +40,7 @@ export const Login = () => {
       { user ? <Redirect to={ location.state?.from || '/' } /> : 
       <form onSubmit={onLoginClick} className={styles.login}>
         <p className="mt-20 mb-6 text text_type_main-medium">Вход</p>
-        <div className="mb-6" style={{ display: 'flex', flexDirection: 'column' }}>
+        <div data-cy="emailInput" className="mb-6" style={{ display: 'flex', flexDirection: 'column' }}>
           <EmailInput
             onChange={handleChange}
             value={values.email || ''}
@@ -48,7 +48,7 @@ export const Login = () => {
             isIcon={false}
           />
         </div>
-        <div className="mb-6"> 
+        <div className="mb-6" data-cy="passwordInput" > 
         <Input 
           type={'text'}
           placeholder={'Пароль'}
@@ -65,7 +65,7 @@ export const Login = () => {
         />
         { loginFailure && <p className="text text_type_main-default text_color_error">{status}</p>}
         </div>
-        <div className="mb-20">
+        <div className="mb-20" data-cy="enterButton">
           <Button htmlType="submit" type="primary" size="medium" disabled={ values.email && values.password ? false : true }>
             Войти
           </Button>
